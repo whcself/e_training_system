@@ -42,7 +42,7 @@ public class AdminService {
 
     @Transactional
     public void addBatch( Batch batch){
-        batchRepository.saveAndFlush(batch);
+        batchRepository.save(batch);
     }
     @Transactional
     public void deleteBatch(String id){
@@ -54,7 +54,8 @@ public class AdminService {
     }
 
     public Batch getBatch(String id){
-        return batchRepository.getOne(id);
+        Optional<Batch> op = batchRepository.findById(id);
+        return op.get();
     }
 
     public Iterable<Batch>getAllBatch(){

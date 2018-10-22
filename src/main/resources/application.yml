@@ -12,7 +12,7 @@ spring:
 
     hibernate:
       # create table if there is no table corresponding to the Persistence class
-      ddl-auto: update
+      ddl-auto: create-drop
     database-platform: org.hibernate.dialect.MySQL5Dialect # set the dialect
 server:
   port: 8084

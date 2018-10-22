@@ -13,25 +13,25 @@ public class Batch {
 
     @Id
     @Column(length = 20)
-    private String id;
+    private String bId;
     private int credit;
     private String process_list;
 
     public Batch() {
     }
 
-    public Batch(String id, int credit, String process_list) {
-        this.id = id;
+    public Batch(String bId, int credit, String process_list) {
+        this.bId = bId;
         this.credit = credit;
         this.process_list = process_list;
     }
 
-    public String getId() {
-        return id;
+    public String getbId() {
+        return bId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setbId(String bId) {
+        this.bId = bId;
     }
 
     public int getCredit() {

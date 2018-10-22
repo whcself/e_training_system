@@ -18,15 +18,11 @@ public class BatchController {
         this.adminService=adminService;
     }
 
-    @GetMapping("/{id}")
-    public CommonResponseForm getBatch(@PathVariable String  id){
-        return CommonResponseForm.of200("获取成功",adminService.getBatch(id));
-    }
 
     @PostMapping("/")
     public CommonResponseForm addBatch(Batch batch){
         adminService.addBatch(batch);
-        return  CommonResponseForm.of200("添加批次",batch);
+        return  CommonResponseForm.of200("添加批次成功",batch);
 
     }
 
@@ -35,17 +31,24 @@ public class BatchController {
 
         adminService.deleteBatch(id);
 
-        return CommonResponseForm.of204("删除成功");
+        return CommonResponseForm.of204("删除批次成功");
     }
+
 
     @PutMapping("/")
     public CommonResponseForm updateBatch(Batch batch){
         adminService.updateBatch(batch);
         return CommonResponseForm.of204("更新批次成功");
     }
-    @PostMapping("/all")
+
+    @GetMapping("/{id}")
+    public CommonResponseForm getBatch(@PathVariable String  id){
+        return CommonResponseForm.of200("获取批次成功",adminService.getBatch(id));
+    }
+
+    @GetMapping("/")
     public CommonResponseForm getAllBatch(){
-        return CommonResponseForm.of200("获取成功",adminService.getAllBatch());
+        return CommonResponseForm.of200("获取所有批次成功",adminService.getAllBatch());
     }
 
 }
