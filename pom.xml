@@ -38,6 +38,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
@@ -46,10 +47,12 @@
             <!--<groupId>org.springframework.boot</groupId>-->
             <!--<artifactId>spring-boot-starter-security</artifactId>-->
         <!--</dependency>-->
+        <!--thymeleaf启动器-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <!-- web的启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -63,16 +66,20 @@
             <!--<artifactId>spring-session-core</artifactId>-->
         <!--</dependency>-->
 
+        <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- 测试工具的启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- 添加junit环境 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -95,6 +102,13 @@
             <!--<artifactId>spring-security-test</artifactId>-->
             <!--<scope>test</scope>-->
         <!--</dependency>-->
+
+        <!-- druid连接池 -->
+        <!--<dependency>-->
+            <!--<groupId>com.alibaba</groupId>-->
+            <!--<artifactId>druid</artifactId>-->
+            <!--<version>1.0.9</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
@@ -102,6 +116,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
