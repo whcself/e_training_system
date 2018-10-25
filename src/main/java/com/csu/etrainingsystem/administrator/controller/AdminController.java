@@ -9,6 +9,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 /**
  * GET     获取一个资源
@@ -27,19 +29,25 @@ public class AdminController {
 
     @ApiOperation(value = "创建一个管理员", notes = "")
     @ApiImplicitParam(name = "admin", value = "", required = true, dataType = "Admin")
-    @PostMapping("/")
+    @RequestMapping(value="/addAdmin",method = RequestMethod.POST)
     public CommonResponseForm saveAdmin(Admin admin){
         adminService.save(admin);
         return  CommonResponseForm.of204("管理员增加成功");
     }
 
-    @GetMapping("/{id}")
-    public CommonResponseForm getAdminById(@PathVariable String id){
+    @RequestMapping(value="/getAdmin/{id}",method = RequestMethod.POST)
+    public CommonResponseForm getAdminById(@PathVariable("id") String id){
         Admin admin=adminService.getAdminById(id);
         return  CommonResponseForm.of200("获取管理员成功",admin);
     }
 
-    @PutMapping("/")
+    @RequestMapping(value="/getAllAdmin",method = RequestMethod.POST)
+    public CommonResponseForm getAllAdmin(){
+        Iterable<Admin> admin=adminService.getAllAdmin();
+        return  CommonResponseForm.of200("获取管理员成功",admin);
+    }
+
+    @RequestMapping(value="/updateAdmin",method = RequestMethod.POST)
     public CommonResponseForm updateAdmin(Admin admin){
         adminService.updateAdmin(admin);
         return CommonResponseForm.of204("更新管理员成功");
@@ -48,9 +56,8 @@ public class AdminController {
     /*
     修改密码的接口写在admin package里面，还是大package里面
      */
-
-    @DeleteMapping("/{id}")
-    public @ResponseBody CommonResponseForm deleteAdmin(@PathVariable String id){
+    @RequestMapping(value="/deleteAdmin/{id}",method = RequestMethod.POST)
+    public @ResponseBody CommonResponseForm deleteAdmin(@PathVariable("id") String id){
         adminService.deleteAdmin(id);
         return CommonResponseForm.of204("删除管理员成功");
     }

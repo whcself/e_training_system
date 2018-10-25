@@ -2,10 +2,7 @@ package com.csu.etrainingsystem.administrator.entity;
 
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "tb_batch")
