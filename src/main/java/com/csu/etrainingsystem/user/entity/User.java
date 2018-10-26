@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.entity;
+package com.csu.etrainingsystem.user.entity;
 
 import javax.persistence.*;
 
