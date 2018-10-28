@@ -1,4 +1,4 @@
-//package com.csu.etrainingsystem.controller;
+package com.csu.etrainingsystem.user.controller;//package com.csu.etrainingsystem.controller;
 //
 //import com.csu.etrainingsystem.administrator.entity.Admin;
 //import com.csu.etrainingsystem.administrator.service.AdminService;
