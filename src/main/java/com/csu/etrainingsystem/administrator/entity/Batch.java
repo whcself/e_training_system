@@ -1,34 +1,36 @@
 package com.csu.etrainingsystem.administrator.entity;
 
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tb_batch")
+@Table(name = "batch")
 public class Batch {
 
     @Id
-    @Column(length = 20)
-    private String bId;
+    @Column(name="batch_name")
+    private String batch_name;
+    @Column(name="credit")
     private int credit;
-    private String process_list;
+    @Column(name="bat_describe")
+    private String bat_describe;
+    @Column(name="del_status")
+    private  boolean del_status;
 
     public Batch() {
     }
 
-    public Batch(String bId, int credit, String process_list) {
-        this.bId = bId;
+    public Batch(String batch_name, int credit, String bat_describe) {
+        this.batch_name = batch_name;
         this.credit = credit;
-        this.process_list = process_list;
+        this.bat_describe = bat_describe;
     }
 
-    public String getbId() {
-        return bId;
+    public String getBatch_name() {
+        return batch_name;
     }
 
-    public void setbId(String bId) {
-        this.bId = bId;
+    public void setBatch_name(String batch_name) {
+        this.batch_name = batch_name;
     }
 
     public int getCredit() {
@@ -39,11 +41,19 @@ public class Batch {
         this.credit = credit;
     }
 
-    public String getProcess_list() {
-        return process_list;
+    public String getBat_describe() {
+        return bat_describe;
     }
 
-    public void setProcess_list(String process_list) {
-        this.process_list = process_list;
+    public void setBat_describe(String bat_describe) {
+        this.bat_describe = bat_describe;
+    }
+
+    public boolean isDel_status() {
+        return del_status;
+    }
+
+    public void setDel_status(boolean del_status) {
+        this.del_status = del_status;
     }
 }

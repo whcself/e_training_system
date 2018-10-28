@@ -16,7 +16,10 @@ public class UserService {
     }
     public void changePassword(HttpSession session,String newPassword){
         User user= (User) session.getAttribute("user");
-        user.setPassword(newPassword);
+
+        user.setPwd(newPassword);
+
+
         userRepository.saveAndFlush(user);
     }
 

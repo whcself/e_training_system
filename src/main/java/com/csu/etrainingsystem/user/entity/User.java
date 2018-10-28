@@ -1,68 +1,63 @@
 package com.csu.etrainingsystem.user.entity;
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_user")
+@Table(name = "users")
 public class User {
-
     @Id
-    @Column(length = 20)
-    private String id; //different identity means different type of id
-    private String name;
-    private String identity; // student, teacher ,admin
-    private String username;
-    private String password;
-
+    @Column(name="account")
+    private String account; //different identity means different type of id
+    @Column(name="role")
+    private String role; // student, teacher ,admin
+    @Column(name="pwd")
+    private String pwd;
+    @Column(name="del_status")
+    private boolean del_status;
     public User() {
 
     }
-
-    public User(String id, String name, String identity, String username, String password) {
-        this.id = id;
-        this.name = name;
-        this.identity = identity;
-        this.username = username;
-        this.password = password;
+    public User(String account, String role, String pwd, boolean del_status){
+        this.account=account;
+        this.pwd =pwd;
+        this.role=role;
+        this.del_status=del_status;
     }
 
-    public String getId() {
-        return id;
+
+    public String getAccount() {
+        return account;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public String getName() {
-        return name;
+    public String getRole() {
+        return role;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getIdentity() {
-        return identity;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setIdentity(String identity) {
-        this.identity = identity;
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
-    public String getUsername() {
-        return username;
+    public boolean isDel_status() {
+        return del_status;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDel_status(boolean del_status) {
+        this.del_status = del_status;
     }
 }

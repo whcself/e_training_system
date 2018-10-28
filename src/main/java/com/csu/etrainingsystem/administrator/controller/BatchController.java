@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/batch")
+@RequestMapping(value="/batch",method = RequestMethod.POST)
 public class BatchController {
 
     private final AdminService adminService;
@@ -19,13 +19,13 @@ public class BatchController {
     }
 
 
-    @RequestMapping(value="/addBatch",method = RequestMethod.POST)
+    @RequestMapping(value="/addBatch")
     public CommonResponseForm addBatch(Batch batch){
         adminService.addBatch(batch);
         return  CommonResponseForm.of200("添加批次成功",batch);
     }
 
-    @RequestMapping(value="/deleteBatch/{id}",method = RequestMethod.POST)
+    @RequestMapping(value="/deleteBatch/{id}")
     public @ResponseBody CommonResponseForm deleteBatch(@PathVariable String id){
 
         adminService.deleteBatch(id);
@@ -34,18 +34,18 @@ public class BatchController {
     }
 
 
-    @RequestMapping(value="/updateBatch",method = RequestMethod.POST)
+    @RequestMapping(value="/updateBatch")
     public CommonResponseForm updateBatch(Batch batch){
         adminService.updateBatch(batch);
         return CommonResponseForm.of204("更新批次成功");
     }
 
-    @RequestMapping(value="/getBatch/{id}",method = RequestMethod.POST)
+    @RequestMapping(value="/getBatch/{id}")
     public CommonResponseForm getBatch(@PathVariable String  id){
         return CommonResponseForm.of200("获取批次成功",adminService.getBatch(id));
     }
 
-    @RequestMapping(value="/getAllBatch",method = RequestMethod.POST)
+    @RequestMapping(value="/getAllBatch")
     public CommonResponseForm getAllBatch(){
         return CommonResponseForm.of200("获取所有批次成功",adminService.getAllBatch());
     }

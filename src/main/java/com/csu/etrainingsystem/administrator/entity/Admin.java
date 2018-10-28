@@ -1,48 +1,40 @@
 package com.csu.etrainingsystem.administrator.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 //create the admin persistence layer
 @Entity
-@Table(name = "tb_admin")
+@Table(name = "admin")
 public class Admin implements Serializable {
     @Id
-    @Column(length = 20)
-    private String aId;
-    private String name;
-    private String phone;
-
+    @Column(name="aid")
+    private String adminId;
+    @Column(name="del_status")
+    private boolean del_status;
     public Admin(){
 
     }
-    public Admin(String aId, String name, String phone) {
-        this.aId = aId;
-        this.name = name;
-        this.phone = phone;
+    public Admin(String adminId,boolean del_status) {
+        this.adminId = adminId;
+        this.del_status=del_status;
     }
 
-    public String getaId() {
-        return aId;
+    public String getAdminId() {
+        return adminId;
     }
 
-    public void setaId(String aId) {
-        this.aId = aId;
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
     }
 
-    public String getName() {
-        return name;
+    public boolean isDel_status() {
+        return del_status;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setDel_status(boolean del_status) {
+        this.del_status = del_status;
     }
 }
