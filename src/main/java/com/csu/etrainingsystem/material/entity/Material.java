@@ -8,6 +8,10 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * -whc
+ * 物料实体
+ */
 @Entity
 @Table(name = "material")
 public class Material implements Serializable {

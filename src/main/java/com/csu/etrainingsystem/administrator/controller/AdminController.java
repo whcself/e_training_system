@@ -33,7 +33,7 @@ public class AdminController {
     @ApiOperation(value = "创建一个管理员", notes = "")
     @ApiImplicitParam(name = "admin", value = "", required = true, dataType = "Admin")
     @RequestMapping(value="/addAdmin")
-    public CommonResponseForm saveAdmin(Admin admin){
+    public CommonResponseForm addAdmin(Admin admin){
         adminService.save(admin);
         return  CommonResponseForm.of204("管理员增加成功");
 }

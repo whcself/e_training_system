@@ -6,7 +6,6 @@ package com.csu.etrainingsystem.user.controller;//package com.csu.etrainingsyste
 //import com.csu.etrainingsystem.entity.User;
 //import com.csu.etrainingsystem.form.CommonResponseForm;
 //import com.csu.etrainingsystem.service.UserService;
-=======
 //package com.csu.etrainingsystem.user.controller;
 //
 //import com.csu.etrainingsystem.administrator.entity.Admin;

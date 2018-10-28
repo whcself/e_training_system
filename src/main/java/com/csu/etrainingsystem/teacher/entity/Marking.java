@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.marking.entity;
+package com.csu.etrainingsystem.teacher.entity;
 
 
 import javax.persistence.Column;

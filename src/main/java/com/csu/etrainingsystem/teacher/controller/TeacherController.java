@@ -13,15 +13,23 @@ import sun.plugin2.message.Message;
 @RestController
 @RequestMapping(value = "/teacher",method = RequestMethod.POST)
 public class TeacherController {
-    @Autowired
+
     private TeacherService teacherService;
+
+    @Autowired
+    public TeacherController(TeacherService teacherService) {
+        this.teacherService = teacherService;
+    }
+
+
+
     @RequestMapping("/addTeacher")
     public CommonResponseForm addTeacher(Teacher teacher){
         teacherService.addTeacher(teacher);
         return CommonResponseForm.of204("添加教师成功");
     }
     @RequestMapping("/getTeacher/{id}")
-    public  CommonResponseForm getTeacherByid(@PathVariable("id") String id){
+    public  CommonResponseForm getTeacherById(@PathVariable("id") String id){
         return CommonResponseForm.of200("获取教师成功",teacherService.getTeacherById(id));
     }
 
