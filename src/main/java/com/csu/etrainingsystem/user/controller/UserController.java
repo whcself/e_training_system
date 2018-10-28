@@ -1,3 +1,4 @@
+
 package com.csu.etrainingsystem.user.controller;//package com.csu.etrainingsystem.controller;
 //
 //import com.csu.etrainingsystem.administrator.entity.Admin;
@@ -5,6 +6,15 @@ package com.csu.etrainingsystem.user.controller;//package com.csu.etrainingsyste
 //import com.csu.etrainingsystem.entity.User;
 //import com.csu.etrainingsystem.form.CommonResponseForm;
 //import com.csu.etrainingsystem.service.UserService;
+=======
+//package com.csu.etrainingsystem.user.controller;
+//
+//import com.csu.etrainingsystem.administrator.entity.Admin;
+//import com.csu.etrainingsystem.administrator.service.AdminService;
+//import com.csu.etrainingsystem.user.entity.User;
+//import com.csu.etrainingsystem.form.CommonResponseForm;
+//import com.csu.etrainingsystem.user.service.UserService;
+
 //import com.csu.etrainingsystem.student.service.StudentService;
 //import com.csu.etrainingsystem.teacher.service.TeacherService;
 //import org.springframework.beans.factory.annotation.Autowired;

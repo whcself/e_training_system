@@ -4,20 +4,26 @@ import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.entity.Batch;
 import com.csu.etrainingsystem.administrator.repository.AdminRepository;
 import com.csu.etrainingsystem.administrator.repository.BatchRepository;
+import com.csu.etrainingsystem.student.entity.Student;
+import com.csu.etrainingsystem.student.repository.StudentRepository;
+import com.csu.etrainingsystem.util.ExcelPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
 public class AdminService {
     private final AdminRepository adminRepository;
     private final BatchRepository batchRepository;
+    private final StudentRepository studentRepository;
     @Autowired
-    public AdminService(AdminRepository adminRepository,BatchRepository batchRepository) {
+    public AdminService(AdminRepository adminRepository,BatchRepository batchRepository,StudentRepository studentRepository) {
         this.adminRepository=adminRepository;
         this.batchRepository=batchRepository;
+        this.studentRepository=studentRepository;
     }
     @Transactional
     public void save(Admin admin){
@@ -68,14 +74,9 @@ public class AdminService {
     public Iterable<Batch>getAllBatch(){
         return batchRepository.findAll();
     }
-    public boolean importStudent(){
-        try{
-
-            /**/
-
-            return true;
-        }catch (Exception e){
-            return false;
-        }
+    public ArrayList<Student> importStudent(String path){
+        ArrayList<Student> students=ExcelPort.readExcel(path);
+        for(Student student:students)studentRepository.save(student);
+        return students;
     }
 }

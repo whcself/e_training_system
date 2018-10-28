@@ -2,6 +2,7 @@ package com.csu.etrainingsystem;
 
 
 import com.csu.etrainingsystem.mylearn.controller.HelloController;
+import com.csu.etrainingsystem.util.ExcelPort;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +38,7 @@ public class ApplicationTest1 {
     public void getHello() throws Exception {
         ResultActions hello_world = mvc.perform(MockMvcRequestBuilders.get("/hello").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("Hello world"))); //throw Exception if not equal
+                .andExpect(content().string(equalTo("Hello world2"))); //throw Exception if not equal
         System.out.println("ss");
 
     }
@@ -45,5 +46,11 @@ public class ApplicationTest1 {
     @Test
     public void whenCallingSayHello_thenReturnHello() {
         assertEquals("Hello world", HelloController.index());
+    }
+
+
+    @Test
+    public void TestExcelPort(){
+        ExcelPort.readExcel("test.xlsx");
     }
 }
