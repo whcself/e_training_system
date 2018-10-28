@@ -17,18 +17,18 @@ public class Teacher implements Serializable {
     private String tname;
     private String role;
     private int material_privilege;
-    private int overtime;
+    private int overtime_privilege;
     private boolean del_status;
 
     public Teacher() { }
 
-    public Teacher(String tid, String t_group_id, String tname, String role, int material_privilege, int overtime, boolean del_status) {
+    public Teacher(String tid, String t_group_id, String tname, String role, int material_privilege, int overtime_privilege, boolean del_status) {
         this.tid = tid;
         this.t_group_id = t_group_id;
         this.tname = tname;
         this.role = role;
         this.material_privilege = material_privilege;
-        this.overtime = overtime;
+        this.overtime_privilege = overtime_privilege;
         this.del_status = del_status;
     }
 
@@ -52,9 +52,13 @@ public class Teacher implements Serializable {
 
     public void setMaterial_privilege(int material_privilege) { this.material_privilege = material_privilege; }
 
-    public int getOvertime() { return overtime; }
+    public int getOvertime_privilege() {
+        return overtime_privilege;
+    }
 
-    public void setOvertime(int overtime) { this.overtime = overtime; }
+    public void setOvertime_privilege(int overtime_privilege) {
+        this.overtime_privilege = overtime_privilege;
+    }
 
     public boolean isDel_status() { return del_status; }
 

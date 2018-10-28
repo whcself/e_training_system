@@ -23,6 +23,13 @@ public class Overwork implements Serializable {
     public Overwork() {
     }
 
+    public Overwork(String overwork_id, String pro_name, java.sql.Date overwork_time, boolean del_status) {
+        this.overwork_id = overwork_id;
+        this.pro_name = pro_name;
+        this.overwork_time = overwork_time;
+        this.del_status = del_status;
+    }
+
     public String getOverwork_id() {
         return overwork_id;
     }
