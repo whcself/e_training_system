@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 //create the admin persistence layer
 @Entity
-@Table(name = "admin")
+@Table(name = "tb_admin")
 public class Admin implements Serializable {
     @Id
     @Column(name="aid")
