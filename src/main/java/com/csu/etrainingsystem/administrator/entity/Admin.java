@@ -11,23 +11,24 @@ import java.io.Serializable;
 public class Admin implements Serializable {
     @Id
     @Column(name="aid")
-    private String adminId;
+    private String aid;
     @Column(name="del_status")
     private boolean del_status;
     public Admin(){
 
     }
-    public Admin(String adminId,boolean del_status) {
-        this.adminId = adminId;
-        this.del_status=del_status;
+
+    public Admin(String aid, boolean del_status) {
+        this.aid = aid;
+        this.del_status = del_status;
     }
 
-    public String getAdminId() {
-        return adminId;
+    public String getAid() {
+        return aid;
     }
 
-    public void setAdminId(String adminId) {
-        this.adminId = adminId;
+    public void setAid(String aid) {
+        this.aid = aid;
     }
 
     public boolean isDel_status() {

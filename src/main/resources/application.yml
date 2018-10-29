@@ -1,7 +1,9 @@
 spring:
   datasource:
   #test数据库是用于测试
-    url: jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&useSSL=false
+#    url: jdbc:mysql://localhost:3306/test?characterEncoding=utf-8&useSSL=false
+  #ScJn
+    url: jdbc:mysql://localhost:3306/etsys?characterEncoding=utf-8&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
     username: root
     password: 123456
@@ -16,7 +18,7 @@ spring:
     hibernate:
       # create table if there is no table corresponding to the Persistence class
       ddl-auto: update
-  database-platform: org.hibernate.dialect.MySQL5Dialect # set the dialect
+    database-platform: org.hibernate.dialect.MySQL5Dialect # set the dialect
   #bean中有属性为空的时候会导致json格式转换失败
   jackson:
     serialization:

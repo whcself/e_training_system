@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.marking.entity;
+package com.csu.etrainingsystem.teacher.entity;
 
 
 import javax.persistence.Column;
@@ -15,7 +15,7 @@ public class Marking implements Serializable {
 
     @Id
     @Column
-    private String markId ;
+    private String mark_id ;
     private String t_group_id;
     private String authority;
     private boolean del_status;
@@ -23,19 +23,19 @@ public class Marking implements Serializable {
     public Marking() {
     }
 
-    public Marking(String markId, String t_group_id, String authority, boolean del_status) {
-        this.markId = markId;
+    public Marking(String mark_id, String t_group_id, String authority, boolean del_status) {
+        this.mark_id = mark_id;
         this.t_group_id = t_group_id;
         this.authority = authority;
         this.del_status = del_status;
     }
 
-    public String getMarkId() {
-        return markId;
+    public String getMark_id() {
+        return mark_id;
     }
 
-    public void setMarkId(String markId) {
-        this.markId = markId;
+    public void setMark_id(String mark_id) {
+        this.mark_id = mark_id;
     }
 
     public String getT_group_id() {

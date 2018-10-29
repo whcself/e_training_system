@@ -101,6 +101,7 @@ public class ExcelPort {
      */
     private static void setPro(String cell_colName, String value, Student student){
         switch (cell_colName){
+
 //            case "姓名": student.setName(value);break;
 //            case "学号": student.setStuId(value);break;
 //            case "专业": student.setMajor(value);break;
@@ -108,6 +109,8 @@ public class ExcelPort {
 //            case "批次": student.setBatchId(value);break;
 //            case "组号": student.setTeamId(value);break;
 //            case "学院": student.setAcademy(value);break;
+
+
         }
     }
 }

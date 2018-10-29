@@ -1,6 +1,6 @@
 //package com.csu.etrainingsystem.mylearn.controller;
 //
-//import com.csu.etrainingsystem.entity.User;
+//import com.csu.etrainingsystem.user.entity.User;
 //import io.swagger.annotations.ApiImplicitParam;
 //import io.swagger.annotations.ApiImplicitParams;
 //import io.swagger.annotations.ApiOperation;

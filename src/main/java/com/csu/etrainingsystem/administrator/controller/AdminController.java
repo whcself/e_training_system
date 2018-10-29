@@ -4,11 +4,14 @@ import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.entity.Batch;
 import com.csu.etrainingsystem.administrator.service.AdminService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.student.entity.Student;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,7 +33,7 @@ public class AdminController {
     @ApiOperation(value = "创建一个管理员", notes = "")
     @ApiImplicitParam(name = "admin", value = "", required = true, dataType = "Admin")
     @RequestMapping(value="/addAdmin")
-    public CommonResponseForm saveAdmin(Admin admin){
+    public CommonResponseForm addAdmin(Admin admin){
         adminService.save(admin);
         return  CommonResponseForm.of204("管理员增加成功");
 }
@@ -60,6 +63,12 @@ public class AdminController {
     public @ResponseBody CommonResponseForm deleteAdmin(@PathVariable("id") String id){
         adminService.deleteAdmin(id);
         return CommonResponseForm.of204("删除管理员成功");
+    }
+
+    @PostMapping("/importStudents/{path}")
+    public CommonResponseForm importStudents(@PathVariable String path){
+        ArrayList<Student>students=adminService.importStudent(path);
+        return CommonResponseForm.of200("导入学生信息成功",students);
     }
 
 

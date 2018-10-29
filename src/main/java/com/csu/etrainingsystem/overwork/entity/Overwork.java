@@ -15,27 +15,27 @@ public class Overwork implements Serializable {
 
     @Id
     @Column
-    private String ovrkeId ;
+    private String overwork_id ;
     private String pro_name;
-    private java.sql.Date ovkeTime;
+    private java.sql.Date overwork_time;
     private boolean del_status;
 
     public Overwork() {
     }
 
-    public Overwork(String ovrkeId, String pro_name, java.sql.Date ovkeTime, boolean del_status) {
-        this.ovrkeId = ovrkeId;
+    public Overwork(String overwork_id, String pro_name, java.sql.Date overwork_time, boolean del_status) {
+        this.overwork_id = overwork_id;
         this.pro_name = pro_name;
-        this.ovkeTime = ovkeTime;
+        this.overwork_time = overwork_time;
         this.del_status = del_status;
     }
 
-    public String getOvrkeId() {
-        return ovrkeId;
+    public String getOverwork_id() {
+        return overwork_id;
     }
 
-    public void setOvrkeId(String ovrkeId) {
-        this.ovrkeId = ovrkeId;
+    public void setOverwork_id(String overwork_id) {
+        this.overwork_id = overwork_id;
     }
 
     public String getPro_name() {
@@ -46,12 +46,12 @@ public class Overwork implements Serializable {
         this.pro_name = pro_name;
     }
 
-    public java.sql.Date getOvkeTime() {
-        return ovkeTime;
+    public java.sql.Date getOverwork_time() {
+        return overwork_time;
     }
 
-    public void setOvkeTime(java.sql.Date ovkeTime) {
-        this.ovkeTime = ovkeTime;
+    public void setOverwork_time(java.sql.Date overwork_time) {
+        this.overwork_time = overwork_time;
     }
 
     public boolean isDel_status() {

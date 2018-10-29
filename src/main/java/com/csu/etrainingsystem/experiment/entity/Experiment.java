@@ -14,7 +14,7 @@ public class Experiment implements Serializable {
 
     @Id
     @Column
-    private String expId ;
+    private String exp_id ;
     private String t_group_id;
     private String s_group_id;
     private String time_quant;
@@ -26,8 +26,8 @@ public class Experiment implements Serializable {
     public Experiment() {
     }
 
-    public Experiment(String expId, String t_group_id, String s_group_id, String time_quant, String pro_name, String tid, java.sql.Date submit_time, boolean del_status) {
-        this.expId = expId;
+    public Experiment(String exp_id, String t_group_id, String s_group_id, String time_quant, String pro_name, String tid, java.sql.Date submit_time, boolean del_status) {
+        this.exp_id = exp_id;
         this.t_group_id = t_group_id;
         this.s_group_id = s_group_id;
         this.time_quant = time_quant;
@@ -37,12 +37,12 @@ public class Experiment implements Serializable {
         this.del_status = del_status;
     }
 
-    public String getExpId() {
-        return expId;
+    public String getExp_id() {
+        return exp_id;
     }
 
-    public void setExpId(String expId) {
-        this.expId = expId;
+    public void setExp_id(String exp_id) {
+        this.exp_id = exp_id;
     }
 
     public String getT_group_id() {
