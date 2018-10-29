@@ -18,7 +18,7 @@ public class Material implements Serializable {
 
 
     @Id
-    @Column
+    @Column(length = 20)
     private String clazz ;
     private int num;
     private boolean del_status;

@@ -10,8 +10,11 @@ import java.io.Serializable;
 @Table(name = "teacher")
 public class Teacher implements Serializable {
 
+    /*
+    主键为String，必须要控制长度
+     */
     @Id
-    @Column(name = "tid")
+    @Column(name = "tid",length = 20)
     private String tid;
     private String t_group_id;
     private String tname;

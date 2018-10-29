@@ -13,10 +13,10 @@ public class Score implements Serializable {
 
 
     @Id
-    @Column
+    @Column(length = 20)
     private String sid;
     @Id
-    @Column
+    @Column(length = 20)
     private String pro_name;
     private float pro_score;
     private boolean del_status;

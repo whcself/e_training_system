@@ -10,7 +10,7 @@ import javax.persistence.Table;
 @Table(name = "users")
 public class User {
     @Id
-    @Column(name="account")
+    @Column(name="account",length = 20)
     private String account; //different identity means different type of id
     @Column(name="role")
     private String role; // student, teacher ,admin

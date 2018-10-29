@@ -13,7 +13,7 @@ import java.util.Date;
 public class Purchase implements Serializable {
 
     @Id
-    @Column
+    @Column(length = 20)
     private String clazz ;
     private String t_group_id ;
     private java.sql.Date pur_time ;

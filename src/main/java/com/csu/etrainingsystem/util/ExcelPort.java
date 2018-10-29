@@ -102,13 +102,13 @@ public class ExcelPort {
     private static void setPro(String cell_colName, String value, Student student){
         switch (cell_colName){
 
-//            case "姓名": student.setName(value);break;
-//            case "学号": student.setStuId(value);break;
-//            case "专业": student.setMajor(value);break;
-//            case "班级": student.settClass(value);break;
-//            case "批次": student.setBatchId(value);break;
-//            case "组号": student.setTeamId(value);break;
-//            case "学院": student.setAcademy(value);break;
+            case "姓名": student.setSname(value);break;
+            case "学号": student.setSid(value);break;
+            case "专业": student.setSdept(value);break;
+            case "班级": student.setClazz(value);break;
+            case "批次": student.setBatch_name(value);break;
+            case "组号": student.setS_group_id(value);break;
+            case "学院": student.setDepart(value);break;
 
 
         }

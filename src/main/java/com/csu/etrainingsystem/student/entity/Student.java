@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Table(name = "student")
 public class Student implements Serializable {
     @Id
-    @Column
+    @Column(length = 20)
     private String sid;
     @Column(name = "s_group_id")
     private  String s_group_id;

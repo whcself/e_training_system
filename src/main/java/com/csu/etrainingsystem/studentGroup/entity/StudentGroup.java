@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class StudentGroup implements Serializable {
 
     @Id
-    @Column
+    @Column(length = 20)
     private  String s_group_id;
     private String batch_name;
     private int num;

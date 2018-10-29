@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Batch {
 
     @Id
-    @Column(name="batch_name")
+    @Column(name="batch_name",length = 20)
     private String batch_name;
     @Column(name="credit")
     private int credit;

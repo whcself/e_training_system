@@ -13,8 +13,8 @@ import java.util.Date;
 public class Template implements Serializable {
 
     @Id
-    @Column
-    private String tempId ;
+    @Column(length = 20)
+    private String temp_id ;
     private String s_group_id ;
     private String temp_name ;
     private int class_time;
@@ -24,8 +24,8 @@ public class Template implements Serializable {
     public Template() {
     }
 
-    public Template(String tempId, String s_group_id, String temp_name, int class_time, String pro_name, boolean del_status) {
-        this.tempId = tempId;
+    public Template(String temp_id, String s_group_id, String temp_name, int class_time, String pro_name, boolean del_status) {
+        this.temp_id = temp_id;
         this.s_group_id = s_group_id;
         this.temp_name = temp_name;
         this.class_time = class_time;
@@ -33,12 +33,12 @@ public class Template implements Serializable {
         this.del_status = del_status;
     }
 
-    public String getTempId() {
-        return tempId;
+    public String getTemp_id() {
+        return temp_id;
     }
 
-    public void setTempId(String tempId) {
-        this.tempId = tempId;
+    public void setTemp_id(String temp_id) {
+        this.temp_id = temp_id;
     }
 
     public String getS_group_id() {

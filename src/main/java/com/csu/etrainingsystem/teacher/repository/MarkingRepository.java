@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 public interface MarkingRepository extends JpaRepository<Marking,String> {
 
-
+    public Marking getByAuthority(String Authority);
 }

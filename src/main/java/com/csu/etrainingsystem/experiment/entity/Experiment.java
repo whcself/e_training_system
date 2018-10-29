@@ -13,7 +13,7 @@ import java.util.Date;
 public class Experiment implements Serializable {
 
     @Id
-    @Column
+    @Column(length = 20)
     private String exp_id ;
     private String t_group_id;
     private String s_group_id;

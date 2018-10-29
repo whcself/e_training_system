@@ -14,7 +14,7 @@ public class Overwork_apply implements Serializable {
 
 
     @Id
-    @Column
+    @Column(length = 20)
     private String applyId ;
 
     private String sid;

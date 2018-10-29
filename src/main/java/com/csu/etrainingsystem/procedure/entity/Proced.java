@@ -15,7 +15,7 @@ public class Proced implements Serializable {
 
 
     @Id
-    @Column
+    @Column(length = 20)
     private String pro_name ;
     private String t_group_id;
     private String batch_name;
