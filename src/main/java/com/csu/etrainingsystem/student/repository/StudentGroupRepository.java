@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.studentGroup.repository;
+package com.csu.etrainingsystem.student.repository;
 
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;

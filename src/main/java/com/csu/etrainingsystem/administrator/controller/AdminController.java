@@ -115,8 +115,10 @@ public class AdminController {
     导入学生接口
      */
     @PostMapping("/importStudents")
-    public CommonResponseForm importStudents(@RequestParam String path) {
-        ArrayList<Student> students = adminService.importStudent(path);
+    public CommonResponseForm importStudents(@RequestParam String path,
+                                             @RequestParam String batchName,
+                                             @RequestParam int groupNum) {
+        ArrayList<Student> students = adminService.importStudent(path,batchName,groupNum);
         return CommonResponseForm.of200("导入学生信息成功", students);
     }
 

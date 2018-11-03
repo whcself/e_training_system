@@ -51,6 +51,6 @@ public class ApplicationTest1 {
 
     @Test
     public void TestExcelPort(){
-        ExcelPort.readExcel("test.xlsx");
+        ExcelPort.readExcel("test.xlsx","aa",2);
     }
 }

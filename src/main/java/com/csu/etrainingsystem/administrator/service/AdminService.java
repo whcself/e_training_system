@@ -117,8 +117,8 @@ public class AdminService {
      * @param path 文件路径，绝对
      * @return 学生列表
      */
-    public ArrayList<Student> importStudent(String path){
-        ArrayList<Student> students=ExcelPort.readExcel(path);
+    public ArrayList<Student> importStudent(String path,String batchName,int groupNum){
+        ArrayList<Student> students=ExcelPort.readExcel(path,batchName,groupNum);
         for(Student student:students)studentRepository.save(student);
         return students;
     }
