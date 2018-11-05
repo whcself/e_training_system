@@ -2,6 +2,7 @@ package com.csu.etrainingsystem.teacher.repository;
 
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -18,9 +19,10 @@ public interface TeacherRepository extends JpaRepository<Teacher,String> {
      * @param overwork 加班管理权限： 加班管理，无
      * @return 查询所得的教师列表
      */
+    @Query(value="select * from teacher where teacher.tid=? and teacher.del_status=0",nativeQuery = true)
+    Teacher findTeacherByTid(String tid);
 
-    @Query(value = "select * from teacher  where t_group_id=?1 and role=?2 and material_privilege=?3 and overtime=?4",nativeQuery = true)
-    public List<Teacher> findTeacherByTRMO(String tClass, String role, String material, String overwork);
-
+    @Query(value="select * from teacher where teacher.del_status=0",nativeQuery = true)
+    Iterable<Teacher> findAllTeacher();
 
 }

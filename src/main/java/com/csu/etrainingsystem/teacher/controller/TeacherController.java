@@ -30,7 +30,7 @@ public class TeacherController {
     }
     @RequestMapping("/getTeacher/{id}")
     public  CommonResponseForm getTeacherById(@PathVariable("id") String id){
-        return CommonResponseForm.of200("获取教师成功",teacherService.getTeacherById(id));
+        return CommonResponseForm.of200("获取教师成功",teacherService.getTeacher(id));
     }
 
     @RequestMapping("/getAllTeacher")
@@ -40,8 +40,8 @@ public class TeacherController {
 
     @RequestMapping("/deleteTeacher/{id}")
     public  CommonResponseForm deleteTeacherById(@PathVariable("id") String id){
-        teacherService.deleteTeacherById(id);
-        return CommonResponseForm.of204("获取全体教师成功");
+        teacherService.deleteTeacher(id);
+        return CommonResponseForm.of204("删除教师成功");
     }
     @RequestMapping("/updateTeacher")
     public CommonResponseForm updateTeacher(Teacher teacher){

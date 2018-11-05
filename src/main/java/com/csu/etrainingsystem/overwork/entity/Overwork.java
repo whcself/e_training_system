@@ -15,7 +15,7 @@ public class Overwork implements Serializable {
 
     @Id
     @Column
-    private String overwork_id ;
+    private int overwork_id ;
     private String pro_name;
     private java.sql.Date overwork_time;
     private boolean del_status;
@@ -23,18 +23,18 @@ public class Overwork implements Serializable {
     public Overwork() {
     }
 
-    public Overwork(String overwork_id, String pro_name, java.sql.Date overwork_time, boolean del_status) {
+    public Overwork(int overwork_id, String pro_name, java.sql.Date overwork_time, boolean del_status) {
         this.overwork_id = overwork_id;
         this.pro_name = pro_name;
         this.overwork_time = overwork_time;
         this.del_status = del_status;
     }
 
-    public String getOverwork_id() {
+    public int getOverwork_id() {
         return overwork_id;
     }
 
-    public void setOverwork_id(String overwork_id) {
+    public void setOverwork_id(int overwork_id) {
         this.overwork_id = overwork_id;
     }
 

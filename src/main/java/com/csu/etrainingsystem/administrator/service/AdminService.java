@@ -4,14 +4,15 @@ import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.entity.Batch;
 import com.csu.etrainingsystem.administrator.repository.AdminRepository;
 import com.csu.etrainingsystem.administrator.repository.BatchRepository;
+import com.csu.etrainingsystem.experiment.service.ExperimentService;
+import com.csu.etrainingsystem.procedure.service.ProcedureService;
 import com.csu.etrainingsystem.student.entity.Student;
-import com.csu.etrainingsystem.student.repository.StudentRepository;
+import com.csu.etrainingsystem.student.service.StudentService;
+import com.csu.etrainingsystem.studentGroup.service.StudentGroupService;
 import com.csu.etrainingsystem.teacher.entity.Marking;
-import com.csu.etrainingsystem.teacher.entity.Teacher;
-import com.csu.etrainingsystem.teacher.repository.MarkingRepository;
+import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.util.ExcelPort;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -22,18 +23,22 @@ import java.util.Optional;
 public class AdminService {
     private final AdminRepository adminRepository;
     private final BatchRepository batchRepository;
-    private final StudentRepository studentRepository;
-    private final MarkingRepository markingRepository;
-
+    private final StudentGroupService studentGroupService;
+    private final ExperimentService experimentService;
+    private final ProcedureService procedureService;
+    private final MarkingService markingService;
+    private final StudentService studentService;
     @Autowired
-    public AdminService(AdminRepository adminRepository, BatchRepository batchRepository, StudentRepository studentRepository, MarkingRepository markingRepository) {
+    public AdminService(AdminRepository adminRepository, BatchRepository batchRepository, StudentGroupService studentGroupService, ExperimentService experimentService, ProcedureService procedureService, MarkingService markingService, StudentService studentService) {
         this.adminRepository = adminRepository;
         this.batchRepository = batchRepository;
-        this.studentRepository = studentRepository;
-        this.markingRepository = markingRepository;
+
+        this.studentGroupService = studentGroupService;
+        this.experimentService = experimentService;
+        this.procedureService = procedureService;
+        this.markingService = markingService;
+        this.studentService = studentService;
     }
-
-
     /**
      * admin 的增删改查
      * @param admin 管理员
@@ -42,10 +47,15 @@ public class AdminService {
     public void save(Admin admin){
        adminRepository.save(admin);
     }
-
+    /**删除一个管理员不会带来影响*/
     @Transactional
     public void deleteAdmin(String id){
-        adminRepository.deleteById(id);
+
+        Admin admin=getAdminById(id);
+        if(admin!=null){
+            admin.setDel_status(true);
+            updateAdmin(admin);
+        }
     }
 
     @Transactional
@@ -53,14 +63,14 @@ public class AdminService {
         adminRepository.saveAndFlush(admin);
     }
 
-    public Iterable<Admin> getAllAdmin(){ return adminRepository.findAll(); }
+    public Iterable<Admin> getAllAdmin(){
+        return adminRepository.findAllAdmin();
+        }
 
     public Admin getAdminById(String id){
-        Optional<Admin>op=adminRepository.findById(id);
-        return op.get();
+       Optional<Admin>  admin=adminRepository.findAdminByAid(id);
+        return admin.get();
     }
-
-
     /****batch 的增删改查****/
 
     @Transactional
@@ -71,50 +81,60 @@ public class AdminService {
     @Transactional//假删除,先取出,修改del_status字段,写回数据库,然后调用函数,做级联操作
     public void deleteBatch(String id){
         Batch batch = batchRepository.getOne(id);
-        batch.setDel_status(true);
-        batchRepository.saveAndFlush(batch);
-        batchRepository.deleteStudentByBatchStatusSQL(batch.getBatch_name());
-
-        // TODO: 2018/10/27 消除删除一个批次所带来的影响:如下 
-        //删除一个批次所带来的影响:批次中的学生删除,批次中的学生组被删除,该批次的工序被删除
-        //在下面的语句中消除该影响
+        if(batch!=null){
+            batch.setDel_status(true);
+            batchRepository.saveAndFlush(batch);
+            //批次中的学生组被删除
+            this.studentGroupService.deleteStudentGroupByBacth(id);
+            //该批次的工序被删除
+            this.procedureService.deleteProcedByBatch(id);
+            //该批次的实验被删除
+            this.experimentService.deleteExperimentByBatch(id);
+        }
     }
 
     public void updateBatch(Batch batch){
         batchRepository.saveAndFlush(batch);
     }
 
-    public Batch getBatch(String id){
-        Optional<Batch> op = batchRepository.findById(id);
+    public Batch getBatch(String batch_name){
+        Optional<Batch> op = batchRepository.findBatchByName(batch_name);
         return op.get();
     }
 
     public Iterable<Batch>getAllBatch(){
-        return batchRepository.findAll();
+        return batchRepository.findAllBatch();
     }
 
 
-    /****打分权限的增删改查****/
+    /****打分权限的增删改查,调用service层更好****/
 
     @Transactional
     public void addMarking(Marking marking){
-        markingRepository.save(marking);
+
+        this.markingService.addMarking(marking);
     }
 
+    /**
+     * 考虑到实际情况中打分权限表id字段没有意义,所以这个改为用t_group_id查询以及查询全部
+     * @param t_group_id
+     * @return
+     */
     @Transactional
-    public Marking getMarkingById(String id){return markingRepository.getOne(id);}
+    public Iterable<Marking> getMarkingById(String t_group_id){
+        return this.markingService.getMarkingByT_group_id(t_group_id);}
 
     @Transactional
-    public Iterable<Marking>getAllMarking(){return markingRepository.findAll();}
+    public Iterable<Marking>getAllMarking(){
+        return this.markingService.getAllMarking();}
 
     @Transactional
-    public void updateMarking(Marking marking){markingRepository.saveAndFlush(marking);}
+    public void updateMarking(Marking marking){
+        markingService.updateMarking(marking);}
 
     @Transactional
-    public void deleteMarkingById(String id){
-        Marking marking=markingRepository.getOne(id);
-        marking.setDel_status(true);
-        markingRepository.saveAndFlush(marking);
+    public void deleteMarkingById(int id){
+      this.markingService.deleteMarkingById(id);
       /*
       todo:消除删除一个老师所带来的影响
        */
@@ -127,7 +147,7 @@ public class AdminService {
      */
     public ArrayList<Student> importStudent(String path){
         ArrayList<Student> students=ExcelPort.readExcel(path);
-        for(Student student:students)studentRepository.save(student);
+        for(Student student:students)studentService.addStudent (student);
         return students;
     }
 
