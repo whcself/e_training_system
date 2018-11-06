@@ -1,46 +1,34 @@
 package com.csu.etrainingsystem.student.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "s_group")
 public class StudentGroup implements Serializable {
 
-    @Id
-    @Column(length = 20)
-    private  String s_group_id;
-    private String batch_name;
+
+    @EmbeddedId
+    @Column
+    private StudentGroupId studentGroupId;
     private int num;
     private  boolean del_status;
 
     public StudentGroup() {
     }
 
-    public StudentGroup(String s_group_id, String batch_name, int num, boolean del_status) {
-        this.s_group_id = s_group_id;
-        this.batch_name = batch_name;
+    public StudentGroup(StudentGroupId studentGroupId, int num, boolean del_status) {
+        this.studentGroupId = studentGroupId;
         this.num = num;
         this.del_status = del_status;
     }
 
-    public String getS_group_id() {
-        return s_group_id;
+    public StudentGroupId getStudentGroupId() {
+        return studentGroupId;
     }
 
-    public void setS_group_id(String s_group_id) {
-        this.s_group_id = s_group_id;
-    }
-
-    public String getBatch_name() {
-        return batch_name;
-    }
-
-    public void setBatch_name(String batch_name) {
-        this.batch_name = batch_name;
+    public void setStudentGroupId(StudentGroupId studentGroupId) {
+        this.studentGroupId = studentGroupId;
     }
 
     public int getNum() {

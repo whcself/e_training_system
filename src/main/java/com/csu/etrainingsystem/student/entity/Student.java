@@ -13,7 +13,7 @@ public class Student implements Serializable {
     private  String s_group_id;
     private String batch_name;
     private String  sname;
-    @Column(name="class")
+    @Column(name="clazz")
     private String clazz;
     private String sdept;
     private String depart;

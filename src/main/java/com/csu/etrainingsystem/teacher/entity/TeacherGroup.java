@@ -1,38 +1,35 @@
 package com.csu.etrainingsystem.teacherGroup.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
-
+@Embeddable
 @Entity
 @Table(name = "t_group")
 public class TeacherGroup implements Serializable {
 
 
-    @Id
-    @Column
-    private String t_group_id;
+    @EmbeddedId
+    @Column//必须用复合主键
+    private  TeacherGroupId teacherGroupId;
     private int t_num;
     private boolean del_status;
 
     public TeacherGroup() {
     }
 
-    public TeacherGroup(String t_group_id, int t_num, boolean del_status) {
-        this.t_group_id = t_group_id;
+    public TeacherGroup(TeacherGroupId teacherGroupId, int t_num, boolean del_status) {
+        this.teacherGroupId = teacherGroupId;
         this.t_num = t_num;
         this.del_status = del_status;
     }
 
-    public String getT_group_id() {
-        return t_group_id;
+    public TeacherGroupId getTeacherGroupId() {
+        return teacherGroupId;
     }
 
-    public void setT_group_id(String t_group_id) {
-        this.t_group_id = t_group_id;
+    public void setTeacherGroupId(TeacherGroupId teacherGroupId) {
+        this.teacherGroupId = teacherGroupId;
     }
 
     public int getT_num() {

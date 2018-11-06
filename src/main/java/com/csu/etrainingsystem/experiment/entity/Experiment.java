@@ -12,12 +12,16 @@ import java.util.Date;
 @Table(name = "experiment")
 public class Experiment implements Serializable {
 
+
+
     @Id
-    @Column(length = 20)
-    private String exp_id ;
+    @Column
+    private  int exp_id ;
+    private String batch_name;
+    private String time_quant;
+    private String class_time;
     private String t_group_id;
     private String s_group_id;
-    private String time_quant;
     private String pro_name;
     private String tid;
     private java.sql.Date submit_time;
@@ -26,23 +30,49 @@ public class Experiment implements Serializable {
     public Experiment() {
     }
 
-    public Experiment(String exp_id, String t_group_id, String s_group_id, String time_quant, String pro_name, String tid, java.sql.Date submit_time, boolean del_status) {
+    public Experiment(int exp_id, String batch_name, String time_quant, String class_time, String t_group_id, String s_group_id, String pro_name, String tid, java.sql.Date submit_time, boolean del_status) {
         this.exp_id = exp_id;
+        this.batch_name = batch_name;
+        this.time_quant = time_quant;
+        this.class_time = class_time;
         this.t_group_id = t_group_id;
         this.s_group_id = s_group_id;
-        this.time_quant = time_quant;
         this.pro_name = pro_name;
         this.tid = tid;
         this.submit_time = submit_time;
         this.del_status = del_status;
     }
 
-    public String getExp_id() {
+    public int getExp_id() {
         return exp_id;
     }
 
-    public void setExp_id(String exp_id) {
+    public void setExp_id(int exp_id) {
         this.exp_id = exp_id;
+    }
+
+    public String getBatch_name() {
+        return batch_name;
+    }
+
+    public void setBatch_name(String batch_name) {
+        this.batch_name = batch_name;
+    }
+
+    public String getTime_quant() {
+        return time_quant;
+    }
+
+    public void setTime_quant(String time_quant) {
+        this.time_quant = time_quant;
+    }
+
+    public String getClass_time() {
+        return class_time;
+    }
+
+    public void setClass_time(String class_time) {
+        this.class_time = class_time;
     }
 
     public String getT_group_id() {
@@ -59,14 +89,6 @@ public class Experiment implements Serializable {
 
     public void setS_group_id(String s_group_id) {
         this.s_group_id = s_group_id;
-    }
-
-    public String getTime_quant() {
-        return time_quant;
-    }
-
-    public void setTime_quant(String time_quant) {
-        this.time_quant = time_quant;
     }
 
     public String getPro_name() {

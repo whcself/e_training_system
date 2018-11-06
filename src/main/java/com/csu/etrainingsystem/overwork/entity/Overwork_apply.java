@@ -14,9 +14,8 @@ public class Overwork_apply implements Serializable {
 
 
     @Id
-    @Column(length = 20)
-    private String applyId ;
-
+    @Column
+    private int apply_id;
     private String sid;
     private String reason;
     private java.sql.Date apply_time;
@@ -26,8 +25,8 @@ public class Overwork_apply implements Serializable {
     public Overwork_apply() {
     }
 
-    public Overwork_apply(String applyId, String sid, String reason, java.sql.Date apply_time, java.sql.Date overwork_time, boolean del_status) {
-        this.applyId = applyId;
+    public Overwork_apply(int apply_id, String sid, String reason, java.sql.Date apply_time, java.sql.Date overwork_time, boolean del_status) {
+        this.apply_id = apply_id;
         this.sid = sid;
         this.reason = reason;
         this.apply_time = apply_time;
@@ -35,12 +34,12 @@ public class Overwork_apply implements Serializable {
         this.del_status = del_status;
     }
 
-    public String getApplyId() {
-        return applyId;
+    public int getApply_id() {
+        return apply_id;
     }
 
-    public void setApplyId(String applyId) {
-        this.applyId = applyId;
+    public void setApply_id(int apply_id) {
+        this.apply_id = apply_id;
     }
 
     public String getSid() {

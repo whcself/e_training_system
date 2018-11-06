@@ -1,22 +1,17 @@
 package com.csu.etrainingsystem.score.entity;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "score")
 public class Score implements Serializable {
 
-
     @Id
-    @Column(length = 20)
+    @Column
+    private int scoreid;//无意义,自增长
     private String sid;
-    @Id
-    @Column(length = 20)
     private String pro_name;
     private float pro_score;
     private boolean del_status;
@@ -24,11 +19,20 @@ public class Score implements Serializable {
     public Score() {
     }
 
-    public Score(String sid, String pro_name, float pro_score, boolean del_status) {
+    public Score(int scoreid, String sid, String pro_name, float pro_score, boolean del_status) {
+        this.scoreid = scoreid;
         this.sid = sid;
         this.pro_name = pro_name;
         this.pro_score = pro_score;
         this.del_status = del_status;
+    }
+
+    public int getScoreid() {
+        return scoreid;
+    }
+
+    public void setScoreid(int scoreid) {
+        this.scoreid = scoreid;
     }
 
     public String getSid() {
