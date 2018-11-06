@@ -1,7 +1,6 @@
-package com.csu.etrainingsystem.teacherGroup.entity;
+package com.csu.etrainingsystem.teacher.entity;
 
 import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import java.io.Serializable;
 import java.util.Objects;
 

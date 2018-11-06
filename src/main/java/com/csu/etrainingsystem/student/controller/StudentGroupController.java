@@ -3,8 +3,8 @@ package com.csu.etrainingsystem.student.controller;
 
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.student.entity.StudentGroup;
-import com.csu.etrainingsystem.studentGroup.entity.StudentGroupId;
-import com.csu.etrainingsystem.studentGroup.service.StudentGroupService;
+import com.csu.etrainingsystem.student.entity.StudentGroupId;
+import com.csu.etrainingsystem.student.service.StudentGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +36,7 @@ public class StudentGroupController {
     }
     @RequestMapping(value ="/getStudentGroup/{batch_name}")
     public CommonResponseForm getBatchStudentGroup(@PathVariable("batch_name") String batch_name){
-        return CommonResponseForm.of200("获取该批次所有学生分组成功",this.studentGroupService.getStudentGroupByBacth (batch_name));
+        return CommonResponseForm.of200("获取该批次所有学生分组成功",this.studentGroupService.getStudentGroupByBatch(batch_name));
     }
     @RequestMapping(value ="/updateStudentGroup")
     public CommonResponseForm updateStudentGroup(StudentGroup studentGroup){

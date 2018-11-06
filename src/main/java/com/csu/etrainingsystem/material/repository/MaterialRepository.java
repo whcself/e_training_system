@@ -1,7 +1,6 @@
 package com.csu.etrainingsystem.material.repository;
 
 import com.csu.etrainingsystem.material.entity.Material;
-import com.csu.etrainingsystem.overwork_apply.entity.Overwork_apply;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

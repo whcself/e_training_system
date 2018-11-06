@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.overwork_apply.repository;
+package com.csu.etrainingsystem.overwork.repository;
 
 import com.csu.etrainingsystem.overwork.entity.Overwork_apply;
 import org.springframework.data.jpa.repository.JpaRepository;

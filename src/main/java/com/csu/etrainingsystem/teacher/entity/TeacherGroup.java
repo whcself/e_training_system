@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.teacherGroup.entity;
+package com.csu.etrainingsystem.teacher.entity;
 
 
 import javax.persistence.*;
@@ -11,7 +11,7 @@ public class TeacherGroup implements Serializable {
 
     @EmbeddedId
     @Column//必须用复合主键
-    private  TeacherGroupId teacherGroupId;
+    private TeacherGroupId teacherGroupId;
     private int t_num;
     private boolean del_status;
 

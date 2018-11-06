@@ -26,17 +26,17 @@ public class ExperimentController {
     public CommonResponseForm getExperiment(@PathVariable("id") int id){
          return CommonResponseForm.of200("获取成功",this.experimentService.getExperiment (id));
     }
-    @RequestMapping(value ="/getExperiment")
+    @RequestMapping(value ="/getAllExperiment")
     public CommonResponseForm getAllExperiment(){
 
         return CommonResponseForm.of200("获取成功", this.experimentService.getAllExperiment ());
     }
-    @RequestMapping(value ="/getExperiment/{id}")
+    @RequestMapping(value ="/updateExperiment/{id}")
     public CommonResponseForm updateStudentGroup(Experiment experiment){
         this.experimentService.updateExperiment (experiment);
         return CommonResponseForm.of204("更新成功");
     }
-    @RequestMapping(value ="/getExperiment/{id}")
+    @RequestMapping(value ="/deleteExperiment/{id}")
     public CommonResponseForm updateStudentGroup(@PathVariable("id") int id){
         this.experimentService.deleteExperiment (id);
         return CommonResponseForm.of204("删除成功");

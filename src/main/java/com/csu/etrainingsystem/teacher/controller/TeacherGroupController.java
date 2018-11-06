@@ -1,9 +1,9 @@
-package com.csu.etrainingsystem.teacherGroup.controller;
+package com.csu.etrainingsystem.teacher.controller;
 
 import com.csu.etrainingsystem.form.CommonResponseForm;
-import com.csu.etrainingsystem.teacherGroup.entity.TeacherGroup;
-import com.csu.etrainingsystem.teacherGroup.entity.TeacherGroupId;
-import com.csu.etrainingsystem.teacherGroup.service.TeacherGroupService;
+import com.csu.etrainingsystem.teacher.entity.TeacherGroup;
+import com.csu.etrainingsystem.teacher.entity.TeacherGroupId;
+import com.csu.etrainingsystem.teacher.service.TeacherGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

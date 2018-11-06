@@ -57,4 +57,3 @@ public class UserController {
 
 
 }
->>>>>>> 81a69595c0876378aa93fcd93fcb8da9b77a0d0d:src/main/java/com/csu/etrainingsystem/user/controller/UserController.java

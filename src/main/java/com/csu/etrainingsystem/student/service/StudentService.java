@@ -1,7 +1,7 @@
 package com.csu.etrainingsystem.student.service;
 
 
-import com.csu.etrainingsystem.overwork_apply.service.Overwork_applyService;
+import com.csu.etrainingsystem.overwork.service.Overwork_applyService;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.repository.StudentRepository;

@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.overwork_apply.service;
+package com.csu.etrainingsystem.overwork.service;
 import com.csu.etrainingsystem.overwork.entity.Overwork_apply;
 import com.csu.etrainingsystem.overwork.repository.Overwork_applyRepository;
 import org.springframework.beans.factory.annotation.Autowired;

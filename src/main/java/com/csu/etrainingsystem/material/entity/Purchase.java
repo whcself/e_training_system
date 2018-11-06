@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.purchase.entity;
+package com.csu.etrainingsystem.material.entity;
 
 
 import javax.persistence.Column;

@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.studentGroup.service;
+package com.csu.etrainingsystem.student.service;
 
 
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
@@ -49,7 +49,7 @@ public class StudentGroupService {
         this.studentGroupRepository.saveAndFlush(studentGroup);
     }
     @Transactional
-    public void  deleteStudentGroupByBacth(String batch_name) {
+    public void deleteStudentGroupByBatch(String batch_name) {
        Iterable<StudentGroup> studentGroups =this.studentGroupRepository.findStudentGroupByBatch(batch_name);
         if (studentGroups!=null){
             for (StudentGroup studentGroup : studentGroups) {
@@ -59,7 +59,7 @@ public class StudentGroupService {
         }
     }
     @Transactional
-    public Iterable<StudentGroup>  getStudentGroupByBacth(String batch_name) {
+    public Iterable<StudentGroup> getStudentGroupByBatch(String batch_name) {
        return this.studentGroupRepository.findStudentGroupByBatch(batch_name);
     }
     @Transactional

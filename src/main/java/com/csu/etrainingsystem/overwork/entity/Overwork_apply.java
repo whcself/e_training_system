@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.overwork_apply.entity;
+package com.csu.etrainingsystem.overwork.entity;
 
 
 import javax.persistence.Column;

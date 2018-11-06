@@ -1,8 +1,7 @@
 package com.csu.etrainingsystem.student.repository;
 
-import com.csu.etrainingsystem.studentGroup.entity.StudentGroup;
-import com.csu.etrainingsystem.studentGroup.entity.StudentGroupId;
-import com.csu.etrainingsystem.teacher.entity.Teacher;
+import com.csu.etrainingsystem.student.entity.StudentGroup;
+import com.csu.etrainingsystem.student.entity.StudentGroupId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

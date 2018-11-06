@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.studentGroup.entity;
+package com.csu.etrainingsystem.student.entity;
 
 
 import javax.persistence.Embeddable;

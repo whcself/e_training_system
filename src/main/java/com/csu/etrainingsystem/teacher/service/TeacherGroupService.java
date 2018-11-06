@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.teacherGroup.service;
+package com.csu.etrainingsystem.teacher.service;
 
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
 import com.csu.etrainingsystem.teacher.service.MarkingService;

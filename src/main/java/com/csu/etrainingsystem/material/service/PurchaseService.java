@@ -1,7 +1,7 @@
 /**
  * 物料先放一放,这里出现了一点问题,字段有需要修改的地方
  */
-package com.csu.etrainingsystem.purchase.service;
+package com.csu.etrainingsystem.material.service;
 
 import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.material.repository.PurchaseRepository;

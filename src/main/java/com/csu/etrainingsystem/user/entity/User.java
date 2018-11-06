@@ -1,4 +1,4 @@
-package com.csu.etrainingsystem.security.entity;
+package com.csu.etrainingsystem.user.entity;
 
 
 import javax.persistence.Column;
