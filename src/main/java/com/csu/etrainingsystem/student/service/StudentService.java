@@ -66,6 +66,14 @@ public class StudentService {
     public void deleteByBacth(String sid) {
 
     }
+
+    public Iterable<Student> findStudentByBatchName(String batchName){
+        return studentRepository.findStudentByBatch_name(batchName);
+    }
+
+    public Iterable<Student> findStudentByBatchNameAndSGroup(String batchName,String groupId){
+        return studentRepository.findStudentByS_group_idAndBatch(groupId,batchName);
+    }
 }
 
 
