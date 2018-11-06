@@ -1,6 +1,6 @@
 package com.csu.etrainingsystem.user.service;
 
-import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.security.entity.User;
 import com.csu.etrainingsystem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

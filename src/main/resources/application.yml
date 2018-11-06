@@ -23,6 +23,9 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+  session:
+      store-type: none
+      timeout: 72h
 server:
   port: 8084
 

@@ -1,6 +1,6 @@
 package com.csu.etrainingsystem.user.repository;
 
-import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.security.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
