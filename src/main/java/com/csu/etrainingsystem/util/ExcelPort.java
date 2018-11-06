@@ -1,6 +1,9 @@
 package com.csu.etrainingsystem.util;
 
 import com.csu.etrainingsystem.student.entity.Student;
+import com.csu.etrainingsystem.student.entity.StudentGroup;
+import com.csu.etrainingsystem.student.entity.StudentGroupId;
+import com.csu.etrainingsystem.student.service.StudentGroupService;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -13,6 +16,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 
@@ -31,6 +36,14 @@ import java.util.List;
 public class ExcelPort {
 
 
+    private static StudentGroupService studentGroupService;
+
+    @Autowired
+    public ExcelPort(StudentGroupService studentGroupService) {
+        ExcelPort.studentGroupService = studentGroupService;
+    }
+
+
     public static void main(String[] args) {
         readExcel("test.xlsx", "2", 8);
     }
@@ -38,7 +51,7 @@ public class ExcelPort {
     /**
      * -ScJn 2018.10.26
      *
-     * @param path the path of the excel file
+     * @param path      the path of the excel file
      * @param batchName 2018S101/2018S201/2018S501
      * @return the students list
      * <p>
@@ -51,10 +64,7 @@ public class ExcelPort {
         String[] groupName1 = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
         int[] numOfAdd = new int[20];
         int[] numOfGroup1 = new int[20];
-        /*
-        TODO: batchName 命名规则
-         */
-        String[] groupName = batchName.charAt(5)=='1' ? groupName1 : groupName25;
+        String[] groupName = batchName.charAt(5) == '1' ? groupName1 : groupName25;
         ArrayList<Student> students = new ArrayList<>();
         try {
             FileInputStream file = new FileInputStream(new File(path));
@@ -69,12 +79,17 @@ public class ExcelPort {
             int exGroupNum = rowNum % groupNum;
             int stuNum = rowNum / groupNum;
             for (int i = 0; i < groupNum; i++) {
-                if (i < exGroupNum) numOfGroup1[i] = stuNum + 1;
-                else numOfGroup1[i] = stuNum;
+
+                if (i < exGroupNum) {
+                    numOfGroup1[i] = stuNum + 1;
+                } else numOfGroup1[i] = stuNum;
+                studentGroupService.addStudentGroup(
+                        new StudentGroup(new StudentGroupId(groupName[i], batchName), numOfGroup1[i], false)
+                );
                 if (i != 0)
-                    numOfAdd[i] = numOfAdd[i - 1]+numOfGroup1[i];
-                else numOfAdd[i]=numOfGroup1[i];
-                System.out.println(i+" "+numOfGroup1[i]+" "+numOfAdd[i]);
+                    numOfAdd[i] = numOfAdd[i - 1] + numOfGroup1[i];
+                else numOfAdd[i] = numOfGroup1[i];
+                System.out.println(i + " " + numOfGroup1[i] + " " + numOfAdd[i]);
             }
             System.out.println("rowNum:" + rowNum);
             DecimalFormat decimalFormat = new DecimalFormat();
@@ -83,7 +98,7 @@ public class ExcelPort {
             for (Cell cell : firstRow) colName.add(cell.getStringCellValue());
 
             //Iterate through each rows one by one
-            int groupIndex=0;
+            int groupIndex = 0;
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) continue;
                 //For each row, iterate through all the columns
@@ -117,9 +132,10 @@ public class ExcelPort {
                         System.out.print("null" + "\t");
                 }// 一行结束
                 int rowIndex = row.getRowNum();
-                if(rowIndex<=numOfAdd[groupIndex]){
+                if (rowIndex <= numOfAdd[groupIndex]) {
                     student.setS_group_id(groupName[groupIndex]);
-                }else {
+                } else {
+
                     groupIndex++;
                     student.setS_group_id(groupName[groupIndex]);
                 }
