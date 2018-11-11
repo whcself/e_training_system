@@ -7,10 +7,7 @@ import com.csu.etrainingsystem.procedure.entity.ProcedId;
 import com.csu.etrainingsystem.procedure.service.ProcedureService;
 import com.csu.etrainingsystem.student.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/proced",method = RequestMethod.POST)
@@ -42,13 +39,14 @@ public class ProcedureController {
     /**
      * 获取指定批次的所有工序
      * @param batch_name
-     * @return
+     * @return list of 工序
+     * 修改一次，之前掉错了方法 -ScJn
      */
-    @RequestMapping(value = "/getBatchProced/{batch_name}")
+    @RequestMapping("/getBatchProced/{batch_name}")
     public CommonResponseForm getBatchProced(@PathVariable("batch_name") String batch_name) {
-        ProcedId procedId=new ProcedId (null,batch_name);
-        return  CommonResponseForm.of200("工序获取成功",procedureService.getProcedure (procedId));
+        return  CommonResponseForm.of200("工序获取成功",procedureService.getBatchProcedure (batch_name));
     }
+
     @RequestMapping(value = "/getAllProced")
     public CommonResponseForm getAllProced() {
         return  CommonResponseForm.of200("工序获取成功",procedureService.getAllProcedure ());
