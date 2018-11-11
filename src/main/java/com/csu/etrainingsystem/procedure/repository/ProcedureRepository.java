@@ -2,7 +2,9 @@ package com.csu.etrainingsystem.procedure.repository;
 
 import com.csu.etrainingsystem.procedure.entity.Proced;
 import com.csu.etrainingsystem.procedure.entity.ProcedId;
+import org.hibernate.annotations.SQLUpdate;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Repository;
@@ -35,5 +37,13 @@ public interface ProcedureRepository extends JpaRepository<Proced,ProcedId> {
      */
     @Query(value="select * from proced where  proced.pro_name=? and proced.batch_name=? and proced.del_status=0",nativeQuery = true)
     Optional<Proced> findProcedByNameAndBatch(String pro_name,String batch_name);
+
+    /**
+     * 设置权重
+     *
+     */
+    @Modifying
+    @Query(value = "update proced set weight=?3 where batch_name=?1 and pro_name=?2",nativeQuery = true)
+    void setWeightByBatchNameAndProName(String batch_name,String pro_name,float weight);
 
 }

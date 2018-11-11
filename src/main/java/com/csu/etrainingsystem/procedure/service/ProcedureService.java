@@ -80,4 +80,8 @@ public class ProcedureService {
         */
     }
 
+    @Transactional
+    public void setWeight(String batch_name,String pro_name,float weight){
+        procedureRepository.setWeightByBatchNameAndProName(batch_name,pro_name,weight);
+    }
 }
