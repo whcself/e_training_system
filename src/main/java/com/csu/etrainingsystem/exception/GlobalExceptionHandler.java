@@ -1,23 +1,22 @@
-//package com.csu.etrainingsystem.exception;
-//
-//import org.springframework.web.bind.annotation.ControllerAdvice;
-//import org.springframework.web.bind.annotation.ExceptionHandler;
-//import org.springframework.web.servlet.ModelAndView;
-//
-//import javax.servlet.http.HttpServletRequest;
-//
-//@ControllerAdvice
-//public class GlobalExceptionHandler {
-//
-//    public static final String DEFAULT_ERROR_VIEW = "error";
-//
-//    @ExceptionHandler(value = Exception.class)
-//    public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
-//        ModelAndView mav = new ModelAndView();
-//        mav.addObject("exception", e);
-//        mav.addObject("url", req.getRequestURL());
-//        mav.setViewName(DEFAULT_ERROR_VIEW);
-//        return mav;
-//    }
-//
-//}
+package com.csu.etrainingsystem.exception;
+
+import com.csu.etrainingsystem.form.CommonResponseForm;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    public static final String DEFAULT_ERROR_VIEW = "error";
+
+    @ExceptionHandler(value = Exception.class)
+    public CommonResponseForm defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+        return CommonResponseForm.of400(e.getMessage());
+
+    }
+
+}

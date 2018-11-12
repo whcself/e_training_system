@@ -116,3 +116,5 @@ INSERT score(sid,pro_name,pro_score)VALUES
 ('1203160126','qiangong',88);
 
 SELECT * FROM score
+
+INSERT INTO `etsys`.`experiment` (`batch_name`, `class_time`, `time_quant`, `exp_id`, `s_group_id`, `pro_name`, `t_group_id`, `tid`, `submit_time`) VALUES ('2018S101', '1', '第二周周三56节', '1', 'A', '钳工', '钳工组', '123404', '2018-10-10');

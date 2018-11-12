@@ -80,6 +80,13 @@ public class ProcedureService {
         */
     }
 
+    /**
+     *
+     * @param batch_name 批次名
+     * @param pro_name 工序名
+     * @param weight 权重值
+     * update必须要@Transactional， 要不然报错
+     */
     @Transactional
     public void setWeight(String batch_name,String pro_name,float weight){
         procedureRepository.setWeightByBatchNameAndProName(batch_name,pro_name,weight);

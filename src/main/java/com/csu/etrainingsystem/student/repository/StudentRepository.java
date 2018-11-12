@@ -19,11 +19,21 @@ public interface StudentRepository extends JpaRepository<Student,String> {
      */
     @Query(value="select * from student where student.sid=? and student.del_status=0",nativeQuery = true)
     Optional<Student> findStudentBySid(String sid);
+
+    @Query(value = "select * from student where student.sname=? and student.del_status=0",nativeQuery = true)
+    Iterable<Student> findStudentBySName(String sName);
     @Query(value="select * from student where  student.del_status=0",nativeQuery = true)
     Iterable<Student> findAllStudent();
 
     //根据批次/分组挑选出来,然后再删除
-    @Query(value="select * from student where student.s_group_id=? and student.batch_name=? and student.del_status=0",nativeQuery = true)
+
+    /**
+     *
+     * @param s_group_id 学生组
+     * @param batch_name 批次名
+     * @return 获得指定批次，小组的所有学生
+     */
+    @Query(value="select * from student where student.s_group_id like ?1 and student.batch_name like ?2 and student.del_status=0",nativeQuery = true)
     Iterable<Student> findStudentByS_group_idAndBatch(String s_group_id,String batch_name);
 
 

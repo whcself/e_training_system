@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,12 +15,16 @@ import java.util.Optional;
  */
 @Repository
 public interface ExperimentRepository extends JpaRepository<Experiment,Integer> {
+
     @Query(value="select * from experiment where experiment.exp_id=? and experiment.del_status=0",nativeQuery = true)
     Optional<Experiment> findExperimentByExp_id(int exp_id);
+
     @Query(value="select * from experiment where experiment.calss_time=? and experiment.del_status=0",nativeQuery = true)
     Iterable<Experiment> findExperimentByClass_time(String class_time);
+
     @Query(value="select * from experiment where experiment.del_status=0",nativeQuery = true)
     Iterable<Experiment> findAllExperiment();
+
     @Query(value="select * from experiment where experiment.s_group_id=? experiment.batch_name=? and experiment.del_status=0",nativeQuery = true)
     Iterable<Experiment> findStudentExperiment(String s_group_id,String batch_name);
     /**
@@ -51,4 +56,8 @@ public interface ExperimentRepository extends JpaRepository<Experiment,Integer> 
     @Query(value = "update experiment SET experiment.del_status=1 WHERE experiment.batch_name=?",nativeQuery = true)
     @Modifying
     void deleteExperimentByBatch(String batch_name);
+
+
+    @Query(value = "select * from experiment where batch_name like ?1 and s_group_id like ?2 and pro_name like ?3 and del_status=0",nativeQuery = true)
+    List<Experiment> findExperimentByBatchOrSGroupOrProName(String batchName, String sGroup, String proName);
 }

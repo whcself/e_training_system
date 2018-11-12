@@ -5,13 +5,9 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.procedure.entity.Proced;
 import com.csu.etrainingsystem.procedure.entity.ProcedId;
 import com.csu.etrainingsystem.procedure.service.ProcedureService;
-import com.csu.etrainingsystem.student.entity.Student;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import io.netty.handler.codec.json.JsonObjectDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
