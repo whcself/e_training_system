@@ -1,10 +1,13 @@
 package com.csu.etrainingsystem.overwork.service;
 import com.csu.etrainingsystem.overwork.entity.Overwork;
 import com.csu.etrainingsystem.overwork.repository.OverworkRepository;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Service
@@ -46,5 +49,32 @@ public class OverworkService {
        即:似乎无影响
         */
     }
+
+    /**
+     * 功能：新增教师值班
+     * @param beginTime 开始时间
+     * @param proName   工序名
+     * @param timeLen   时长
+     */
+
+    public Overwork addTeacherOverwork(String beginTime,String proName,String timeLen,String tName){
+        Timestamp begin=Timestamp.valueOf(beginTime);
+        String[] timesp= timeLen.split(":");
+        long duration=Integer.valueOf(timesp[0])*3600000;
+        if(timesp.length==2)duration+=Integer.valueOf(timesp[1])*60000;
+        if(timesp.length==3)duration+=Integer.valueOf(timesp[2])*1000;
+        Timestamp end=new Timestamp(begin.getTime()+duration);
+        Overwork overwork=new Overwork();
+        overwork.setOverwork_time(begin);
+        overwork.setOverwork_time_end(end);
+        overwork.setPro_name(proName);
+        overwork.setT_name(tName);
+        overworkRepository.save(overwork);
+        return overwork;
+    }
+
+//    public static void main(String[] args){
+//        //用于调试
+//    }
 
 }

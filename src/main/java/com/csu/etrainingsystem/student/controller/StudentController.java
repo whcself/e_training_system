@@ -61,6 +61,7 @@ public class StudentController {
     }
 
     /**
+     * -ScJn
      * 重要，学生分组板块，只根据批次
      * @param batchName
      * @return
@@ -71,6 +72,7 @@ public class StudentController {
     }
 
     /**
+     * -ScJn
      * 重要 学生分组板块，根据批次和组名
      * @param groupId
      * @param batchName
