@@ -31,27 +31,27 @@ public class OverWorkController {
 
 
     /**
+     * @apiNote 学生加班申请
      * @param begin    开始时间
      * @param end      结束时间
      * @param pro_name 工序名
      * @return form
-     * @apiNote 查询加班申请
      */
-    @PostMapping("/getOverworkByTime")
-    public CommonResponseForm getOverworkByTime(@RequestParam(required = false) String begin,
-                                                @RequestParam(required = false) String end,
-                                                @RequestParam(required = false) String pro_name) {
+    @PostMapping("/getOverworkApplyByTime")
+    public CommonResponseForm getOverworkApplyByTime(@RequestParam(required = false) String begin,
+                                                     @RequestParam(required = false) String end,
+                                                     @RequestParam(required = false) String pro_name) {
         List<Overwork_apply> overworkApplyList = overworkapplyService.getOverworkApplyByBeginAndEndTime(begin, end, pro_name);
         if (overworkApplyList.size() == 0) return CommonResponseForm.of400("查询错误");
         else return CommonResponseForm.of200("查询成功", overworkApplyList);
     }
 
     /**
+     * @apiNote 新增教师值班
      * @param begin    开始时间 2018-10-10 22:10:10
      * @param duration 时长 默认为2，可以是2:30,2:30:12 (注意是':' 英文冒号)
      * @param pro_name 工序
      * @return form
-     * @apiNote 新增教师值班
      */
     @PostMapping("/addTeacherOverwork")
     public CommonResponseForm addTeacherOverwork(@RequestParam String begin,
@@ -65,11 +65,12 @@ public class OverWorkController {
 
 
     /**
+     * @apiNote 教师值班记录
      * @param begin    开始时间
      * @param end      结束时间
      * @param pro_name 工序名
      * @return list
-     * @apiNote 功能：教师值班记录
+     *
      */
     @PostMapping("/getOverworkByTimeOrProName")
     public CommonResponseForm getOverworkByTimeOrProName(@RequestParam(required = false) String begin,
