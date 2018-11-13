@@ -1,21 +1,24 @@
 package com.csu.etrainingsystem.overwork.service;
 import com.csu.etrainingsystem.overwork.entity.Overwork;
 import com.csu.etrainingsystem.overwork.repository.OverworkRepository;
-import org.junit.Test;
+import com.csu.etrainingsystem.teacher.entity.Teacher;
+import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class OverworkService {
     private final OverworkRepository overworkRepository;
+    private final TeacherRepository teacherRepository;
     @Autowired
-    public OverworkService(OverworkRepository overworkRepository) {
+    public OverworkService(OverworkRepository overworkRepository,TeacherRepository teacherRepository) {
         this.overworkRepository = overworkRepository;
+        this.teacherRepository=teacherRepository;
     }
 
     @Transactional
@@ -57,7 +60,10 @@ public class OverworkService {
      * @param timeLen   时长
      */
 
-    public Overwork addTeacherOverwork(String beginTime,String proName,String timeLen,String tName){
+    public boolean addTeacherOverwork(String beginTime,String proName,String timeLen,String tName){
+
+        Teacher teacher=teacherRepository.findTeacherByTName(tName);
+        if(teacher==null)return false;
         Timestamp begin=Timestamp.valueOf(beginTime);
         String[] timesp= timeLen.split(":");
         long duration=Integer.valueOf(timesp[0])*3600000;
@@ -70,11 +76,30 @@ public class OverworkService {
         overwork.setPro_name(proName);
         overwork.setT_name(tName);
         overworkRepository.save(overwork);
-        return overwork;
+        return true;
+    }
+
+    /**
+     * 功能：教师值班记录
+     * @param begin 开始时间
+     * @param end 结束时间
+     * @param proName 工序名
+     * @return list
+     */
+    public List<Overwork> getOverworkByTimeOrProName(String begin,String end,String proName){
+        if(begin==null)begin="1999-1-1";
+        if(end==null)end="2999-1-1";
+        if(proName==null)proName="%";
+        System.out.println("*****");
+        return overworkRepository.findOverworkByTimeOrProName(begin,end,proName);
     }
 
 //    public static void main(String[] args){
-//        //用于调试
+//        List<Overwork> overworks=overworkService.getOverworkByTimeOrProName("2018-10-10","2018-12-12",null);
+//        System.out.println(overworks.size());
+//        for(Overwork overwork:overworks){
+//            System.out.println(overwork.getOverwork_time()+" "+overwork.getOverwork_time_end());
+//        }
 //    }
 
 }

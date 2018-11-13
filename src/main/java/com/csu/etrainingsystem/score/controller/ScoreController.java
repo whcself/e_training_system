@@ -31,7 +31,8 @@ public class ScoreController {
     }
 
 
-    /**重要
+    /**
+     * @apiNote 成绩列表
      * @param batch_name 批次名
      * @param s_group_id 学生组
      * @param pro_name   工序名
@@ -45,7 +46,7 @@ public class ScoreController {
                                                              @RequestParam(required = false) String sName) {
         List<ScoreForm> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName);
         if ( scoreForms.size() == 0) {
-            return CommonResponseForm.of400("查询失败");
+            return CommonResponseForm.of400("查询失败，结果为空");
         }
         return CommonResponseForm.of200("查询成功", scoreForms);
     }
@@ -57,7 +58,7 @@ public class ScoreController {
                                                    @RequestParam(required = false) String pro_name){
         List<Experiment> experiments=scoreService.getScoreSubmitRecord(batch_name,s_group_id,pro_name);
         if(experiments.size()==0){
-            return CommonResponseForm.of400("查询失败");
+            return CommonResponseForm.of400("查询失败，结果为空");
         }else return CommonResponseForm.of200("查询成功",experiments);
 
     }
