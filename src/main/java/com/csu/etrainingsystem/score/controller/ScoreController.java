@@ -51,7 +51,13 @@ public class ScoreController {
         return CommonResponseForm.of200("查询成功", scoreForms);
     }
 
-
+    /**
+     * @apiNote 成绩提交记录
+     * @param batch_name 批次
+     * @param s_group_id 学生组
+     * @param pro_name 工序
+     * @return form
+     */
     @PostMapping("/getScoreRecord")
     public CommonResponseForm getScoreSubmitRecord(@RequestParam(required = false) String batch_name,
                                                    @RequestParam(required = false) String s_group_id,
