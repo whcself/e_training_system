@@ -21,9 +21,9 @@ public class Overwork_apply implements Serializable {
     private int apply_id;
     private String sid;
     private String reason;
-    private java.sql.Date apply_time;
-    private java.sql.Date overwork_time;
-    private java.sql.Date overwork_time_end;
+    private java.sql.Timestamp apply_time;
+    private java.sql.Timestamp overwork_time;
+    private java.sql.Timestamp overwork_time_end;
     private String pro_name;
     private boolean del_status;
 

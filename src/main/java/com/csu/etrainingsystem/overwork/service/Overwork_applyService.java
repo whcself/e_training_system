@@ -9,6 +9,8 @@ import javax.transaction.Transactional;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,18 +65,15 @@ public class Overwork_applyService {
      * @return 申请列表
      */
     public List<Overwork_apply> getOverworkApplyByBeginAndEndTime(String beginTime, String endTime, String proName) {
-        java.sql.Timestamp begin, end;
-        if (beginTime == null) begin = new Timestamp(1999 - 1 - 1);
-        else
-            begin = Timestamp.valueOf(beginTime);
-
-        if (endTime == null) end = new Timestamp(2999 - 1 - 1);
-        else
-            end = Timestamp.valueOf(endTime);
-        if(proName==null){
-            proName="%";
+        if (beginTime == null) beginTime = "1999-1-1";
+        if (endTime == null)
+            endTime = "2999-1-1";
+        if (proName == null) {
+            proName = "%";
         }
-        return overwork_applyRepository.findBetweenBeginAndEndTime(begin, end, proName);
+        System.out.println(beginTime + "*" + endTime + "*" + proName);
+
+        return overwork_applyRepository.findBetweenBeginAndEndTime(beginTime, endTime, proName);
     }
 
 }
