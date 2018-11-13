@@ -6,10 +6,7 @@ import com.csu.etrainingsystem.student.entity.StudentGroup;
 import com.csu.etrainingsystem.student.entity.StudentGroupId;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/studentGroup",method = RequestMethod.POST)
@@ -44,7 +41,7 @@ public class StudentGroupController {
         return CommonResponseForm.of204("更新该批次所有学生分组成功");
     }
     @RequestMapping(value ="/deleteStudentGroup/{s_group_id}/{batch_name}")
-    public CommonResponseForm deleteStudentGroup(@PathVariable("s_group_id") String s_group_id,@PathVariable("batch_name") String batch_name){
+    public CommonResponseForm deleteStudentGroup(@RequestParam("s_group_id") String s_group_id, @PathVariable("batch_name") String batch_name){
         StudentGroupId studentGroupId=new StudentGroupId (s_group_id,batch_name);
         this.studentGroupService.deleteStudentGroup (studentGroupId);
         return CommonResponseForm.of204("删除学生分组成功");
