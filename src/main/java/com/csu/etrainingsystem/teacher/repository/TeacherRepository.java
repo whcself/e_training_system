@@ -28,11 +28,17 @@ public interface TeacherRepository extends JpaRepository<Teacher,String> {
             "select tid from t_group where t_group_id like ?1)",nativeQuery = true)
     public List<Teacher> findTeacherByTRMO(String tClass, String role, String  material_privilege, String  overtime_privilege);
 
+
+    @Query(value = "select * from teacher where tname=? and del_status=0",nativeQuery = true)
+    Teacher findTeacherByTName(String tName);
+
     @Query(value="select * from teacher where teacher.tid=? and teacher.del_status=0",nativeQuery = true)
     Teacher findTeacherByTid(String tid);
 
 
     @Query(value="select * from teacher where teacher.del_status=0",nativeQuery = true)
     Iterable<Teacher> findAllTeacher();
+
+
 
 }

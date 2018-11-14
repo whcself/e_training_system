@@ -2,11 +2,16 @@ package com.csu.etrainingsystem;
 
 
 import com.csu.etrainingsystem.mylearn.controller.HelloController;
+import com.csu.etrainingsystem.overwork.entity.Overwork;
+import com.csu.etrainingsystem.overwork.service.OverworkService;
 import com.csu.etrainingsystem.util.ExcelPort;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -15,6 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
@@ -27,30 +34,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 //a class-level annotation that is used to declare that the ApplicationContext loaded for an integration test should be a WebApplicationContext.
 public class ApplicationTest1 {
-    private MockMvc mvc;
 
-    @Before//Methods annotated with the @Before annotation are executed before each test.
-    public void setUp() throws Exception {
-        mvc = MockMvcBuilders.standaloneSetup(new HelloController()).build();
-    }
+    @Mock
+    private OverworkService overworkService;
 
-    @Test
-    public void getHello() throws Exception {
-        ResultActions hello_world = mvc.perform(MockMvcRequestBuilders.get("/hello").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("Hello world2"))); //throw Exception if not equal
-        System.out.println("ss");
-
-    }
-
-    @Test
-    public void whenCallingSayHello_thenReturnHello() {
-        assertEquals("Hello world", HelloController.index());
-    }
+    public ApplicationTest1(){}
 
 
     @Test
     public void TestExcelPort(){
         ExcelPort.readExcel("test.xlsx","aa",2);
+    }
+
+    @Test
+    public void testOverworkService(){
+        List<Overwork> overworks=overworkService.getOverworkByTimeOrProName("2018-10-10","2018-12-12",null);
+        System.out.println(overworks.size());
+        for(Overwork overwork:overworks){
+            System.out.println(overwork.getOverwork_time()+" "+overwork.getOverwork_time_end());
+        }
     }
 }

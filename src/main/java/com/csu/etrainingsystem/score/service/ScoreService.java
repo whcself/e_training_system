@@ -74,7 +74,6 @@ public class ScoreService {
 
     /**
      * 重要
-     *
      * @param batchName 批次
      * @param sGroup    学生组
      * @param proName   工序名

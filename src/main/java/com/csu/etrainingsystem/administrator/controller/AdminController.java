@@ -43,9 +43,6 @@ public class AdminController {
         this.markingService = markingService;
     }
 
-//
-//    @ApiOperation(value = "创建一个管理员", notes = "")
-//    @ApiImplicitParam(name = "admin", value = "", required = true, dataType = "Admin")
     @RequestMapping(value = "/addAdmin")
     public CommonResponseForm addAdmin(Admin admin) {
         adminService.save(admin);
