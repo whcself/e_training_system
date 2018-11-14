@@ -4,10 +4,12 @@ package com.csu.etrainingsystem.student.service;
 import com.csu.etrainingsystem.overwork.service.Overwork_applyService;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.Student;
+import com.csu.etrainingsystem.student.form.StudentInfoForm;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -74,6 +76,15 @@ public class StudentService {
     public Iterable<Student> findStudentByBatchNameAndSGroup(String batchName,String groupId){
         return studentRepository.findStudentByS_group_idAndBatch(groupId,batchName);
     }
+
+    // TODO: 2018/11/14 教师端学生分组查询？？？
+//    public List<Student> findStudentByInfo(StudentInfoForm studentInfoForm){
+//        String batchName=studentInfoForm.getBatch_name();
+//        String sGroup=studentInfoForm.getS_group_id();
+//        String proName=studentInfoForm.getPro_name();
+//        
+//        return studentRepository.
+//    }
 }
 
 

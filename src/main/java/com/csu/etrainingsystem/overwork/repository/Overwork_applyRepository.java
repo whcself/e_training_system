@@ -21,4 +21,8 @@ public interface Overwork_applyRepository extends JpaRepository<Overwork_apply,I
 
     @Query(value = "select * from overwork_apply where apply_time>?1 and apply_time<?2 and pro_name like ?3 and del_status=0",nativeQuery = true)
     List<Overwork_apply> findBetweenBeginAndEndTime(String beginDate, String endDate, String proName);
+
+    @Query(value = "select * from overwork_apply where sid=? and del_status=0",nativeQuery = true)
+    List<Overwork_apply> findOverwork_applyBySId(String sId);
+
 }

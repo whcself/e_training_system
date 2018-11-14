@@ -3,28 +3,25 @@ package com.csu.etrainingsystem.overwork.controller;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.overwork.entity.Overwork;
 import com.csu.etrainingsystem.overwork.entity.Overwork_apply;
-import com.csu.etrainingsystem.overwork.repository.Overwork_applyRepository;
 import com.csu.etrainingsystem.overwork.service.OverworkService;
 import com.csu.etrainingsystem.overwork.service.Overwork_applyService;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
 @RequestMapping("/overwork")
 public class OverWorkController {
-    private final Overwork_applyService overworkapplyService;
+    private final Overwork_applyService overworkApplyService;
     private final OverworkService overworkService;
     private final TeacherRepository teacherRepository;
 
     @Autowired
     public OverWorkController(Overwork_applyService overwork_applyService, OverworkService overworkService, TeacherRepository teacherRepository) {
-        this.overworkapplyService = overwork_applyService;
+        this.overworkApplyService = overwork_applyService;
         this.overworkService = overworkService;
         this.teacherRepository = teacherRepository;
     }
@@ -41,9 +38,27 @@ public class OverWorkController {
     public CommonResponseForm getOverworkApplyByTime(@RequestParam(required = false) String begin,
                                                      @RequestParam(required = false) String end,
                                                      @RequestParam(required = false) String pro_name) {
-        List<Overwork_apply> overworkApplyList = overworkapplyService.getOverworkApplyByBeginAndEndTime(begin, end, pro_name);
+        List<Overwork_apply> overworkApplyList = overworkApplyService.getOverworkApplyByBeginAndEndTime(begin, end, pro_name);
         if (overworkApplyList.size() == 0) return CommonResponseForm.of400("查询错误");
         else return CommonResponseForm.of200("查询成功", overworkApplyList);
+    }
+
+    /**
+     * @apiNote 学生端，提交加班申请
+     * @param begin 开始时间
+     * @param pro_name 工种
+     * @param duration 时长
+     * @return form
+     */
+    @PostMapping("/addOverworkApply")
+    public CommonResponseForm addOverworkApply(@RequestParam String begin,
+                                               @RequestParam String pro_name,
+                                               @RequestParam String duration,
+                                               @RequestParam(required = false) String reason,
+                                               HttpSession session){
+        boolean isOk= overworkApplyService.addOverworkApply(begin,pro_name,duration,reason,session);
+        if(!isOk)return CommonResponseForm.of400("提交失败");
+        return CommonResponseForm.of204("提交成功");
     }
 
     /**
@@ -80,4 +95,16 @@ public class OverWorkController {
         if (overWorks.size() == 0) return CommonResponseForm.of400("查询失败,结果为空");
         return CommonResponseForm.of200("查询成功", overWorks);
     }
+
+    /**
+     *
+     * @apiNote 学生端：我的申请
+     */
+//    @PostMapping("/getMyOverworkApply")
+//    public CommonResponseForm getMyOverworkApply(HttpSession session){
+//        if(session.getAttribute("role")==)
+//        List<Overwork_apply> overworkApplies= overworkApplyService.getMyOverworkApply(session);
+//
+//        return null;
+//    }
 }

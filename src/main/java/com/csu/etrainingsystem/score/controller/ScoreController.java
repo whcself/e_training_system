@@ -32,11 +32,13 @@ public class ScoreController {
 
 
     /**
-     * @apiNote 成绩列表
+     * @apiNote 管理员端：成绩列表 学生端：评分查询
      * @param batch_name 批次名
      * @param s_group_id 学生组
      * @param pro_name   工序名
      * @return 成绩列表, 上三查询，或确定工序名
+     *
+     * 学生端就传自己的id
      */
     @RequestMapping("/getScore")
     public CommonResponseForm getScoreByBatchAndTeamOrProced(@RequestParam(required = false) String batch_name,

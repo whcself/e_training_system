@@ -2,9 +2,11 @@ package com.csu.etrainingsystem.overwork.service;
 
 import com.csu.etrainingsystem.overwork.entity.Overwork_apply;
 import com.csu.etrainingsystem.overwork.repository.Overwork_applyRepository;
+import com.csu.etrainingsystem.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.sql.Time;
@@ -76,4 +78,42 @@ public class Overwork_applyService {
         return overwork_applyRepository.findBetweenBeginAndEndTime(beginTime, endTime, proName);
     }
 
+    /**
+     * 学生端：新增加班申请
+     *
+     *
+     * @param beginTime 开始时间
+     * @param proName   工序
+     * @param timeLen   时长
+     * @return bool
+     */
+    // TODO-s: 2018/11/14 session,role
+    public boolean addOverworkApply(String beginTime, String proName, String timeLen,
+                                    String reason,HttpSession httpSession) {
+        try {
+            String sId= (String) httpSession.getAttribute("sId");
+            Overwork_apply overworkApply = new Overwork_apply();
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            overworkApply.setApply_time(now);
+            overworkApply.setPro_name(proName);
+            Timestamp begin = Timestamp.valueOf(beginTime);
+            overworkApply.setOverwork_time(begin);
+            Timestamp end=TimeUtil.getEndTime(beginTime,timeLen);
+            overworkApply.setOverwork_time_end(end);
+            overworkApply.setReason(reason);
+            overwork_applyRepository.save(overworkApply);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *
+     * 学生端：我的申请
+     */
+    public List<Overwork_apply> getMyOverworkApply(HttpSession session){
+        String sId= (String) session.getAttribute("sId");
+        return overwork_applyRepository.findOverwork_applyBySId(sId);
+    }
 }
