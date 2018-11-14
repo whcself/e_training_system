@@ -1,5 +1,6 @@
 package com.csu.etrainingsystem.security;
 
+import com.csu.etrainingsystem.form.CommonResponseForm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ConcurrentAccessException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -10,56 +11,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class LoginController {
 
-	/**
-	 * 测试方法
-	 */
-	@RequestMapping("/hello")
-	@ResponseBody
-	public String hello(){
-		System.out.println("UserController.hello()");
-		return "ok";
-	}
-	
-	@RequestMapping("/add")
-	public String add(){
-		return "/user/add";
-	}
-	
-	@RequestMapping("/update")
-	public String update(){
-		return "/user/update";
-	}
-	
-	@RequestMapping("/toLogin")
-	public String toLogin(){
-		return "/login";
-	}
-	
-	@RequestMapping("/noAuth")
-	public String noAuth(){
-		return "/noAuth";
-	}
-
-	/**
-	 * 测试thymeleaf
-	 */
-	@RequestMapping("/testThymeleaf")
-	public String testThymeleaf(Model model){
-		//把数据存入model
-		model.addAttribute("name", "黑马程序员");
-		//返回test.html
-		return "test";
-	}
 	
 	/**
 	 * 登录逻辑处理
 	 */
 	@RequestMapping("/login")
-	public String login(String name,String password,Model model){
+	public CommonResponseForm login(String name, String password){
 		System.out.println("name="+name);
 		/**
 		 * 使用Shiro编写认证操作
@@ -76,21 +38,18 @@ public class LoginController {
 			
 			//登录成功
 			//跳转到test.html
-			return "redirect:/testThymeleaf";
+			return CommonResponseForm.of204 ("登录成功");
 		} catch (UnknownAccountException e) {
 			//e.printStackTrace();
 			//登录失败:用户名不存在
-			model.addAttribute("msg", "用户名不存在");
-			return "login";
+
+			return CommonResponseForm.of400 ("用户名或密码不正确");
 		}catch (IncorrectCredentialsException e) {
-			//e.printStackTrace();
-			//登录失败:密码错误
-			model.addAttribute("msg", "密码错误");
-			return "login";
+
+			return CommonResponseForm.of400 ("用户名或密码不正确");
 		}catch (ConcurrentAccessException e){
 
-			System.out.println ("重复登录");
-			return "login";
+			return CommonResponseForm.of400 ("重复登录");
 		}
 	}
 }

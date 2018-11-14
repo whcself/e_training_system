@@ -45,8 +45,11 @@ public class UserRealm extends AuthorizingRealm{
 		//获取当前登录用户
 		Subject subject = SecurityUtils.getSubject();
 		User user = (User)subject.getPrincipal();
+		//根据不同的角色授予不同权限,管理员权限才能打开管理员界面,老师权限才能打开老师界面;
 		User dbUser = userSerivce.getUser (user.getAccount ());
-
+       if(dbUser.getRole ().equals ("teacher")){
+       	info.addStringPermission ("");
+	   }
 		info.addStringPermission("user:admin");
 
 		return info;
@@ -90,8 +93,10 @@ public class UserRealm extends AuthorizingRealm{
 				if(obj instanceof User){
 					User u=(User)obj;
 					if(userName.equals(u.getAccount ())&&u.getPwd ().equals (user.getPwd ())) {
-					sessionManager.getSessionDAO().delete(session);
-					break;
+							sessionManager.getSessionDAO().delete(session);
+
+							throw new ConcurrentAccessException("重复登录");
+					//
 					}
 				}
 			}

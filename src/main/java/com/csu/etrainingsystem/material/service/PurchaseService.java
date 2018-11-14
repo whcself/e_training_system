@@ -20,6 +20,10 @@ public class PurchaseService {
         this.purchaseRepository = purchaseRepository;
     }
 
+    /**
+     * 添加一个申购记录,前端页面空缺
+     * @param purchase
+     */
     @Transactional
     public void addPurchase(Purchase purchase) {
         this.purchaseRepository.save(purchase);
@@ -28,6 +32,11 @@ public class PurchaseService {
     public Purchase getPurchase(String clazz) {
         Optional<Purchase> purchase=purchaseRepository.findPurchaseByClazz(clazz);
         return purchase.get();
+    }
+    @Transactional
+    public Iterable<Purchase> getPurchaseByTime(String startTime,String endTime) {
+        Iterable<Purchase> purchases=purchaseRepository.findPurchaseByTime (startTime,endTime);
+        return purchases;
     }
     @Transactional
     public Iterable<Purchase> getAllPurchase() {

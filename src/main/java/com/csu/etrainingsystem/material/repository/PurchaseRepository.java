@@ -14,5 +14,6 @@ public interface PurchaseRepository extends JpaRepository<Purchase,String> {
     Optional<Purchase> findPurchaseByClazz(String clazz);
     @Query(value="select * from purchase where purchase.del_status=0",nativeQuery = true)
     Iterable<Purchase> findAllPurchase();
-
+    @Query(value="select * from purchase where purchase.pur_time between ? and ?",nativeQuery = true)
+    Iterable<Purchase> findPurchaseByTime(String startTime ,String endTime);
 }

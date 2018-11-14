@@ -25,8 +25,20 @@ public class ExperimentService {
         return experiment.get();
     }
     @Transactional
+    public Iterable<Experiment> getExperimentByBatch(String batch_name) {
+        return this.experimentRepository.findExperimentByBatch (batch_name);
+    }
+    @Transactional
     public Iterable<Experiment> getAllExperiment() {
         return this.experimentRepository.findAllExperiment();
+    }
+    @Transactional
+    public Iterable<Experiment> getExperimentByTemplate(String template_id) {
+        return this.experimentRepository.findExperimentByTemplate (template_id);
+    }
+    @Transactional
+    public Iterable<Experiment> getExperimentByTempAndBatch(String template_id,String batch_name) {
+        return this.experimentRepository.findExperimentByTempAndBatch (template_id,batch_name);
     }
     @Transactional
     public Iterable<Experiment> getStudentExperiment(String s_group_id,String batch_name) {
@@ -66,6 +78,10 @@ public class ExperimentService {
     @Transactional
     public void  deleteExperimentByT_group(String t_group_id) {
         this.experimentRepository.deleteExperimentByT_group(t_group_id);
+    }
+    @Transactional
+    public void  deleteExperimentByTempAndBatch(String template_id,String batch_name) {
+        this.experimentRepository.deleteExperimentByTempAndBatch (template_id,batch_name);
     }
 
 }
