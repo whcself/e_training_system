@@ -48,8 +48,13 @@ public class ShiroConfig {
 		/*filterMap.put("/add", "authc");
 		filterMap.put("/update", "authc");*/
 		
-		filterMap.put("/swagger-ui.html", "anon");
-		filterMap.put("/swagger-ui.htm", "anon");
+
+
+
+
+//		filterMap.put("/testThymeleaf", "anon");
+//		filterMap.put("/swagger-ui.html","anon");
+
 		//放行login.html页面
 		filterMap.put("/login", "anon");
 		

@@ -14,4 +14,6 @@ public interface OverworkRepository extends JpaRepository<Overwork,Integer> {
 
     @Query(value="select * from overwork where overwork.del_status=0",nativeQuery = true)
     Iterable<Overwork> findAllOverwork();
+
+
 }

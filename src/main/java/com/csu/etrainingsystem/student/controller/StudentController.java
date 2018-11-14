@@ -60,11 +60,24 @@ public class StudentController {
         return CommonResponseForm.of204("删除学生成功");
     }
 
+    /**
+     * -ScJn
+     * 重要，学生分组板块，只根据批次
+     * @param batchName
+     * @return
+     */
     @RequestMapping("/getStudentByBatchName")
     public CommonResponseForm getStudentByBatchName(@RequestParam String batchName){
         return CommonResponseForm.of200("查询成功",studentService.findStudentByBatchName(batchName));
     }
 
+    /**
+     * -ScJn
+     * 重要 学生分组板块，根据批次和组名
+     * @param groupId
+     * @param batchName
+     * @return
+     */
     @RequestMapping("/getStudentByBatchNameAndSgroup")
     public CommonResponseForm getStudentByBatchNameAndSgroup(@RequestParam String groupId,
                                                              @RequestParam String batchName){
