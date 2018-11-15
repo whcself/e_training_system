@@ -74,6 +74,7 @@ public class ScoreService {
 
     /**
      * 重要
+     *
      * @param batchName 批次
      * @param sGroup    学生组
      * @param proName   工序名
@@ -85,19 +86,19 @@ public class ScoreService {
         List<ScoreForm> scoreForms = new ArrayList<>();
 
         Iterable<Score> scores;
-        List<Student> students;
+        List<Student> students=new ArrayList<>();
 
-        //根据所传的参数，先确定学生
-        if (sGroup != null || batchName != null) {
-            if (sGroup == null) sGroup = "%";
-            if (batchName == null) batchName = "%";
-            students = (List<Student>) studentRepository.findStudentByS_group_idAndBatch(sGroup, batchName);
-        } else if (sId != null) {
+        //根据所传的参数，先确定学生,没有学好就看批次和组号
+        if (sId != null) {
             students = new ArrayList<>();
             Optional<Student> student = studentRepository.findStudentBySid(sId);
             student.ifPresent(students::add);
-        } else {
+        } else if (sName != null) {
             students = (List<Student>) studentRepository.findStudentBySName(sName);
+        } else if (sGroup != null || batchName != null) {
+            if (sGroup == null) sGroup = "%";
+            if (batchName == null) batchName = "%";
+            students = (List<Student>) studentRepository.findStudentByS_group_idAndBatch(sGroup, batchName);
         }
         for (Student student : students) {
             if (proName != null) {
@@ -187,16 +188,15 @@ public class ScoreService {
     }
 
     /**
-     *
      * @param batchName 批次名
-     * @param sGroup 学生组
-     * @param proName 工序名
+     * @param sGroup    学生组
+     * @param proName   工序名
      * @return 实验列表
      */
     public List<Experiment> getScoreSubmitRecord(String batchName, String sGroup, String proName) {
-        if(batchName==null)batchName="%";
-        if(sGroup==null)sGroup="%";
-        if(proName==null)proName="%";
+        if (batchName == null) batchName = "%";
+        if (sGroup == null) sGroup = "%";
+        if (proName == null) proName = "%";
         return experimentRepository.findExperimentByBatchOrSGroupOrProName(batchName, sGroup, proName);
     }
 

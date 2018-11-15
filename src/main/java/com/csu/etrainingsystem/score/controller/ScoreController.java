@@ -4,12 +4,15 @@ import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
+import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.entity.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Sides;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -51,6 +54,23 @@ public class ScoreController {
             return CommonResponseForm.of400("查询失败，结果为空");
         }
         return CommonResponseForm.of200("查询成功", scoreForms);
+    }
+
+    /**
+     * @apiNote 学生端 我的成绩
+     * @param session s
+     * @return form
+     */
+    @RequestMapping("/getMyScore")
+    public CommonResponseForm getMyScore(HttpSession session){
+        User user=UserRole.getUser(session);
+        String sId=user.getAccount();
+        List<ScoreForm> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(null,null , null, sId,null);
+        if ( scoreForms.size() == 0) {
+            return CommonResponseForm.of400("查询失败，结果为空");
+        }
+        return CommonResponseForm.of200("查询成功", scoreForms);
+
     }
 
     /**

@@ -9,6 +9,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ public class LoginController {
 	/**
 	 * 登录逻辑处理
 	 */
-	@RequestMapping("/login")
+	@PostMapping("/login")
 	public CommonResponseForm login(String name, String password){
 		System.out.println("name="+name);
 		/**
@@ -35,6 +36,8 @@ public class LoginController {
 		//3.执行登录方法
 		try {
 			subject.login(token);
+
+
 			
 			//登录成功
 			//跳转到test.html

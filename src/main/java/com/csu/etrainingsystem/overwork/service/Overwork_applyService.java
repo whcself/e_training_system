@@ -2,7 +2,11 @@ package com.csu.etrainingsystem.overwork.service;
 
 import com.csu.etrainingsystem.overwork.entity.Overwork_apply;
 import com.csu.etrainingsystem.overwork.repository.Overwork_applyRepository;
+import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.util.TimeUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -81,24 +85,24 @@ public class Overwork_applyService {
     /**
      * 学生端：新增加班申请
      *
-     *
      * @param beginTime 开始时间
      * @param proName   工序
      * @param timeLen   时长
      * @return bool
      */
-    // TODO-s: 2018/11/14 session,role
     public boolean addOverworkApply(String beginTime, String proName, String timeLen,
-                                    String reason,HttpSession httpSession) {
+                                    String reason, User user) {
         try {
-            String sId= (String) httpSession.getAttribute("sId");
+
+            String sId=user.getAccount();
             Overwork_apply overworkApply = new Overwork_apply();
             Timestamp now = new Timestamp(System.currentTimeMillis());
             overworkApply.setApply_time(now);
+            overworkApply.setSid(sId);
             overworkApply.setPro_name(proName);
             Timestamp begin = Timestamp.valueOf(beginTime);
             overworkApply.setOverwork_time(begin);
-            Timestamp end=TimeUtil.getEndTime(beginTime,timeLen);
+            Timestamp end = TimeUtil.getEndTime(beginTime, timeLen);
             overworkApply.setOverwork_time_end(end);
             overworkApply.setReason(reason);
             overwork_applyRepository.save(overworkApply);
@@ -109,11 +113,9 @@ public class Overwork_applyService {
     }
 
     /**
-     *
      * 学生端：我的申请
      */
-    public List<Overwork_apply> getMyOverworkApply(HttpSession session){
-        String sId= (String) session.getAttribute("sId");
+    public List<Overwork_apply> getMyOverworkApply(String sId) {
         return overwork_applyRepository.findOverwork_applyBySId(sId);
     }
 }

@@ -1,3 +1,4 @@
+
 package com.csu.etrainingsystem.security.shiro;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
