@@ -4,12 +4,15 @@ import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
+import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.entity.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Sides;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -32,11 +35,13 @@ public class ScoreController {
 
 
     /**
-     * @apiNote 成绩列表
+     * @apiNote 管理员端：成绩列表 学生端：评分查询
      * @param batch_name 批次名
      * @param s_group_id 学生组
      * @param pro_name   工序名
      * @return 成绩列表, 上三查询，或确定工序名
+     *
+     * 学生端就传自己的id
      */
     @RequestMapping("/getScore")
     public CommonResponseForm getScoreByBatchAndTeamOrProced(@RequestParam(required = false) String batch_name,
@@ -49,6 +54,23 @@ public class ScoreController {
             return CommonResponseForm.of400("查询失败，结果为空");
         }
         return CommonResponseForm.of200("查询成功", scoreForms);
+    }
+
+    /**
+     * @apiNote 学生端 我的成绩
+     * @param session s
+     * @return form
+     */
+    @RequestMapping("/getMyScore")
+    public CommonResponseForm getMyScore(HttpSession session){
+        User user=UserRole.getUser(session);
+        String sId=user.getAccount();
+        List<ScoreForm> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(null,null , null, sId,null);
+        if ( scoreForms.size() == 0) {
+            return CommonResponseForm.of400("查询失败，结果为空");
+        }
+        return CommonResponseForm.of200("查询成功", scoreForms);
+
     }
 
     /**

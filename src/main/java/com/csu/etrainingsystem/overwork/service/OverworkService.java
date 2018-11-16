@@ -3,6 +3,7 @@ import com.csu.etrainingsystem.overwork.entity.Overwork;
 import com.csu.etrainingsystem.overwork.repository.OverworkRepository;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
+import com.csu.etrainingsystem.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,11 +66,7 @@ public class OverworkService {
         Teacher teacher=teacherRepository.findTeacherByTName(tName);
         if(teacher==null)return false;
         Timestamp begin=Timestamp.valueOf(beginTime);
-        String[] timesp= timeLen.split(":");
-        long duration=Integer.valueOf(timesp[0])*3600000;
-        if(timesp.length==2)duration+=Integer.valueOf(timesp[1])*60000;
-        if(timesp.length==3)duration+=Integer.valueOf(timesp[2])*1000;
-        Timestamp end=new Timestamp(begin.getTime()+duration);
+        Timestamp end=TimeUtil.getEndTime(beginTime,timeLen);
         Overwork overwork=new Overwork();
         overwork.setOverwork_time(begin);
         overwork.setOverwork_time_end(end);
@@ -78,6 +75,8 @@ public class OverworkService {
         overworkRepository.save(overwork);
         return true;
     }
+
+
 
     /**
      * 功能：教师值班记录
@@ -93,6 +92,8 @@ public class OverworkService {
         System.out.println("*****");
         return overworkRepository.findOverworkByTimeOrProName(begin,end,proName);
     }
+
+
 
 //    public static void main(String[] args){
 //        List<Overwork> overworks=overworkService.getOverworkByTimeOrProName("2018-10-10","2018-12-12",null);

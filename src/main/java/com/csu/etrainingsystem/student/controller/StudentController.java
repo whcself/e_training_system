@@ -5,6 +5,7 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.Student;
+import com.csu.etrainingsystem.student.form.StudentInfoForm;
 import com.csu.etrainingsystem.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -63,26 +64,28 @@ public class StudentController {
     /**
      * -ScJn
      * 重要，学生分组板块，只根据批次
+     *
      * @param batchName
      * @return
      */
     @RequestMapping("/getStudentByBatchName")
-    public CommonResponseForm getStudentByBatchName(@RequestParam String batchName){
-        return CommonResponseForm.of200("查询成功",studentService.findStudentByBatchName(batchName));
+    public CommonResponseForm getStudentByBatchName(@RequestParam String batchName) {
+        return CommonResponseForm.of200("查询成功", studentService.findStudentByBatchName(batchName));
     }
 
     /**
      * -ScJn
      * 重要 学生分组板块，根据批次和组名
-     * @param groupId
-     * @param batchName
-     * @return
+     * String s_group_id,
+     * String batch_name,
+     * String pro_name,
+     * String sname,
+     * String sid
      */
-    @RequestMapping("/getStudentByBatchNameAndSgroup")
-    public CommonResponseForm getStudentByBatchNameAndSgroup(@RequestParam String groupId,
-                                                             @RequestParam String batchName){
-        return CommonResponseForm.of200("查询成功",studentService.findStudentByBatchNameAndSGroup(batchName,groupId));
-    }
+//    @RequestMapping("/getStudentByBatchNameAndSgroup")
+//    public CommonResponseForm getStudentByBatchAndSgroupAndProOrNameAndId(@RequestBody StudentInfoForm studentInfoForm) {
+//        return CommonResponseForm.of200("查询成功", studentService.findStudentByBatchNameAndSGroup(studentInfoForm));
+//    }
 
 
 }
