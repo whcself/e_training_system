@@ -24,6 +24,12 @@ public class ExperimentService {
         Optional<Experiment> experiment=experimentRepository.findExperimentByExp_id(id);
         return experiment.get();
     }
+
+    /**
+     * 该批次的排课
+     * @param batch_name
+     * @return
+     */
     @Transactional
     public Iterable<Experiment> getExperimentByBatch(String batch_name) {
         return this.experimentRepository.findExperimentByBatch (batch_name);
@@ -32,14 +38,23 @@ public class ExperimentService {
     public Iterable<Experiment> getAllExperiment() {
         return this.experimentRepository.findAllExperiment();
     }
+
+    /**
+     * 获取一个批次为空的模板
+     * @param template_id
+     * @return
+     */
     @Transactional
     public Iterable<Experiment> getExperimentByTemplate(String template_id) {
         return this.experimentRepository.findExperimentByTemplate (template_id);
     }
-    @Transactional
-    public Iterable<Experiment> getExperimentByTempAndBatch(String template_id,String batch_name) {
-        return this.experimentRepository.findExperimentByTempAndBatch (template_id,batch_name);
-    }
+
+    /**
+     * 查询学生的课表,传入一个学生id,查询学生,然后找到分组和批次,根据分组和批次,查询他的排课
+     * @param s_group_id
+     * @param batch_name
+     * @return
+     */
     @Transactional
     public Iterable<Experiment> getStudentExperiment(String s_group_id,String batch_name) {
 
@@ -79,9 +94,6 @@ public class ExperimentService {
     public void  deleteExperimentByT_group(String t_group_id) {
         this.experimentRepository.deleteExperimentByT_group(t_group_id);
     }
-    @Transactional
-    public void  deleteExperimentByTempAndBatch(String template_id,String batch_name) {
-        this.experimentRepository.deleteExperimentByTempAndBatch (template_id,batch_name);
-    }
+
 
 }

@@ -40,25 +40,6 @@ public interface ExperimentRepository extends JpaRepository<Experiment,Integer> 
     Iterable<Experiment> findExperimentByTemplate(String template_id);
 
     /**
-     * 取出同一个模板中的所有实验;并且这些实验属于同一个批次
-     * @param template_id
-     * @param batch_name
-     * @return
-     */
-    @Query(value="select * from experiment where experiment.template_id=? and experiment.batch_name=? and experiment.del_status=0",nativeQuery = true)
-    Iterable<Experiment> findExperimentByTempAndBatch(String template_id,String batch_name);
-
-    /**
-     * 取出同一个模板中的所有实验;并且这些实验属于同一个批次,选出来,然后将其删除,然后将新实验的实验号置空(自增长),写入;
-     * @param template_id
-     * @param batch_name
-     * @return
-     */
-    @Query(value="update experiment SET experiment.del_status=1 WHERE experiment.template_id=? and experiment.batch_name=?",nativeQuery = true)
-    @Modifying
-    Iterable<Experiment> deleteExperimentByTempAndBatch(String template_id,String batch_name);
-
-    /**
      * 根据工序删除实验表,或者说就按这样的方式存?
      * @param pro_name
      */

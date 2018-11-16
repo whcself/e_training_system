@@ -47,9 +47,6 @@ public class UserRealm extends AuthorizingRealm{
 		User user = (User)subject.getPrincipal();
 		//根据不同的角色授予不同权限,管理员权限才能打开管理员界面,老师权限才能打开老师界面;
 		User dbUser = userSerivce.getUser (user.getAccount ());
-       if(dbUser.getRole ().equals ("teacher")){
-       	info.addStringPermission ("");
-	   }
 		info.addStringPermission("user:admin");
 
 		return info;
@@ -87,7 +84,8 @@ public class UserRealm extends AuthorizingRealm{
 
 		for(Session session:sessions){
 	       Object obj=session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-			if(obj instanceof SimplePrincipalCollection){
+
+            if(obj instanceof SimplePrincipalCollection){
 				SimplePrincipalCollection spc = (SimplePrincipalCollection)obj;
 				obj = spc.getPrimaryPrincipal();
 				if(obj instanceof User){
