@@ -4,20 +4,14 @@ import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.entity.StudentGroup;
 import com.csu.etrainingsystem.student.entity.StudentGroupId;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 
@@ -45,29 +39,23 @@ public class ExcelPort {
 
 
     public static void main(String[] args) {
-        readExcel("test.xlsx", "2", 8);
+        System.out.println(readExcel("test.xlsx", "2"));
     }
 
     /**
      * -ScJn 2018.10.26
      *
-     * @param path      the path of the excel file
+     * @param inFile   he path of the excel file
      * @param batchName 2018S101/2018S201/2018S501
      * @return the students list
      * <p>
      * 2018 11.3 update:
      * 增加批次，组数参数，导入excel时确定批次和组数
      */
-    public static ArrayList<Student> readExcel(String path, String batchName, int groupNum) {
-        String[] groupName25 = {"A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3", "D1", "D2", "D3",
-                "E1", "E2", "E3", "F1", "F2", "F3", "G1", "G2", "G3"};
-        String[] groupName1 = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-        int[] numOfAdd = new int[20];
-        int[] numOfGroup1 = new int[20];
-        String[] groupName = batchName.charAt(5) == '1' ? groupName1 : groupName25;
+    public static ArrayList<Student> readExcel(String inFile, String batchName) {
         ArrayList<Student> students = new ArrayList<>();
         try {
-            FileInputStream file = new FileInputStream(new File(path));
+            FileInputStream file = new FileInputStream(new File(inFile));
 
             //Create Workbook instance holding reference to .xlsx file
             XSSFWorkbook workbook = new XSSFWorkbook(file);
@@ -76,21 +64,7 @@ public class ExcelPort {
             XSSFSheet sheet = workbook.getSheetAt(0);
             int rowNum = sheet.getLastRowNum();
             //人数多一个的group数
-            int exGroupNum = rowNum % groupNum;
-            int stuNum = rowNum / groupNum;
-            for (int i = 0; i < groupNum; i++) {
 
-                if (i < exGroupNum) {
-                    numOfGroup1[i] = stuNum + 1;
-                } else numOfGroup1[i] = stuNum;
-                studentGroupService.addStudentGroup(
-                        new StudentGroup(new StudentGroupId(groupName[i], batchName), numOfGroup1[i], false)
-                );
-                if (i != 0)
-                    numOfAdd[i] = numOfAdd[i - 1] + numOfGroup1[i];
-                else numOfAdd[i] = numOfGroup1[i];
-                System.out.println(i + " " + numOfGroup1[i] + " " + numOfAdd[i]);
-            }
             System.out.println("rowNum:" + rowNum);
             DecimalFormat decimalFormat = new DecimalFormat();
             Row firstRow = sheet.getRow(0);
@@ -131,17 +105,7 @@ public class ExcelPort {
                     } else if (cell.getCellType() == CellType._NONE)
                         System.out.print("null" + "\t");
                 }// 一行结束
-                int rowIndex = row.getRowNum();
-                if (rowIndex <= numOfAdd[groupIndex]) {
-                    student.setS_group_id(groupName[groupIndex]);
-                } else {
-
-                    groupIndex++;
-                    student.setS_group_id(groupName[groupIndex]);
-                }
-
                 students.add(student);
-                System.out.println("student index：" + rowIndex + '\t' + "groupid:" + student.getS_group_id());
             }
             file.close();
         } catch (Exception e) {

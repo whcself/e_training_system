@@ -113,9 +113,8 @@ public class AdminController {
      */
     @PostMapping("/importStudents")
     public CommonResponseForm importStudents(@RequestParam String path,
-                                             @RequestParam String batchName,
-                                             @RequestParam int groupNum) {
-        ArrayList<Student> students = adminService.importStudent(path,batchName,groupNum);
+                                             @RequestParam String batchName) {
+        ArrayList<Student> students = adminService.importStudent(path,batchName);
         return CommonResponseForm.of200("导入学生信息成功", students);
     }
 

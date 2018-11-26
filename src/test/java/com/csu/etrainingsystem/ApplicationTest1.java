@@ -42,11 +42,6 @@ public class ApplicationTest1 {
 
 
     @Test
-    public void TestExcelPort(){
-        ExcelPort.readExcel("test.xlsx","aa",2);
-    }
-
-    @Test
     public void testOverworkService(){
         List<Overwork> overworks=overworkService.getOverworkByTimeOrProName("2018-10-10","2018-12-12",null);
         System.out.println(overworks.size());

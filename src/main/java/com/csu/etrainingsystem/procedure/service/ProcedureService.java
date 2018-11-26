@@ -4,22 +4,26 @@ package com.csu.etrainingsystem.procedure.service;
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
 import com.csu.etrainingsystem.procedure.entity.Proced;
 import com.csu.etrainingsystem.procedure.entity.ProcedId;
+import com.csu.etrainingsystem.procedure.entity.Proced_template;
+import com.csu.etrainingsystem.procedure.repository.ProcedTemplateRepository;
 import com.csu.etrainingsystem.procedure.repository.ProcedureRepository;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 public class ProcedureService {
     private final ProcedureRepository procedureRepository;
+    private final ProcedTemplateRepository procedTemplateRepository;
     private final ScoreService scoreService;
     private final ExperimentService experimentService;
     @Autowired
-    public ProcedureService(ProcedureRepository procedureRepository, ScoreService scoreService, ExperimentService experimentService) {
+    public ProcedureService(ProcedTemplateRepository procedTemplateRepository,ProcedureRepository procedureRepository, ScoreService scoreService, ExperimentService experimentService) {
         this.procedureRepository = procedureRepository;
+        this.procedTemplateRepository=procedTemplateRepository;
         this.scoreService = scoreService;
         this.experimentService = experimentService;
     }
@@ -90,5 +94,28 @@ public class ProcedureService {
     @Transactional
     public void setWeight(String batch_name,String pro_name,float weight){
         procedureRepository.setWeightByBatchNameAndProName(batch_name,pro_name,weight);
+    }
+
+    /**
+     * @apiNote 管理员端-增加权重模板
+     * @param template template
+     */
+    @Transactional
+    public void addTemplate(Proced_template template) {
+        procedTemplateRepository.save(template);
+    }
+
+    @Transactional
+    public void band(String batchName,String templateName){
+        List<Proced_template>templates= (List<Proced_template>) procedTemplateRepository.findByTemplateName(templateName);
+        for(Proced_template template:templates){
+            Proced proced=new Proced();
+            proced.setWeight(template.getWeight());
+            String tGroupName=procedureRepository.getTGroupByProName(template.getPro_name());
+            proced.setT_group_id(tGroupName);
+            proced.setProid(new ProcedId(template.getPro_name(),batchName));
+            procedureRepository.save(proced);
+        }
+
     }
 }
