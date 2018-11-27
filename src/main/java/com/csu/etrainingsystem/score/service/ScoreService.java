@@ -2,21 +2,20 @@ package com.csu.etrainingsystem.score.service;
 
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.repository.ExperimentRepository;
-import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
-import com.csu.etrainingsystem.score.form.ScoreSubmitForm;
 import com.csu.etrainingsystem.score.repository.ScoreRepository;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
+import com.csu.etrainingsystem.student.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -43,7 +42,7 @@ public class ScoreService {
     }
 
     @Transactional
-    public Iterable<Score> getScoreBySidAndPro(String sid, String pro_name) {
+    public Score getScoreBySidAndPro(String sid, String pro_name) {
         return scoreRepository.findScoreBySidAndPro_name(sid, pro_name);
     }
 
@@ -103,7 +102,7 @@ public class ScoreService {
         }
         for (Student student : students) {
             if (proName != null) {
-                scores = scoreRepository.findScoreBySidAndPro_name(student.getSid(), proName);
+                scores = (Iterable<Score>) scoreRepository.findScoreBySidAndPro_name(student.getSid(), proName);
             } else {
                 scores = scoreRepository.findScoreBySid(student.getSid());
             }
@@ -201,6 +200,9 @@ public class ScoreService {
         return experimentRepository.findExperimentByBatchOrSGroupOrProName(batchName, sGroup, proName);
     }
 
+    /**
+     * 等级
+     */
     public void setDegree(String way, DegreeForm degreeForm) {
         float great = Float.parseFloat(degreeForm.getGreat());
         float good = Float.parseFloat(degreeForm.getGood());
@@ -223,16 +225,16 @@ public class ScoreService {
             }
         } else if (way.equals("score")) {
             for (Student student : students) {
-                float score = Float.parseFloat(student.getTotal_score());
+                float score = student.getTotal_score();
                 if (score >= great) {
                     student.setDegree("优");
                 } else if (score >= good) {
                     student.setDegree("良");
-                } else if (score>=middle){
+                } else if (score >= middle) {
                     student.setDegree("中");
-                }else if(score>=pass){
+                } else if (score >= pass) {
                     student.setDegree("及格");
-                }else {
+                } else {
                     student.setDegree("不及格");
                 }
                 studentRepository.save(student);
@@ -241,4 +243,132 @@ public class ScoreService {
 
         }
     }
+
+    /**
+     * 修改成绩
+     *
+     * 修改的话，以前就有记录了
+     * 2中类别的分数，分开来执行，一个用studentRepo
+     * 一个用scoreRepo
+     */
+    public void updateScore2(Map<String, String> scoreForm) {
+        String sid = scoreForm.get("sid");
+        System.out.println("*****" + sid);
+        Optional<Student> op = studentRepository.findStudentBySid(sid);
+        if (op.isPresent()) {
+            Student student = op.get();
+            System.out.println("*******" + sid + " " + student.getSname());
+            for (String itemName : scoreForm.keySet()) {
+                System.out.println("****" + itemName);
+                if (itemName.equals("sid")) continue;
+                if (itemName.equals("degree")) student.setDegree(scoreForm.get(itemName));
+                if (itemName.equals("total_score")) student.setTotal_score(Float.parseFloat(scoreForm.get(itemName)));
+                else updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)));
+            }
+        }
+
+
+        // 管理组打分项
+//        if (scoreForm.getAddScore() != 0.0f) {
+//            updateScoreInScore(sid, "加分", scoreForm.getAddScore());
+//        }
+//        if (scoreForm.getReport() != 0.0f) {
+//            updateScoreInScore(sid, "报告", scoreForm.getReport());
+//        }
+//
+//        if (scoreForm.getComputer() != 0.0f) {
+//            updateScoreInScore(sid, "上机", scoreForm.getComputer());
+//        }
+//
+//        if (scoreForm.getAttendance() != 0.0f) {
+//            updateScoreInScore(sid, "考勤", scoreForm.getAttendance());
+//        }
+//        if (scoreForm.getCarDesign() != 0.0f) {
+//            updateScoreInScore(sid, "小车设计", scoreForm.getCarDesign());
+//        }
+//        if (scoreForm.getCarMake() != 0.0f) {
+//            updateScoreInScore(sid, "小车制造", scoreForm.getCarMake());
+//        }
+//
+//
+//        /**********学生表中的项********/
+//        if (scoreForm.getDegree() != null) {
+//            student.setDegree(scoreForm.getDegree());
+//        }
+//
+//        if (scoreForm.getTotalScore() != 0.0f) {
+//            student.setTotal_score(scoreForm.getTotalScore());
+//
+//        }
+//
+//        //其他工序项
+//        if (scoreForm.getChexue() != 0.0f) {
+//            updateScoreInScore(sid, "车削", scoreForm.getChexue());
+//        }
+//        if (scoreForm.getZhuzao() != 0.0f) {
+//            updateScore();
+//        }
+//        if (scoreForm.getCimatron() != 0.0f) {
+//            updateScoreInScore(sid, "Cimatron", scoreForm.getCimatron());
+//        }
+//        if (scoreForm.getDuanya() != 0.0f) {
+//            updateScoreInScore(sid, "锻压", scoreForm.getDuanya());
+//        }
+//
+//
+//        if (scoreForm.getHanjie() != 0.0f) {
+//            updateScoreInScore(sid, "焊接", scoreForm.getHanjie());
+//        }
+//        if (scoreForm.getHeat() != 0.0f) {
+//            updateScoreInScore(sid, "热处理", scoreForm.getHeat());
+//
+//        }
+//        if (scoreForm.getJiguang() != 0.0f) {
+//            updateScoreInScore(sid, "激光", scoreForm.getJiguang());
+//        }
+//        if (scoreForm.getMoxue() != 0.0f) {
+//            updateScoreInScore(sid, "磨削", scoreForm.getMoxue());
+//        }
+//        if (scoreForm.getProcess() != 0.0f) {
+//            updateScoreInScore(sid, "加工中心", scoreForm.getProcess());
+//        }
+//        if (scoreForm.getQiangong() != 0.0f) {
+//            updateScoreInScore(sid, "钳工", scoreForm.getQiangong());
+//        }
+//        if (scoreForm.getRapidprototyping() != 0.0f) {
+//            updateScoreInScore(sid, "快速成型", scoreForm.getRapidprototyping());
+//        }
+//        if (scoreForm.getShukongche() != 0.0f) {
+//            updateScoreInScore(sid, "数控车", scoreForm.getShukongche());
+//        }
+//        if (scoreForm.getShukongchefangzheng() != 0.0f) {
+//            updateScoreInScore(sid, "数控车仿真", scoreForm.getShukongchefangzheng());
+//        }
+//        if (scoreForm.getXianqiege() != 0.0f) {
+//            updateScoreInScore(sid, "线切割", scoreForm.getXianqiege());
+//        }
+//        if (scoreForm.getXixue() != 0.0f) {
+//            updateScoreInScore(sid, "铣削", scoreForm.getXixue());
+//        }
+    }
+
+    private void updateScoreInScore(String sid, String proName, float sco) {
+
+        Score score = scoreRepository.findScoreBySidAndPro_name(sid, proName);
+        if (score != null) {
+            score.setPro_score(sco);
+        } else {
+            score = new Score();
+            score.setSid(sid);
+            score.setPro_score(sco);
+            score.setPro_name(proName);
+        }
+        scoreRepository.save(score);
+
+    }
+
+//    private void updateScoreInStudent(String sid,String ScoreName,float sco){
+
+//
+//    }
 }

@@ -20,7 +20,7 @@ public interface ScoreRepository extends JpaRepository<Score,Integer> {
 
     //查找该同学指定工序的成绩
     @Query(value="select * from score where score.sid=? and score.pro_name=? and score.del_status=0",nativeQuery = true)
-    Iterable<Score> findScoreBySidAndPro_name(String sid, String pro_name);
+    Score findScoreBySidAndPro_name(String sid, String pro_name);
 
     //查找该同学指定工序的成绩
     @Query(value="select * from score where score.del_status=0",nativeQuery = true)
@@ -37,4 +37,5 @@ public interface ScoreRepository extends JpaRepository<Score,Integer> {
     @Query(value = "update score SET score.del_status=1 WHERE score.pro_name=?",nativeQuery = true)
     @Modifying
     void deleteScoreByPro_name(String pro_name);
+
 }

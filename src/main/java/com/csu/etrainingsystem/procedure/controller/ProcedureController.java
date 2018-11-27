@@ -24,11 +24,8 @@ public class ProcedureController {
 
     @RequestMapping(value = "/addProced")
     public CommonResponseForm addProced(Proced proced) {
-        if (procedureService.getProcedure(proced.getProid()) != null) return CommonResponseForm.of204("工序已存在");
-        else {
-            this.procedureService.addProcedure(proced);
-            return CommonResponseForm.of204("工序添加增加成功");
-        }
+        procedureService.addProcedure(proced);
+        return CommonResponseForm.of204("工序添加增加成功");
     }
 
     @RequestMapping(value = "/updateProced")
@@ -73,35 +70,35 @@ public class ProcedureController {
     public CommonResponseForm setWeight(@RequestBody List<Map<String, String>> weightForm) {
         for (Map<String, String> form : weightForm) {
             String batchName = form.get("batch_name");
-            String proName=form.get("pro_name");
+            String proName = form.get("pro_name");
             Float weight = Float.valueOf(form.get("weight"));
-            procedureService.setWeight(batchName,proName,weight);
+            procedureService.setWeight(batchName, proName, weight);
         }
 
         return CommonResponseForm.of204("设置成功");
     }
 
     /**
-     * @apiNote 管理员端-增加权重模板
      * @return form
+     * @apiNote 管理员端-增加权重模板
      */
     @PostMapping("/addTemplate")
-    public CommonResponseForm addTemplate(@RequestBody Proced_template template){
+    public CommonResponseForm addTemplate(@RequestBody Proced_template template) {
         procedureService.addTemplate(template);
         return CommonResponseForm.of204("添加成功");
     }
 
     /**
-     * @apiNote 管理员端-权重模板绑定
-     * @param batch_name 批次名
+     * @param batch_name    批次名
      * @param template_name 模板名
      * @return form
+     * @apiNote 管理员端-权重模板绑定
      */
     @PostMapping("/band")
-    public CommonResponseForm band( @RequestParam String batch_name,@RequestParam String template_name){
+    public CommonResponseForm band(@RequestParam String batch_name, @RequestParam String template_name) {
         try {
             procedureService.band(batch_name, template_name);
-        }catch (Exception e){
+        } catch (Exception e) {
             return CommonResponseForm.of400("绑定失败");
         }
         return CommonResponseForm.of204("绑定成功");

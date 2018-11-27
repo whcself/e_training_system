@@ -97,7 +97,7 @@ public class ProcedureService {
     }
 
     /**
-     * @apiNote 管理员端-增加权重模板
+     * 管理员端-增加权重模板
      * @param template template
      */
     @Transactional
@@ -118,4 +118,10 @@ public class ProcedureService {
         }
 
     }
+
+//    /**
+//     * 加打分项，与老师组
+//     */
+//    @Transactional
+//    public void addProced()
 }

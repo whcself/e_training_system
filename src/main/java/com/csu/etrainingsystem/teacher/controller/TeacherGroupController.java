@@ -1,7 +1,7 @@
 package com.csu.etrainingsystem.teacher.controller;
 
 import com.csu.etrainingsystem.form.CommonResponseForm;
-import com.csu.etrainingsystem.teacher.entity.TeacherGroup;
+import com.csu.etrainingsystem.teacher.entity.TeacherAndGroup;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroupId;
 import com.csu.etrainingsystem.teacher.service.TeacherGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,13 @@ public class TeacherGroupController {
     /**
      *   复合主键添加方式 TeacherGroupId.t_group_id
      *                  TeacherGroupId.tid
-     * @param teacherGroup
+     * @param teacherAndGroup
      * @return
      */
     @RequestMapping("/addTeacherGroup")
-    public CommonResponseForm addTeacherGroup(TeacherGroup teacherGroup){
-        System.out.println ("新增加教师组:"+teacherGroup);
-        this.teacherGroupService.addTeacherGroup (teacherGroup);
+    public CommonResponseForm addTeacherGroup(TeacherAndGroup teacherAndGroup){
+        System.out.println ("新增加教师组:"+ teacherAndGroup);
+        this.teacherGroupService.addTeacherGroup (teacherAndGroup);
         return CommonResponseForm.of204("添加教师组成功");
     }
     @RequestMapping("/getTeacherGroup/{tid}/{t_group_id}")
@@ -54,8 +54,8 @@ public class TeacherGroupController {
         return CommonResponseForm.of204("删除教师组记录成功成功");
     }
     @RequestMapping("/updateTeacherGroup")
-    public CommonResponseForm updateTeacherGroup(TeacherGroup teacherGroup){
-       this.teacherGroupService.updateTeacherGroup (teacherGroup);
+    public CommonResponseForm updateTeacherGroup(TeacherAndGroup teacherAndGroup){
+       this.teacherGroupService.updateTeacherGroup (teacherAndGroup);
         return CommonResponseForm.of204("更新教师组记录成功");
     }
 }

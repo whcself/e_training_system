@@ -1,8 +1,7 @@
 package com.csu.etrainingsystem.teacher.service;
 
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
-import com.csu.etrainingsystem.teacher.service.MarkingService;
-import com.csu.etrainingsystem.teacher.entity.TeacherGroup;
+import com.csu.etrainingsystem.teacher.entity.TeacherAndGroup;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroupId;
 import com.csu.etrainingsystem.teacher.repository.TeacherGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,8 @@ public class TeacherGroupService {
     }
 
     @Transactional
-    public void addTeacherGroup(TeacherGroup TeacherGroup) {
-        this.teacherGroupRepository.save(TeacherGroup);
+    public void addTeacherGroup(TeacherAndGroup TeacherAndGroup) {
+        this.teacherGroupRepository.save(TeacherAndGroup);
     }
 
     /**
@@ -33,17 +32,17 @@ public class TeacherGroupService {
      * @return
      */
     @Transactional
-    public TeacherGroup getTeacherGroup(TeacherGroupId id) {
+    public TeacherAndGroup getTeacherGroup(TeacherGroupId id) {
         return this.teacherGroupRepository.findTeacherGroupById(id.getTid(),id.getT_group_id());
     }
     @Transactional
-    public Iterable<TeacherGroup> getAllTeacherGroup() {
+    public Iterable<TeacherAndGroup> getAllTeacherGroup() {
         return this.teacherGroupRepository.findAllTeacherGroup();
     }
 
     @Transactional
-    public void  updateTeacherGroup(TeacherGroup TeacherGroup) {
-        this.teacherGroupRepository.saveAndFlush(TeacherGroup);
+    public void  updateTeacherGroup(TeacherAndGroup TeacherAndGroup) {
+        this.teacherGroupRepository.saveAndFlush(TeacherAndGroup);
     }
 
     /**
@@ -61,13 +60,13 @@ public class TeacherGroupService {
      */
     @Transactional
     public void  deleteTeacherGroup(TeacherGroupId id) {
-        TeacherGroup teacherGroup=getTeacherGroup(id);
-         if (teacherGroup==null){
+        TeacherAndGroup teacherAndGroup =getTeacherGroup(id);
+         if (teacherAndGroup ==null){
              return ;
          }
          else {
-             teacherGroup.setDel_status(true);
-             updateTeacherGroup(teacherGroup);
+             teacherAndGroup.setDel_status(true);
+             updateTeacherGroup(teacherAndGroup);
              //消除打分权限
              this.markingService.deleteMarking(id.getT_group_id());
              //删除指导的实验

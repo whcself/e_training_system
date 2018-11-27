@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.print.attribute.standard.Sides;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/score", method = RequestMethod.POST)
@@ -104,6 +105,12 @@ public class ScoreController {
 
         scoreService.setDegree(way,degreeForm);
         return CommonResponseForm.of204("设置等级成功");
+    }
+
+    @PostMapping("/updateScore")
+    public CommonResponseForm updateScore(@RequestBody Map<String,String> scoreForm){
+        scoreService.updateScore2(scoreForm);
+        return CommonResponseForm.of204("修改成功");
     }
 
 }
