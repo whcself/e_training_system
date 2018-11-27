@@ -4,6 +4,7 @@ import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.repository.ExperimentRepository;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.score.entity.Score;
+import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.form.ScoreSubmitForm;
 import com.csu.etrainingsystem.score.repository.ScoreRepository;
@@ -86,7 +87,7 @@ public class ScoreService {
         List<ScoreForm> scoreForms = new ArrayList<>();
 
         Iterable<Score> scores;
-        List<Student> students=new ArrayList<>();
+        List<Student> students = new ArrayList<>();
 
         //根据所传的参数，先确定学生,没有学好就看批次和组号
         if (sId != null) {
@@ -200,4 +201,44 @@ public class ScoreService {
         return experimentRepository.findExperimentByBatchOrSGroupOrProName(batchName, sGroup, proName);
     }
 
+    public void setDegree(String way, DegreeForm degreeForm) {
+        float great = Float.parseFloat(degreeForm.getGreat());
+        float good = Float.parseFloat(degreeForm.getGood());
+        float middle = Float.parseFloat(degreeForm.getMiddle());
+        float pass = Float.parseFloat(degreeForm.getPass());
+        float notPass = Float.parseFloat(degreeForm.getNotPass());
+        String batchName = degreeForm.getBatchName();
+        List<Student> students = (List<Student>) studentRepository.findStudentByBatch_nameAndOrder(batchName);
+        int studentNum = students.size();
+        if (way.equals("percent")) {
+            int i = 0;
+            for (Student student : students) {
+                if (i < studentNum * great) student.setDegree("优");
+                else if (i <= studentNum * (good + great)) student.setDegree("良");
+                else if (i <= studentNum * (good + great + middle)) student.setDegree("中");
+                else if (i <= studentNum * (good + great + middle + pass)) student.setDegree("及格");
+                else student.setDegree("不及格");
+                i++;
+                studentRepository.save(student);
+            }
+        } else if (way.equals("score")) {
+            for (Student student : students) {
+                float score = Float.parseFloat(student.getTotal_score());
+                if (score >= great) {
+                    student.setDegree("优");
+                } else if (score >= good) {
+                    student.setDegree("良");
+                } else if (score>=middle){
+                    student.setDegree("中");
+                }else if(score>=pass){
+                    student.setDegree("及格");
+                }else {
+                    student.setDegree("不及格");
+                }
+                studentRepository.save(student);
+
+            }
+
+        }
+    }
 }

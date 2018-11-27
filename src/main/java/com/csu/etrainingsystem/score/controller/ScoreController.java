@@ -2,6 +2,7 @@ package com.csu.etrainingsystem.score.controller;
 
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.user.entity.User;
@@ -89,6 +90,20 @@ public class ScoreController {
             return CommonResponseForm.of400("查询失败，结果为空");
         }else return CommonResponseForm.of200("查询成功",experiments);
 
+    }
+
+    /**
+     * @apiNote 管理员端-设置等级
+     * @param way 方式
+     * @param degreeForm form
+     * @return f
+     */
+    @PostMapping("/setDegree")
+    public CommonResponseForm setDegree(@RequestParam(required = false) String way,
+                                         @RequestBody DegreeForm degreeForm){
+
+        scoreService.setDegree(way,degreeForm);
+        return CommonResponseForm.of204("设置等级成功");
     }
 
 }
