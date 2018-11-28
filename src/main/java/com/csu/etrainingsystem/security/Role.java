@@ -5,7 +5,7 @@ public enum Role {
     STUDENT,
     ADMIN,
     TEACHER_M_PURCHASE,
-    TEACHER_M_REGISTER,
+    TEACHER_M_REGISTE,
 
 }
 
