@@ -17,4 +17,7 @@ public interface BatchRepository extends JpaRepository<Batch,String> {
     Optional<Batch> findBatchByName(String batch_name);
     @Query(value="select * from batch where batch.del_status=0",nativeQuery = true)
     Iterable<Batch> findAllBatch();
+
+    @Query(value = "select * from batch where semester_name like ?1 and del_status=0", nativeQuery = true)
+    Batch findBatchBySemester_name(String semesterName);
 }

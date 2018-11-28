@@ -3,6 +3,7 @@ package com.csu.etrainingsystem.administrator.controller;
 import com.csu.etrainingsystem.administrator.entity.Batch;
 import com.csu.etrainingsystem.administrator.repository.BatchRepository;
 import com.csu.etrainingsystem.administrator.service.AdminService;
+import com.csu.etrainingsystem.administrator.service.BatchService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,10 +13,13 @@ import org.springframework.web.bind.annotation.*;
 public class BatchController {
 
     private final AdminService adminService;
+    private final BatchService batchService;
+
 
     @Autowired
-    public BatchController(AdminService adminService){
+    public BatchController(AdminService adminService,BatchService batchService){
         this.adminService=adminService;
+        this.batchService=batchService;
     }
 
 
@@ -25,6 +29,10 @@ public class BatchController {
         return  CommonResponseForm.of200("添加批次成功",batch);
     }
 
+    @PostMapping("/getBatchBySemesterName")
+    public CommonResponseForm getBatchBySemesterName(String semester_name){
+        return CommonResponseForm.of200("查找成功",batchService.getBatchBySemester(semester_name));
+    }
     @RequestMapping(value="/deleteBatch/{id}")
     public @ResponseBody CommonResponseForm deleteBatch(@PathVariable String id){
 
