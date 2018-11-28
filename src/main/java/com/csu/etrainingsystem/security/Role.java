@@ -6,7 +6,6 @@ public enum Role {
     ADMIN,
     TEACHER_M_PURCHASE,
     TEACHER_M_REGISTER,
-    TEACHER_GAVER
 
 }
 
