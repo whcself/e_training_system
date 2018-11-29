@@ -5,6 +5,7 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
+import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.entity.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +22,18 @@ import java.util.Map;
 @RequestMapping(value = "/score", method = RequestMethod.POST)
 public class ScoreController {
     private final ScoreService scoreService;
+    private final StudentService studentService;
 
     @Autowired
-    public ScoreController(ScoreService scoreService) {
+    public ScoreController(ScoreService scoreService, StudentService studentService) {
         this.scoreService = scoreService;
+        this.studentService = studentService;
+    }
+
+    @PostMapping("/release")
+    public CommonResponseForm releaseScore(@RequestParam String batch_name) {
+        studentService.releaseScore(batch_name);
+        return CommonResponseForm.of204("发布成绩成功");
     }
 
     /*
@@ -37,13 +46,13 @@ public class ScoreController {
 
 
     /**
-     * @apiNote 管理员端：成绩列表 学生端：评分查询
      * @param batch_name 批次名
      * @param s_group_id 学生组
      * @param pro_name   工序名
      * @return 成绩列表, 上三查询，或确定工序名
-     *
+     * <p>
      * 学生端就传自己的id
+     * @apiNote 管理员端：成绩列表 学生端：评分查询
      */
     @RequestMapping("/getScore")
     public CommonResponseForm getScoreByBatchAndTeamOrProced(@RequestParam(required = false) String batch_name,
@@ -52,23 +61,23 @@ public class ScoreController {
                                                              @RequestParam(required = false) String sId,
                                                              @RequestParam(required = false) String sName) {
         List<ScoreForm> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName);
-        if ( scoreForms.size() == 0) {
+        if (scoreForms.size() == 0) {
             return CommonResponseForm.of400("查询失败，结果为空");
         }
         return CommonResponseForm.of200("查询成功", scoreForms);
     }
 
     /**
-     * @apiNote 学生端 我的成绩
      * @param session s
      * @return form
+     * @apiNote 学生端 我的成绩
      */
     @RequestMapping("/getMyScore")
-    public CommonResponseForm getMyScore(HttpSession session){
-        User user=UserRole.getUser(session);
-        String sId=user.getAccount();
-        List<ScoreForm> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(null,null , null, sId,null);
-        if ( scoreForms.size() == 0) {
+    public CommonResponseForm getMyScore(HttpSession session) {
+        User user = UserRole.getUser(session);
+        String sId = user.getAccount();
+        List<ScoreForm> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(null, null, null, sId, null);
+        if (scoreForms.size() == 0) {
             return CommonResponseForm.of400("查询失败，结果为空");
         }
         return CommonResponseForm.of200("查询成功", scoreForms);
@@ -76,41 +85,48 @@ public class ScoreController {
     }
 
     /**
-     * @apiNote 成绩提交记录
      * @param batch_name 批次
      * @param s_group_id 学生组
-     * @param pro_name 工序
+     * @param pro_name   工序
      * @return form
+     * @apiNote 成绩提交记录
      */
     @PostMapping("/getScoreRecord")
     public CommonResponseForm getScoreSubmitRecord(@RequestParam(required = false) String batch_name,
                                                    @RequestParam(required = false) String s_group_id,
-                                                   @RequestParam(required = false) String pro_name){
-        List<Experiment> experiments=scoreService.getScoreSubmitRecord(batch_name,s_group_id,pro_name);
-        if(experiments.size()==0){
+                                                   @RequestParam(required = false) String pro_name) {
+        List<Experiment> experiments = scoreService.getScoreSubmitRecord(batch_name, s_group_id, pro_name);
+        if (experiments.size() == 0) {
             return CommonResponseForm.of400("查询失败，结果为空");
-        }else return CommonResponseForm.of200("查询成功",experiments);
+        } else return CommonResponseForm.of200("查询成功", experiments);
 
     }
 
     /**
-     * @apiNote 管理员端-设置等级
-     * @param way 方式
+     * @param way        方式
      * @param degreeForm form
      * @return f
+     * @apiNote 管理员端-设置等级
      */
     @PostMapping("/setDegree")
     public CommonResponseForm setDegree(@RequestParam(required = false) String way,
-                                         @RequestBody DegreeForm degreeForm){
+                                        @RequestBody DegreeForm degreeForm) {
 
-        scoreService.setDegree(way,degreeForm);
+        scoreService.setDegree(way, degreeForm);
         return CommonResponseForm.of204("设置等级成功");
     }
 
+    /**
+     * @param scoreForm s
+     * @return s
+     * @apiNote 管理员端-修改成绩
+     */
     @PostMapping("/updateScore")
-    public CommonResponseForm updateScore(@RequestBody Map<String,String> scoreForm){
-        scoreService.updateScore2(scoreForm);
-        return CommonResponseForm.of204("修改成功");
+    public CommonResponseForm updateScore(@RequestBody Map<String, String> scoreForm) {
+        if (scoreService.updateScore2(scoreForm))
+            return CommonResponseForm.of204("修改成功");
+        return CommonResponseForm.of400("成绩已发布，无法修改");
     }
+
 
 }

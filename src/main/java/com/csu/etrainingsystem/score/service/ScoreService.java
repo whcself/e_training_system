@@ -72,6 +72,7 @@ public class ScoreService {
     }
 
 
+
     /**
      * 重要
      *
@@ -251,12 +252,12 @@ public class ScoreService {
      * 2中类别的分数，分开来执行，一个用studentRepo
      * 一个用scoreRepo
      */
-    public void updateScore2(Map<String, String> scoreForm) {
+    public boolean updateScore2(Map<String, String> scoreForm) {
         String sid = scoreForm.get("sid");
-        System.out.println("*****" + sid);
         Optional<Student> op = studentRepository.findStudentBySid(sid);
         if (op.isPresent()) {
             Student student = op.get();
+            if(student.getScore_lock()==1)return false;
             System.out.println("*******" + sid + " " + student.getSname());
             for (String itemName : scoreForm.keySet()) {
                 System.out.println("****" + itemName);
@@ -266,6 +267,7 @@ public class ScoreService {
                 else updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)));
             }
         }
+        return true;
 
 
         // 管理组打分项
@@ -367,8 +369,5 @@ public class ScoreService {
 
     }
 
-//    private void updateScoreInStudent(String sid,String ScoreName,float sco){
 
-//
-//    }
 }

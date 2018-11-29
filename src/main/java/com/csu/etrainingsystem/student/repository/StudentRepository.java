@@ -44,6 +44,8 @@ public interface StudentRepository extends JpaRepository<Student,String> {
     @Query(value = "select * from student where student.batch_name=? and student.del_status=0 ORDER BY total_score DESC ",nativeQuery = true)
     Iterable<Student> findStudentByBatch_nameAndOrder(String batchName);
 
-
+    @Modifying
+    @Query(value = "update student set score_lock=1 where batch_name=?1 and del_status=0", nativeQuery = true)
+    void releaseScore(String batchName);
 }
 

@@ -27,6 +27,10 @@ public class StudentService {
         this.overwork_applyService = overwork_applyService;
     }
 
+    @Transactional
+    public void releaseScore(String batchName){
+        studentRepository.releaseScore(batchName);
+    }
 
     @Transactional
     public void addStudent(Student student) { studentRepository.save(student); }

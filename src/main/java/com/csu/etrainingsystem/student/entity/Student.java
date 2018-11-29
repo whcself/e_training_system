@@ -22,6 +22,7 @@ public class Student implements Serializable {
     private String depart;
     private Float exm_score;
     private Float total_score;
+    private Integer score_lock;
     private boolean del_status;
     private String degree;
     private Float attend_score;
