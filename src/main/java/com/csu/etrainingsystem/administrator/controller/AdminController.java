@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Table;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,6 +133,16 @@ public class AdminController {
         } catch (Exception e) {
             return CommonResponseForm.of400("查询错误");
         }
+    }
+
+    /**
+     * @apiNote 管理员端-下载成绩模板
+     * @param request r
+     * @param response r
+     */
+    @PostMapping("/download")
+    public void downloadTemplate(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        adminService.downloadTemplate(request,response);
     }
 
 
