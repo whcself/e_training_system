@@ -1,8 +1,11 @@
 package com.csu.etrainingsystem.teacher.service;
 
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
+import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.entity.TeacherAndGroup;
+import com.csu.etrainingsystem.teacher.entity.TeacherGroup;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroupId;
+import com.csu.etrainingsystem.teacher.repository.GroupRepository;
 import com.csu.etrainingsystem.teacher.repository.TeacherGroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,13 +17,27 @@ public class TeacherGroupService {
     private  final TeacherGroupRepository teacherGroupRepository;
     private  final MarkingService markingService;
     private final ExperimentService experimentService;
+    private final GroupRepository groupRepository;
     @Autowired
-    public TeacherGroupService(TeacherGroupRepository teacherGroupRepository, MarkingService markingService, ExperimentService experimentService) {
+    public TeacherGroupService(GroupRepository groupRepository,TeacherGroupRepository teacherGroupRepository, MarkingService markingService, ExperimentService experimentService) {
+        this.groupRepository=groupRepository;
         this.teacherGroupRepository = teacherGroupRepository;
         this.markingService = markingService;
         this.experimentService = experimentService;
     }
 
+    @Transactional
+    public void addGroup(TeacherGroup teacherGroup){
+        groupRepository.save(teacherGroup);
+    }
+    @Transactional
+    public void updateGroup(TeacherGroup teacherGroup){
+        groupRepository.saveAndFlush(teacherGroup);
+    }
+    @Transactional
+    public void deleteGroup(String groupName){
+        groupRepository.deleteGroup(groupName);
+    }
     @Transactional
     public void addTeacherGroup(TeacherAndGroup TeacherAndGroup) {
         this.teacherGroupRepository.save(TeacherAndGroup);

@@ -2,10 +2,13 @@ package com.csu.etrainingsystem.teacher.entity;
 
 import lombok.Data;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Data
-@Table
+@Entity
 public class TeacherGroup {
-    private String tGroupName;
+    @Id
+    private String tGroupId;
 }
