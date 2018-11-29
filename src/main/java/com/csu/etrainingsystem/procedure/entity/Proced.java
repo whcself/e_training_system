@@ -19,7 +19,6 @@ public class Proced implements Serializable {
     private ProcedId proid;
     private String t_group_id;
     private float weight;
-    private String template_name;
     private boolean del_status;
 
 }

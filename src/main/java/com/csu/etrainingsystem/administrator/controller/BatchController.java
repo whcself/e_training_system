@@ -33,6 +33,7 @@ public class BatchController {
     public CommonResponseForm getBatchBySemesterName(String semester_name){
         return CommonResponseForm.of200("查找成功",batchService.getBatchBySemester(semester_name));
     }
+
     @RequestMapping(value="/deleteBatch/{id}")
     public @ResponseBody CommonResponseForm deleteBatch(@PathVariable String id){
 

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,7 +20,7 @@ public interface BatchRepository extends JpaRepository<Batch,String> {
     Iterable<Batch> findAllBatch();
 
     @Query(value = "select * from batch where semester_name like ?1 and del_status=0", nativeQuery = true)
-    Batch findBatchBySemester_name(String semesterName);
+    List<Batch> findBatchBySemester_name(String semesterName);
 
     @Query(value = "select distinct semester_name from batch where del_status=0",nativeQuery = true)
     Iterable<String> findAllSemesterName();

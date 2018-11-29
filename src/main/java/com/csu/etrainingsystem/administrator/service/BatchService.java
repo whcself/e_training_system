@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Repository
 public class BatchService {
@@ -19,7 +20,7 @@ public class BatchService {
         this.semesterRepository = semesterRepository;
     }
 
-    public Batch getBatchBySemester(String semesterName) {
+    public List<Batch> getBatchBySemester(String semesterName) {
         return batchRepository.findBatchBySemester_name(semesterName);
     }
 
