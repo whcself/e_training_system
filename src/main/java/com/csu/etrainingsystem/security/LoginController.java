@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 public class LoginController {
 
@@ -37,11 +40,10 @@ public class LoginController {
 		try {
 			subject.login(token);
 
-
-
 			//登录成功
-			//跳转到test.html
-			return CommonResponseForm.of204 ("登录成功");
+			Map<String,String> m=new HashMap<String,String>();
+			m.put ("id",name);//name即是id
+			return CommonResponseForm.of200 ("登录成功",m);
 		} catch (UnknownAccountException e) {
 			//e.printStackTrace();
 			//登录失败:用户名不存在
