@@ -128,5 +128,12 @@ public class ScoreController {
         return CommonResponseForm.of400("成绩已发布，无法修改");
     }
 
+    @PostMapping("/executeScore")
+    public CommonResponseForm executeScore(@RequestParam String batch_name){
+        scoreService.executeScore(batch_name);
+        return CommonResponseForm.of204("计算成功");
+
+    }
+
 
 }

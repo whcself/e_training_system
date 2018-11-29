@@ -72,7 +72,13 @@ public class ScoreService {
     }
 
 
+    /**
+     *
+     */
+    public void executeScore(String batchName){
 
+//        scoreRepository.executeScore(batchName);
+    }
     /**
      * 重要
      *

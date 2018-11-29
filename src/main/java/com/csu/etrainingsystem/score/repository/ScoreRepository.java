@@ -8,9 +8,20 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/*
+ *     private int scoreid;//无意义,自增长
+ *     private String sid;
+ *     private String pro_name;
+ *     private float pro_score;
+ *     private boolean del_status;
+ */
 @Repository
 public interface ScoreRepository extends JpaRepository<Score, Integer> {
 
+    // TODO: 2018/11/29 scjn 计算总成绩
+//    @Modifying
+//    @Query()
+//    void executeScore(String batchName);
     //查找该同学所有工序的成绩
     @Query(value = "select * from score where score.sid=? and score.del_status=0", nativeQuery = true)
     Iterable<Score> findScoreBySid(String sid);

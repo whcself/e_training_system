@@ -58,4 +58,27 @@ public class BatchController {
         return CommonResponseForm.of200("获取所有批次成功",adminService.getAllBatch());
     }
 
+
+    @PostMapping("/getAllSemesterName")
+    public CommonResponseForm getAllSemesterName(){
+        return CommonResponseForm.of200("获取学期名成功",batchService.getAllSemesterName());
+    }
+
+    @PostMapping("/addSemester")
+    public CommonResponseForm addSemester(@RequestParam String semesterName){
+        batchService.addSemester(semesterName);
+        return CommonResponseForm.of204("添加成功");
+    }
+
+    @PostMapping("/updateSemesterName")
+    public CommonResponseForm updateSemesterName(@RequestParam String old,
+                                                 @RequestParam String semesterName){
+        batchService.updateSemesterName(old,semesterName);
+        return CommonResponseForm.of204("更新成功");
+    }
+    @PostMapping("/deleteSemester")
+    public CommonResponseForm deleteSemester(@RequestParam String semesterName){
+        batchService.deleteSemester(semesterName);
+        return CommonResponseForm.of204("删除成功");
+    }
 }

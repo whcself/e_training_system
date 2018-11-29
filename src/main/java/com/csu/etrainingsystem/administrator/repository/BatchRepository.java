@@ -20,4 +20,16 @@ public interface BatchRepository extends JpaRepository<Batch,String> {
 
     @Query(value = "select * from batch where semester_name like ?1 and del_status=0", nativeQuery = true)
     Batch findBatchBySemester_name(String semesterName);
+
+    @Query(value = "select distinct semester_name from batch where del_status=0",nativeQuery = true)
+    Iterable<String> findAllSemesterName();
+
+    @Modifying
+    @Query(value = "update batch set semester_name=?2 where  semester_name=?1 and del_status=0",nativeQuery = true)
+    void updateSemesterName(String old,String semesterName);
+
+    @Modifying
+    @Query(value = "update batch set del_status=1 where semester_name=?1",nativeQuery = true)
+    void deleteSemester(String semesterName);
 }
+
