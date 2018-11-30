@@ -1,12 +1,14 @@
 package com.csu.etrainingsystem.administrator.service;
 
 import com.csu.etrainingsystem.administrator.entity.Batch;
+import com.csu.etrainingsystem.administrator.form.SemesterForm;
 import com.csu.etrainingsystem.administrator.repository.BatchRepository;
 import com.csu.etrainingsystem.administrator.repository.SemesterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -24,8 +26,14 @@ public class BatchService {
         return batchRepository.findBatchBySemester_name(semesterName);
     }
 
-    public Iterable<String> getAllSemesterName() {
-        return batchRepository.findAllSemesterName();
+    public List<SemesterForm> getAllSemesterName() {
+      Iterable<String> semesters= batchRepository.findAllSemesterName();
+       List<SemesterForm> semesterForms=new ArrayList<SemesterForm> ();
+       int index=0;
+        for (String semester : semesters) {
+            semesterForms.add (new SemesterForm (semester,index++));
+        }
+        return semesterForms;
     }
 
     @Deprecated
