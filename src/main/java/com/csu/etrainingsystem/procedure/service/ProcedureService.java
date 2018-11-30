@@ -20,6 +20,8 @@ public class ProcedureService {
     private final ProcedTemplateRepository procedTemplateRepository;
     private final ScoreService scoreService;
     private final ExperimentService experimentService;
+    String 胡俊贤="123";
+
     @Autowired
     public ProcedureService(ProcedTemplateRepository procedTemplateRepository,ProcedureRepository procedureRepository, ScoreService scoreService, ExperimentService experimentService) {
         this.procedureRepository = procedureRepository;
@@ -82,6 +84,24 @@ public class ProcedureService {
        todo:消除删除一个工序所带来的影响
        即:删除这个工序的实验记录,删除成绩表中,这个工序的成绩记录,删除加班表中该工序对应的记录(加班记录先保留?)
         */
+    }
+
+
+    @Transactional
+    public void addProcedToGroup(String groupName,String proName) {
+        Proced proced = new Proced();
+        proced.setT_group_id(groupName);
+        proced.setProid(new ProcedId(proName,"conn"));
+        procedureRepository.save(proced);
+    }
+
+    @Transactional
+    public void updateProcedFromGroup(String groupName,String old,String newName){
+        procedureRepository.updateProcedFromGroup(groupName,old,newName);
+    }
+    @Transactional
+    public void deleteProcedFromGroup(String groupName,String proName){
+        procedureRepository.deleteProcedFromGroup(groupName,proName);
     }
 
     /**

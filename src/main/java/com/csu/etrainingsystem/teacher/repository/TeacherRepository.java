@@ -22,12 +22,15 @@ public interface TeacherRepository extends JpaRepository<Teacher,String> {
      * @param overtime_privilege 加班管理权限： 加班管理，无
      *
      * @return 查询所得的教师列表
+     *
+     * 如果指定了教师组就调用这个，没有指定教师组的话会有多个教师组
      */
     @Query(value = "select * from teacher where role like ?2 and material_privilege like ?3 " +
-            "and overtime_privilege like ?4 and teacher.del_status=0 and  tid  in(" +
-            "select tid from t_group where t_group_id like ?1)",nativeQuery = true)
-    public List<Teacher> findTeacherByTRMO(String tClass, String role, String  material_privilege, String  overtime_privilege);
+            "and overtime_privilege like ?4 and del_status=0 and  tid  in(" +
+            "select tid from t_group_conn where t_group_id like ?1) ",nativeQuery = true)
+    List<Teacher> findTeacherByTRMO(String tClass, String role, String  material_privilege, String  overtime_privilege);
 
+//    @Query(value = )
 
     @Query(value = "select * from teacher where tname=? and del_status=0",nativeQuery = true)
     Teacher findTeacherByTName(String tName);

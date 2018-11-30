@@ -104,4 +104,45 @@ public class ProcedureController {
         return CommonResponseForm.of204("绑定成功");
     }
 
+    /**
+     * @apiNote 增加工序名到教师组
+     * @param groupName g
+     * @param proName p
+     * @return f
+     */
+    @PostMapping("/addProcedToGroup")
+    public CommonResponseForm addProcedToGroup(@RequestParam String groupName,
+                                               @RequestParam String proName){
+        procedureService.addProcedToGroup(groupName,proName);
+        return CommonResponseForm.of204("增加成功");
+    }
+
+    /**
+     * @apiNote 修改教师分组下的工序名
+     * @param groupName g
+     * @param old o
+     * @param newName n
+     */
+    @PostMapping("/updateProcedFromGroup")
+    public CommonResponseForm updateProcedFromGroup(@RequestParam String groupName,
+                                                    @RequestParam String old,
+                                                    @RequestParam String newName){
+        procedureService.updateProcedFromGroup(groupName,old,newName);
+        return CommonResponseForm.of204("修改成功");
+    }
+
+    /**
+     * @apiNote 在教师组下删除工序
+     * @param groupName g
+     * @param pro_name p
+     */
+    @PostMapping("/deleteProcedFromGroup")
+    public CommonResponseForm deleteProcedFromGroup(@RequestParam String groupName,
+                                                    @RequestParam String pro_name){
+        procedureService.deleteProcedFromGroup(groupName,pro_name);
+        return CommonResponseForm.of204("删除成功");
+    }
+
+
+
 }

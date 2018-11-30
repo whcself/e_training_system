@@ -51,7 +51,7 @@ public interface ProcedureRepository extends JpaRepository<Proced,ProcedId> {
      * @param proName pro
      * @return t_group_id
      */
-    @Query(value="select distinct t_group_id from proced where pro_name=?1 ",nativeQuery = true)
+    @Query(value="select distinct t_group_id from proced where pro_name=?1 and del_status=0",nativeQuery = true)
     String getTGroupByProName(String proName);
 
     @Query(value = "select * from proced where template_name=?1 and del_status=0",nativeQuery = true)
@@ -59,4 +59,12 @@ public interface ProcedureRepository extends JpaRepository<Proced,ProcedId> {
 
 //    @Query(value = "update proced set del_status=1 where batch_name=?1 and  ")
 
+    @Modifying
+    @Query(value = "update proced set pro_name=?3 where pro_name=?2 and t_group_id=?1",nativeQuery = true)
+    void updateProcedFromGroup(String groupName,String old,String newName);
+
+
+    @Modifying
+    @Query(value = "update proced set del_status=1 where t_group_id=?1 and pro_name=?2",nativeQuery = true)
+    void deleteProcedFromGroup(String groupName,String proName);
 }

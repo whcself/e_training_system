@@ -1,6 +1,7 @@
 package com.csu.etrainingsystem.teacher.service;
 
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
+import com.csu.etrainingsystem.procedure.entity.Proced;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.entity.TeacherAndGroup;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroup;
@@ -31,12 +32,21 @@ public class TeacherGroupService {
         groupRepository.save(teacherGroup);
     }
     @Transactional
-    public void updateGroup(TeacherGroup teacherGroup){
-        groupRepository.saveAndFlush(teacherGroup);
+    public void updateGroup(String old,String newName){
+        groupRepository.updateGroup(old,newName);
     }
     @Transactional
     public void deleteGroup(String groupName){
         groupRepository.deleteGroup(groupName);
+    }
+    @Transactional
+    public Iterable<TeacherGroup> getAllGroupName(){
+        return groupRepository.getAllGroupName();
+    }
+
+    @Transactional
+    public Iterable<String> getProcedByGroup(String groupName){
+        return groupRepository.getProcedByGroup(groupName);
     }
     @Transactional
     public void addTeacherGroup(TeacherAndGroup TeacherAndGroup) {
