@@ -4,10 +4,12 @@ import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @Entity
+@Table(name = "semester")
 public class Semester {
     @Id
-    private String semesterName;
+    private String semester_name;
 }
