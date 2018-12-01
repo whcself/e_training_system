@@ -1,6 +1,5 @@
 package com.csu.etrainingsystem.teacher.repository;
 
-import com.csu.etrainingsystem.procedure.entity.Proced;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

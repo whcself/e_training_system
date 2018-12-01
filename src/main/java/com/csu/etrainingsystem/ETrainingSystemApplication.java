@@ -15,7 +15,7 @@ import java.util.TimeZone;
 @EnableSwagger2
 public class ETrainingSystemApplication {
     public static void main(String[] args) {
-        BasicConfigurator.configure(); //自动快速地使用缺省Log4j环境。
+      //  BasicConfigurator.configure(); //自动快速地使用缺省Log4j环境。
         SpringApplication.run(ETrainingSystemApplication.class, args);
     }
 

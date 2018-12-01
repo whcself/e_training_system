@@ -9,10 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TeacherGroupRepository extends JpaRepository<TeacherAndGroup,String > {
 
-    @Query(value="select * from t_group where t_group.tid=? and t_group.t_group_id=? and t_group.del_status=0",nativeQuery = true)
+    @Query(value="select * from t_group_conn where t_group.tid=? and t_group.t_group_id=? and t_group.del_status=0",nativeQuery = true)
     TeacherAndGroup findTeacherGroupById(String tid, String t_group_id);
 
-    @Query(value="select * from t_group where t_group.del_status=0",nativeQuery = true)
+    @Query(value="select * from t_group_conn where t_group.del_status=0",nativeQuery = true)
     Iterable<TeacherAndGroup> findAllTeacherGroup();
 
     /**
@@ -20,7 +20,7 @@ public interface TeacherGroupRepository extends JpaRepository<TeacherAndGroup,St
      * @param tid
      * @return
      */
-    @Query(value="UPDATE t_group SET t_group.del_status=1 WHERE t_group.tid=?",nativeQuery=true)
+    @Query(value="UPDATE t_group_conn SET t_group_conn.del_status=1 WHERE t_group_conn.tid=?",nativeQuery=true)
     @Modifying
     void DeleteTeacherGroupByTidSQL(String tid);
 }

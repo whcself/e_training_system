@@ -29,7 +29,7 @@ public class UserService {
 
         this.teacherService = teacherService;
     }
-
+    @Transactional
     public void changePassword(HttpSession session, String newPassword) {
         User user = (User) session.getAttribute ("user");
         user.setPwd (newPassword);

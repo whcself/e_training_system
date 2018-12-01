@@ -3,12 +3,16 @@ package com.csu.etrainingsystem.score.service;
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.repository.ExperimentRepository;
 import com.csu.etrainingsystem.score.entity.Score;
+import com.csu.etrainingsystem.score.entity.SpecialScore;
 import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.repository.ScoreRepository;
+import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
+import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
-import com.csu.etrainingsystem.student.service.StudentService;
+import com.fasterxml.jackson.databind.util.ArrayIterator;
+import jdk.nashorn.internal.runtime.linker.LinkerCallSite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +27,13 @@ public class ScoreService {
     private final ScoreRepository scoreRepository;
     private final StudentRepository studentRepository;
     private final ExperimentRepository experimentRepository;
-
+    private final SpStudentRepository spStudentRepository;
     @Autowired
-    public ScoreService(ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository) {
+    public ScoreService(ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository, SpStudentRepository spStudentRepository) {
         this.scoreRepository = scoreRepository;
         this.studentRepository = studentRepository;
         this.experimentRepository = experimentRepository;
+        this.spStudentRepository = spStudentRepository;
     }
 
     @Transactional
@@ -58,7 +63,13 @@ public class ScoreService {
 
     @Transactional
     public void deleteScoreBySid(String sid) {
-        this.scoreRepository.deleteScoreBySid(sid);
+        Iterable<Score> scores= scoreRepository.findScoreBySid (sid);
+        if(scores!=null)this.scoreRepository.deleteScoreBySid(sid);
+    }
+    @Transactional
+    public void deleteSpScoreBySid(String sid) {
+        Iterable<SpecialScore> scores= scoreRepository.findSpScoreBySid (sid);
+        if(scores!=null)this.scoreRepository.deleteSpScoreBySid (sid);
     }
 
     @Transactional
@@ -124,8 +135,32 @@ public class ScoreService {
         }
         return scoreForms;
     }
+    @Transactional
+    public List<ScoreForm> getSpScoreBySidOrSname(String sId, String sName) {
+        List<ScoreForm> scoreForms = new ArrayList<>();
 
+        Iterable<SpecialScore> scores;
+        List<SpecialStudent> students = new ArrayList<SpecialStudent>();
 
+        //根据所传的参数，先确定学生
+        if (sId != null) {
+            students = new ArrayList<>();
+            Optional<SpecialStudent> student = spStudentRepository.findSpStudentBySid (sId);
+            student.ifPresent(((ArrayList<SpecialStudent>) students)::add);
+        } else if (sName != null) {
+            students = (List<SpecialStudent>) spStudentRepository.findSpStudentBySName (sName);
+        }
+        for (SpecialStudent student : students) {
+            scores=this.scoreRepository.findSpScoreBySid (student.getSid ());
+            ScoreForm scoreForm = new ScoreForm();
+            scoreForm.setStuName(student.getSname());
+            for (SpecialScore score : scores) {
+              //  scoreForm = setScoreForScoreForm(score, scoreForm);
+            }
+            scoreForms.add(scoreForm);
+        }
+        return scoreForms;
+    }
     ////铸造/数控车/Cimatron/激光切割/加工中心/热处理/焊接/快速成型/锻压/铣削/磨削/车削/钳工/线切割/数控车仿真/
     private ScoreForm setScoreForScoreForm(Score score, ScoreForm scoreForm) {
         String proName = score.getPro_name();
@@ -263,7 +298,7 @@ public class ScoreService {
         Optional<Student> op = studentRepository.findStudentBySid(sid);
         if (op.isPresent()) {
             Student student = op.get();
-            if(student.getScore_lock()==1)return false;
+            if(student.isScore_lock ())return false;
             System.out.println("*******" + sid + " " + student.getSname());
             for (String itemName : scoreForm.keySet()) {
                 System.out.println("****" + itemName);
