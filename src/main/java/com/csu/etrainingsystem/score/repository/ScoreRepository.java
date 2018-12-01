@@ -26,7 +26,7 @@ public interface ScoreRepository extends JpaRepository<Score, Integer> {
     @Query(value = "select * from score where score.sid=? and score.del_status=0", nativeQuery = true)
     Iterable<Score> findScoreBySid(String sid);
 
-    @Query(value = "select * from score where score.sid in (select sid from student where s_name=? and del_status=0)", nativeQuery = true)
+    @Query(value = "select * from score where score.sid in (select sid from student where sname=? and del_status=0)", nativeQuery = true)
     Iterable<Score> findScoreBySName(String sName);
 
     //查找该同学指定工序的成绩

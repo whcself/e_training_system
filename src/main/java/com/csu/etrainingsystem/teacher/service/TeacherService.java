@@ -2,17 +2,20 @@ package com.csu.etrainingsystem.teacher.service;
 
 import com.csu.etrainingsystem.authority.TeacherAuthority;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
+import com.csu.etrainingsystem.teacher.form.TeacherForm;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TeacherService {
-    private  final TeacherRepository teacherRepository;
-    private  final TeacherGroupService teacherGroupService;
+    private final TeacherRepository teacherRepository;
+    private final TeacherGroupService teacherGroupService;
+
     @Autowired
     public TeacherService(TeacherRepository teacherRepository, TeacherGroupService teacherGroupService) {
         this.teacherRepository = teacherRepository;
@@ -20,25 +23,32 @@ public class TeacherService {
     }
 
     @Transactional
-    public void addTeacher(Teacher teacher){teacherRepository.save(teacher);}
+    public void addTeacher(Teacher teacher) {
+        teacherRepository.save(teacher);
+    }
 
     @Transactional
-    public Teacher getTeacher(String id){return teacherRepository.findTeacherByTid(id);}
+    public Teacher getTeacher(String id) {
+        return teacherRepository.findTeacherByTid(id);
+    }
 
     @Transactional
-    public Iterable<Teacher>getAllTeacher(){
-        return teacherRepository.findAllTeacher();}
+    public Iterable<Teacher> getAllTeacher() {
+        return teacherRepository.findAllTeacher();
+    }
 
     @Transactional
-    public void updateTeacher(Teacher teacher){teacherRepository.saveAndFlush(teacher);}
+    public void updateTeacher(Teacher teacher) {
+        teacherRepository.saveAndFlush(teacher);
+    }
 
     @Transactional
-    public void deleteTeacher(String tid){
-      Teacher teacher=getTeacher(tid);
-      teacher.setDel_status(true);
+    public void deleteTeacher(String tid) {
+        Teacher teacher = getTeacher(tid);
+        teacher.setDel_status(true);
         updateTeacher(teacher);
-      //删除这个老师在教师组的记录
-      this.teacherGroupService.deleteTeacherGroupByTeacher(tid);
+        //删除这个老师在教师组的记录
+        this.teacherGroupService.deleteTeacherGroupByTeacher(tid);
       /*
       todo:消除删除一个老师所带来的影响:
       所在教师组的记录需要被删除,实验表的提交老师需要被删除?暂定不删除,好追责
@@ -47,15 +57,13 @@ public class TeacherService {
     }
 
     /**
-     *
-     *
      * @param tClass             String
      * @param role               String
      * @param material_privilege String 转换成int
      * @param overwork_privilege String 转换成 int
      * @return
      */
-    public List<Teacher> findTeachers(String tClass, String role, String  material_privilege, String overwork_privilege) {
+    public List<Map<String, String>> findTeachers(String tClass, String role, String material_privilege, String overwork_privilege) {
         switch (material_privilege) {
             case "物料登记":
                 material_privilege = TeacherAuthority.MATERIAL_REGISTER;//1
@@ -81,10 +89,13 @@ public class TeacherService {
                 overwork_privilege = TeacherAuthority.ALL;
                 break;
         }
-        if(tClass.equals("all"))tClass=TeacherAuthority.ALL;
-        if(role.equals("all"))role=TeacherAuthority.ALL;
-        System.out.println(tClass + " " + role + " " + material_privilege + " " + overwork_privilege);
-        System.out.println(teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege));
-        return teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege);
+        if (role.equals("all")) role = TeacherAuthority.ALL;
+        if (tClass.equals("all")) {
+            return teacherRepository.findTeacherByRMO(role,material_privilege,overwork_privilege);
+        } else {
+            System.out.println(tClass + " " + role + " " + material_privilege + " " + overwork_privilege);
+            return teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege);
+        }
+
     }
 }

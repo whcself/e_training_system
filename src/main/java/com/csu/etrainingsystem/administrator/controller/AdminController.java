@@ -8,6 +8,7 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.teacher.entity.Marking;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
+import com.csu.etrainingsystem.teacher.form.TeacherForm;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -122,13 +124,20 @@ public class AdminController {
     }
 
 
+    /**
+     * @apiNote 教师管理-查询教师
+     * @param tClass 教师组
+     * @param role 角色
+     * @return list
+     */
     @RequestMapping("/findTeachers")
     public CommonResponseForm findTeachers(@RequestParam(required = false) String tClass,
                                            @RequestParam(required = false) String role,
                                            @RequestParam(required = false) String material_privilege,
                                            @RequestParam(required = false) String overwork_privilege) {
+
         try {
-            List<Teacher> teachers = teacherService.findTeachers(tClass, role, material_privilege, overwork_privilege);
+            List<Map<String,String>> teachers = teacherService.findTeachers(tClass, role, material_privilege, overwork_privilege);
             return CommonResponseForm.of200("查询成功", teachers);
         } catch (Exception e) {
             return CommonResponseForm.of400("查询错误");
