@@ -5,6 +5,7 @@ import com.csu.etrainingsystem.administrator.repository.BatchRepository;
 import com.csu.etrainingsystem.administrator.service.AdminService;
 import com.csu.etrainingsystem.administrator.service.BatchService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,12 +60,11 @@ public class BatchController {
         return CommonResponseForm.of200("获取所有批次成功",adminService.getAllBatch());
     }
 
-
+    @ApiOperation ("格式:  semester_name:春季学期"+" incrementId:12")
     @PostMapping("/getAllSemesterName")
     public CommonResponseForm getAllSemesterName(){
         return CommonResponseForm.of200("获取学期名成功",batchService.getAllSemesterName());
     }
-
     @PostMapping("/addSemester")
     public CommonResponseForm addSemester(@RequestParam String semesterName){
         batchService.addSemester(semesterName);

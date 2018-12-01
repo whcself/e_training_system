@@ -67,3 +67,6 @@ public class Score implements Serializable {
         this.del_status = del_status;
     }
 }
+/**
+ * 需要在导入学生的时候创建学生的成绩表?
+ */

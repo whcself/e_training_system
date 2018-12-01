@@ -30,6 +30,9 @@ public class UserRealm extends AuthorizingRealm{
 	/**
 	 * 执行授权逻辑
 	 */
+	@Autowired
+	private UserService userSerivce;
+
 
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
@@ -51,9 +54,6 @@ public class UserRealm extends AuthorizingRealm{
 
 		return info;
 	}
-
-	@Autowired
-	private UserService userSerivce;
 
 	/**
 	 * 执行认证逻辑

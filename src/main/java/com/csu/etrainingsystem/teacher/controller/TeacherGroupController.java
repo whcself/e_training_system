@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ *
+ * todo:teachergroup中的东西全部修改成t_group_conn里面的东西
+ */
 @RestController
 @RequestMapping(value = "/teacherGroup",method = RequestMethod.POST)
 public class TeacherGroupController {
