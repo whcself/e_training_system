@@ -2,8 +2,10 @@ package com.csu.etrainingsystem.procedure.service;
 
 
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
+import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.procedure.entity.Proced;
 import com.csu.etrainingsystem.procedure.entity.ProcedId;
+import com.csu.etrainingsystem.procedure.entity.ProcedTemplateId;
 import com.csu.etrainingsystem.procedure.entity.Proced_template;
 import com.csu.etrainingsystem.procedure.repository.ProcedTemplateRepository;
 import com.csu.etrainingsystem.procedure.repository.ProcedureRepository;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProcedureService {
@@ -118,13 +121,36 @@ public class ProcedureService {
 
     /**
      * 管理员端-增加权重模板
-     * @param template template
+     * @param form template
      */
     @Transactional
-    public void addTemplate(Proced_template template) {
-        procedTemplateRepository.save(template);
+    public void addTemplate(String templateName,Map<String,Float> form) {
+        for(String proName:form.keySet()){
+
+            Proced_template template=new Proced_template();
+            template.setProcedTemplateId(new ProcedTemplateId(templateName,proName));
+            template.setWeight(form.get(proName));
+
+            procedTemplateRepository.save(template);
+
+        }
     }
 
+    @Transactional
+    public Iterable<String>findAllTemplateName(){
+        return procedureRepository.findAllTemplateName();
+    }
+
+    @Transactional
+    public List<Map<String,Float>>findTemplateItemByName(String name){
+        return procedureRepository.findTemplateItemByName(name);
+    }
+
+    @Transactional
+    public CommonResponseForm deleteTemplate(String name){
+        procedureRepository.deleteTemplate(name);
+        return CommonResponseForm.of204("删除成功");
+    }
     @Transactional
     public void band(String batchName,String templateName){
         List<Proced_template>templates= (List<Proced_template>) procedTemplateRepository.findByTemplateName(templateName);

@@ -11,4 +11,12 @@ import java.io.Serializable;
 public class ProcedTemplateId implements Serializable {
     private String template_name;
     private String pro_name;
+
+    public ProcedTemplateId(String template_name, String pro_name) {
+        this.template_name = template_name;
+        this.pro_name = pro_name;
+    }
+    public ProcedTemplateId(){
+
+    }
 }

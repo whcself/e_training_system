@@ -83,10 +83,48 @@ public class ProcedureController {
      * @apiNote 管理员端-增加权重模板
      */
     @PostMapping("/addTemplate")
-    public CommonResponseForm addTemplate(@RequestBody Proced_template template) {
-        procedureService.addTemplate(template);
+    public CommonResponseForm addTemplate(@RequestParam String templateName,
+                                          @RequestBody Map<String,Float> template) {
+        procedureService.addTemplate(templateName,template);
         return CommonResponseForm.of204("添加成功");
     }
+
+//    @PostMapping("/updateTemplate")
+//    public CommonResponseForm updateTemplate(@RequestParam String templateName,
+//                                             @RequestBody  Map<String,Float> template){
+//
+//    }
+
+    /**
+     * @apiNote 权重管理 权重管理-查询所有权重模板名
+     * @return form
+     */
+    @PostMapping("/findAllTemplate")
+    public CommonResponseForm findAllTemplateName(){
+        List<String> names= (List<String>) procedureService.findAllTemplateName();
+        return CommonResponseForm.of200("查询成功:共"+names.size(),names);
+    }
+
+    /**
+     * @apiNote 权重管理 根据模板名字查的所有的条目
+     * @param name 名字
+     */
+    @PostMapping("/findTemplateItemByName")
+    public CommonResponseForm findTemplateItemByName(String name){
+
+        List<Map<String,Float>> items=procedureService.findTemplateItemByName(name);
+        return CommonResponseForm.of200("查询成功:共"+items.size(),items);
+
+    }
+
+    /**
+     * @apiNote  权重管理 删除权重模板
+     */
+    @PostMapping ("/deleteTemplate")
+    public CommonResponseForm deleteTemplate(String name){
+        return procedureService.deleteTemplate(name);
+    }
+
 
     /**
      * @param batch_name    批次名
@@ -115,6 +153,12 @@ public class ProcedureController {
                                                @RequestParam String proName){
         procedureService.addProcedToGroup(groupName,proName);
         return CommonResponseForm.of204("增加成功");
+    }
+
+    @PostMapping("/findProcedItemFromBatch")
+    public CommonResponseForm findProcedItemFromBatch(@RequestParam String batchName){
+        List<Proced> proceds= (List<Proced>) procedureService.getBatchProcedure(batchName);
+        return CommonResponseForm.of200("查询成功：共"+proceds.size(),proceds);
     }
 
     /**
