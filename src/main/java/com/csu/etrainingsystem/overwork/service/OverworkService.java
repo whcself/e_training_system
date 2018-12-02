@@ -1,4 +1,5 @@
 package com.csu.etrainingsystem.overwork.service;
+import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.overwork.entity.Overwork;
 import com.csu.etrainingsystem.overwork.repository.OverworkRepository;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
@@ -37,15 +38,34 @@ public class OverworkService {
     }
 
     @Transactional
-    public void  updateOverwork(Overwork Overwork) {
-        this.overworkRepository.saveAndFlush(Overwork);
+    public void  updateOverwork(Integer overworkId,
+                                String begin,
+                                String end,
+                                String pro_name,
+                                String reason,
+                                String tname) {
+        Timestamp beginTime=Timestamp.valueOf(begin);
+        Timestamp endTime=Timestamp.valueOf(end);
+        Overwork overwork=new Overwork();
+        overwork.setOverwork_time_end(endTime);
+        overwork.setOverwork_time(beginTime);
+        overwork.setTname(tname);
+        overwork.setOverwork_id(overworkId);
+        overwork.setPro_name(pro_name);
+        overwork.setReason(reason);
+        overwork.setDel_status(false);
+
+        overworkRepository.saveAndFlush(overwork);
     }
     @Transactional
-    public void  deleteOverwork(int id) {
+    public CommonResponseForm deleteOverwork(Integer id) {
         Overwork overwork=getOverwork(id);
         if (overwork!=null){
             overwork.setDel_status(true);
-            updateOverwork(overwork);
+            overworkRepository.save(overwork);
+            return CommonResponseForm.of204("删除成功");
+        }else{
+            return CommonResponseForm.of400("未找到该加班记录");
         }
 
        /*
@@ -71,7 +91,7 @@ public class OverworkService {
         overwork.setOverwork_time(begin);
         overwork.setOverwork_time_end(end);
         overwork.setPro_name(proName);
-        overwork.setT_name(tName);
+        overwork.setTname(tName);
         overworkRepository.save(overwork);
         return true;
     }

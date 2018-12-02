@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Table;
 import javax.servlet.http.HttpServletRequest;
@@ -117,11 +118,14 @@ public class AdminController {
     导入学生接口
      */
     @PostMapping("/importStudents")
-    public CommonResponseForm importStudents(@RequestParam String path,
+    public CommonResponseForm importStudents(HttpServletRequest request,
+                                             MultipartFile file,
                                              @RequestParam String batchName) {
-        ArrayList<Student> students = adminService.importStudent(path,batchName);
+        ArrayList<Student> students = adminService.importStudent(file,batchName);
         return CommonResponseForm.of200("导入学生信息成功", students);
     }
+
+
 
 
     /**

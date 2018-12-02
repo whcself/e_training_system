@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.File;
@@ -38,9 +39,9 @@ public class ExcelPort {
     }
 
 
-    public static void main(String[] args) {
-        System.out.println(readExcel("test.xlsx", "2"));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(readExcel(new File("test.xlsx"), "2"));
+//    }
 
     /**
      * -ScJn 2018.10.26
@@ -52,10 +53,10 @@ public class ExcelPort {
      * 2018 11.3 update:
      * 增加批次，组数参数，导入excel时确定批次和组数
      */
-    public static ArrayList<Student> readExcel(String inFile, String batchName) {
+    public static ArrayList<Student> readExcel(MultipartFile inFile, String batchName) {
         ArrayList<Student> students = new ArrayList<>();
         try {
-            FileInputStream file = new FileInputStream(new File(inFile));
+            FileInputStream file = new FileInputStream((File) inFile);
 
             //Create Workbook instance holding reference to .xlsx file
             XSSFWorkbook workbook = new XSSFWorkbook(file);

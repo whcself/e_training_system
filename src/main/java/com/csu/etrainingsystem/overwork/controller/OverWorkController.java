@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -67,7 +69,7 @@ public class OverWorkController {
 //            return CommonResponseForm.of401("没有权限");
 //        }
         boolean isOk= overworkApplyService.addOverworkApply(begin,pro_name,duration,reason,user);
-        if(!isOk)return CommonResponseForm.of400("提交失败");
+//        if(!isOk)return CommonResponseForm.of400("提交失败");
         return CommonResponseForm.of204("提交成功");
     }
 
@@ -86,13 +88,29 @@ public class OverWorkController {
                                                  @RequestParam String pro_name,
                                                  @RequestParam String t_name,
                                                  HttpSession session) {
-        User user=UserRole.getUser(session);
-        if(!UserRole.hasRole(user,UserRole.ADMIN)){
-            return CommonResponseForm.of401("没有权限");
-        }
+//        User user=UserRole.getUser(session);
+//        if(!UserRole.hasRole(user,UserRole.ADMIN)){
+//            return CommonResponseForm.of401("没有权限");
+//        }
         boolean isOk = overworkService.addTeacherOverwork(begin, pro_name, duration, t_name);
         if (!isOk) return CommonResponseForm.of400("增加错误，没有该老师");
         return CommonResponseForm.of204("增加成功");
+    }
+
+    /**
+     *  加班管理：修改教师值班记录
+     *  注意要hidden这个id
+     * @return s
+     */
+    @PostMapping("/updateTeacherOverwork")
+    public CommonResponseForm updateTeacherOverwork(@RequestParam Integer overworkId,
+                                                    @RequestParam String begin,
+                                                    @RequestParam String end,
+                                                    @RequestParam String pro_name,
+                                                    @RequestParam String reason,
+                                                    @RequestParam String tname){
+        overworkService.updateOverwork(overworkId,begin,end,pro_name,reason,tname);
+        return CommonResponseForm.of204("修改成功");
     }
 
 
@@ -130,5 +148,18 @@ public class OverWorkController {
         String sId=user.getAccount();
         List<Overwork_apply> overworkApplies= overworkApplyService.getMyOverworkApply(sId);
         return CommonResponseForm.of200("查询成功",overworkApplies);
+    }
+
+    @PostMapping("/deleteOverwork")
+    public CommonResponseForm deleteOverwork(Integer id){
+        return overworkService.deleteOverwork(id);
+    }
+
+    @PostMapping("/getTeacherOverworkFromStudent")
+    public CommonResponseForm getTeacherOverworkFromStudent(){
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        Timestamp end7=new Timestamp(now.getTime()+3600000*24*7);
+
+        return CommonResponseForm.of200("查询成功",overworkService.getOverworkByTimeOrProName(String.valueOf(now),String.valueOf(end7),"%"));
     }
 }

@@ -13,7 +13,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -150,6 +152,13 @@ public class StudentController {
 //    public CommonResponseForm getStudentByBatchAndSgroupAndProOrNameAndId(@RequestBody StudentInfoForm studentInfoForm) {
 //        return CommonResponseForm.of200("查询成功", studentService.findStudentByBatchNameAndSGroup(studentInfoForm));
 //    }
+
+    @PostMapping("/importStudent")
+    public void dome1(HttpServletRequest request, MultipartFile file) throws Exception{
+        //file对象名记得和前端name属性值一致
+        System.out.println(file.getOriginalFilename());
+    }
+
 
 
 }

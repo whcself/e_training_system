@@ -3,7 +3,7 @@ package com.csu.etrainingsystem.util;
 import java.sql.Timestamp;
 
 public class TimeUtil {
-    public static Timestamp getEndTime(String beginTime,String timeLen){
+    public static Timestamp getEndTime(String beginTime,String timeLen) {
         Timestamp begin = Timestamp.valueOf(beginTime);
         String[] timesp = timeLen.split(":");
         long duration = Integer.valueOf(timesp[0]) * 3600000;

@@ -131,9 +131,9 @@ public class ProcedureService {
         for(Proced_template template:templates){
             Proced proced=new Proced();
             proced.setWeight(template.getWeight());
-            String tGroupName=procedureRepository.getTGroupByProName(template.getPro_name());
+            String tGroupName=procedureRepository.getTGroupByProName(template.getProcedTemplateId().getPro_name());
             proced.setT_group_id(tGroupName);
-            proced.setProid(new ProcedId(template.getPro_name(),batchName));
+            proced.setProid(new ProcedId(template.getProcedTemplateId().getPro_name(),batchName));
             procedureRepository.save(proced);
         }
 
