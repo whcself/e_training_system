@@ -86,6 +86,7 @@ public class ScoreService {
     /**
      *
      */
+    // TODO: 2018/12/2 计算总成绩
     public void executeScore(String batchName){
 
 //        scoreRepository.executeScore(batchName);
