@@ -92,23 +92,22 @@ public class Overwork_applyService {
      */
     public boolean addOverworkApply(String beginTime, String proName, String timeLen,
                                     String reason, User user) {
-        try {
 
-            String sId=user.getAccount();
-            Overwork_apply overworkApply = new Overwork_apply();
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-            overworkApply.setApply_time(now);
-            overworkApply.setSid(sId);
-            overworkApply.setPro_name(proName);
-            Timestamp begin = Timestamp.valueOf(beginTime);
-            overworkApply.setOverwork_time(begin);
-            Timestamp end = TimeUtil.getEndTime(beginTime, timeLen);
-            overworkApply.setOverwork_time_end(end);
-            overworkApply.setReason(reason);
-            overwork_applyRepository.save(overworkApply);
-        } catch (Exception e) {
-            return false;
-        }
+        String sId = user.getAccount();
+        System.out.println("@@@@" + sId);
+        Overwork_apply overworkApply = new Overwork_apply();
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        overworkApply.setApply_time(now);
+        overworkApply.setSid(sId);
+        overworkApply.setPro_name(proName);
+        Timestamp begin = Timestamp.valueOf(beginTime);
+        overworkApply.setOverwork_time(begin);
+        Timestamp end = TimeUtil.getEndTime(beginTime, timeLen);
+        overworkApply.setOverwork_time_end(end);
+        overworkApply.setReason(reason);
+        System.out.println(overworkApply.getApply_time() + "$$$$");
+        overwork_applyRepository.save(overworkApply);
+
         return true;
     }
 
@@ -117,5 +116,10 @@ public class Overwork_applyService {
      */
     public List<Overwork_apply> getMyOverworkApply(String sId) {
         return overwork_applyRepository.findOverwork_applyBySId(sId);
+    }
+
+    public static void main(String[] args) {
+        Timestamp begin = Timestamp.valueOf("2022-10-10 00:00:00");
+        System.out.println(begin);
     }
 }

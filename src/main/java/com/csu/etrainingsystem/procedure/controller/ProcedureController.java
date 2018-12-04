@@ -41,15 +41,15 @@ public class ProcedureController {
     }
 
     /**
-     * 获取指定批次的所有工序
-     *
-     * @param batch_name
+     * @param batch_name 批次
      * @return list of 工序
      * 修改一次，之前掉错了方法 -ScJn
+     * @apiNote 权重管理：获取指定批次的所有工序
      */
     @RequestMapping("/getBatchProced/{batch_name}")
     public CommonResponseForm getBatchProced(@PathVariable("batch_name") String batch_name) {
-        return CommonResponseForm.of200("工序获取成功", procedureService.getBatchProcedure(batch_name));
+        List<Proced> proceds = (List<Proced>) procedureService.getBatchProcedure(batch_name);
+        return CommonResponseForm.of200("查询成功：共" + proceds.size(), proceds);
     }
 
     @RequestMapping(value = "/getAllProced")
@@ -83,10 +83,48 @@ public class ProcedureController {
      * @apiNote 管理员端-增加权重模板
      */
     @PostMapping("/addTemplate")
-    public CommonResponseForm addTemplate(@RequestBody Proced_template template) {
-        procedureService.addTemplate(template);
+    public CommonResponseForm addTemplate(@RequestParam String templateName,
+                                          @RequestBody Map<String, Float> template) {
+        procedureService.addTemplate(templateName, template);
         return CommonResponseForm.of204("添加成功");
     }
+
+//    @PostMapping("/updateTemplate")
+//    public CommonResponseForm updateTemplate(@RequestParam String templateName,
+//                                             @RequestBody  Map<String,Float> template){
+//
+//    }
+
+    /**
+     * @return form
+     * @apiNote 权重管理 权重管理-查询所有权重模板名
+     */
+    @PostMapping("/findAllTemplate")
+    public CommonResponseForm findAllTemplateName() {
+        List<String> names = (List<String>) procedureService.findAllTemplateName();
+        return CommonResponseForm.of200("查询成功:共" + names.size(), names);
+    }
+
+    /**
+     * @param name 名字
+     * @apiNote 权重管理 根据模板名字查的所有的条目
+     */
+    @PostMapping("/findTemplateItemByName")
+    public CommonResponseForm findTemplateItemByName(String name) {
+
+        List<Map<String, Float>> items = procedureService.findTemplateItemByName(name);
+        return CommonResponseForm.of200("查询成功:共" + items.size(), items);
+
+    }
+
+    /**
+     * @apiNote 权重管理 删除权重模板
+     */
+    @PostMapping("/deleteTemplate")
+    public CommonResponseForm deleteTemplate(String name) {
+        return procedureService.deleteTemplate(name);
+    }
+
 
     /**
      * @param batch_name    批次名
@@ -105,44 +143,43 @@ public class ProcedureController {
     }
 
     /**
-     * @apiNote 增加工序名到教师组
      * @param groupName g
-     * @param proName p
+     * @param proName   p
      * @return f
+     * @apiNote 增加工序名到教师组
      */
     @PostMapping("/addProcedToGroup")
     public CommonResponseForm addProcedToGroup(@RequestParam String groupName,
-                                               @RequestParam String proName){
-        procedureService.addProcedToGroup(groupName,proName);
+                                               @RequestParam String proName) {
+        procedureService.addProcedToGroup(groupName, proName);
         return CommonResponseForm.of204("增加成功");
     }
 
     /**
-     * @apiNote 修改教师分组下的工序名
      * @param groupName g
-     * @param old o
-     * @param newName n
+     * @param old       o
+     * @param newName   n
+     * @apiNote 修改教师分组下的工序名
      */
     @PostMapping("/updateProcedFromGroup")
     public CommonResponseForm updateProcedFromGroup(@RequestParam String groupName,
                                                     @RequestParam String old,
-                                                    @RequestParam String newName){
-        procedureService.updateProcedFromGroup(groupName,old,newName);
+                                                    @RequestParam String newName) {
+        procedureService.updateProcedFromGroup(groupName, old, newName);
         return CommonResponseForm.of204("修改成功");
     }
 
     /**
-     * @apiNote 在教师组下删除工序
      * @param groupName g
-     * @param pro_name p
+     * @param pro_name  p
+     * @apiNote 在教师组下删除工序
      */
     @PostMapping("/deleteProcedFromGroup")
     public CommonResponseForm deleteProcedFromGroup(@RequestParam String groupName,
-                                                    @RequestParam String pro_name){
-        procedureService.deleteProcedFromGroup(groupName,pro_name);
+                                                    @RequestParam String pro_name) {
+        procedureService.deleteProcedFromGroup(groupName, pro_name);
         return CommonResponseForm.of204("删除成功");
     }
-
 
 
 }

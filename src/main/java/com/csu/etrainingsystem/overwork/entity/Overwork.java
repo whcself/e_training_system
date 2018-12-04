@@ -22,6 +22,7 @@ public class Overwork implements Serializable {
     private String pro_name;
     private java.sql.Timestamp overwork_time;
     private java.sql.Timestamp overwork_time_end;
-    private String t_name;
+    private String tname;
+    private String reason;
     private boolean del_status;
 }

@@ -14,6 +14,7 @@ import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.util.ExcelPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -166,8 +167,8 @@ public class AdminService {
      * 增加批次，组数参数，导入excel时确定批次和组数
      * @apiNote 管理员端-学生管理
      */
-    public ArrayList<Student> importStudent(String path, String batchName) {
-        ArrayList<Student> students = ExcelPort.readExcel(path, batchName);
+    public ArrayList<Student> importStudent(MultipartFile file, String batchName) {
+        ArrayList<Student> students = ExcelPort.readExcel(file, batchName);
         for (Student student : students) studentService.addStudent(student);
         return students;
     }

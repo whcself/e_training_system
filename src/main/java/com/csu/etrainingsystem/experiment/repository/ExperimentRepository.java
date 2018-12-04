@@ -2,6 +2,8 @@ package com.csu.etrainingsystem.experiment.repository;
 
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.material.entity.Material;
+import com.csu.etrainingsystem.score.entity.Score;
+import com.csu.etrainingsystem.score.entity.ScoreSubmit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -73,4 +75,5 @@ public interface ExperimentRepository extends JpaRepository<Experiment,Integer> 
 
     @Query(value = "select * from experiment where batch_name like ?1 and s_group_id like ?2 and pro_name like ?3 and del_status=0",nativeQuery = true)
     List<Experiment> findExperimentByBatchOrSGroupOrProName(String batchName, String sGroup, String proName);
+
 }

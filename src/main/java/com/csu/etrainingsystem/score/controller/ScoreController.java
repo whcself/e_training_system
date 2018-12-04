@@ -2,6 +2,7 @@ package com.csu.etrainingsystem.score.controller;
 
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.score.entity.ScoreSubmit;
 import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.Sides;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,11 +62,11 @@ public class ScoreController {
                                                              @RequestParam(required = false) String pro_name,
                                                              @RequestParam(required = false) String sId,
                                                              @RequestParam(required = false) String sName) {
-        List<ScoreForm> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName);
-        if (scoreForms.size() == 0) {
-            return CommonResponseForm.of400("查询失败，结果为空");
-        }
-        return CommonResponseForm.of200("查询成功", scoreForms);
+        List<HashMap<String,String>> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName);
+//        if ( == 0) {
+//            return CommonResponseForm.of400("查询失败，结果为空");
+//        }
+        return CommonResponseForm.of200("查询成功:共"+scoreForms.size()+"条记录", scoreForms);
     }
 
     /**
@@ -76,7 +78,7 @@ public class ScoreController {
     public CommonResponseForm getMyScore(HttpSession session) {
         User user = UserRole.getUser(session);
         String sId = user.getAccount();
-        List<ScoreForm> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(null, null, null, sId, null);
+        List<HashMap<String,String>> scoreForms= scoreService.getScoreByBatchAndSGroupOrProName(null, null, null, sId, null);
         if (scoreForms.size() == 0) {
             return CommonResponseForm.of400("查询失败，结果为空");
         }
@@ -92,6 +94,22 @@ public class ScoreController {
      * @apiNote 成绩提交记录
      */
     @PostMapping("/getScoreRecord")
+    public CommonResponseForm getScoreRecord(@RequestParam(required = false) String batch_name,
+                                             @RequestParam(required = false) String s_group_id,
+                                             @RequestParam(required = false) String pro_name){
+        List<ScoreSubmit> scoreSubmits=scoreService.getScoreRecord(batch_name,s_group_id,pro_name);
+        return CommonResponseForm.of200("查询成功：共"+scoreSubmits.size()+"条记录",scoreSubmits);
+    }
+
+    /**
+     *
+     * @param batch_name
+     * @param s_group_id
+     * @param pro_name
+     * @return
+     */
+    // TODO: 2018/12/4 实验表里面有提交时间，觉得有点混乱
+    @PostMapping("/getExperiment")
     public CommonResponseForm getScoreSubmitRecord(@RequestParam(required = false) String batch_name,
                                                    @RequestParam(required = false) String s_group_id,
                                                    @RequestParam(required = false) String pro_name) {

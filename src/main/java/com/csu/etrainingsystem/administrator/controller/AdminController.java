@@ -8,12 +8,14 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.teacher.entity.Marking;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
+import com.csu.etrainingsystem.teacher.form.TeacherForm;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Table;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -115,20 +118,30 @@ public class AdminController {
     导入学生接口
      */
     @PostMapping("/importStudents")
-    public CommonResponseForm importStudents(@RequestParam String path,
+    public CommonResponseForm importStudents(HttpServletRequest request,
+                                             MultipartFile file,
                                              @RequestParam String batchName) {
-        ArrayList<Student> students = adminService.importStudent(path,batchName);
+        ArrayList<Student> students = adminService.importStudent(file,batchName);
         return CommonResponseForm.of200("导入学生信息成功", students);
     }
 
 
+
+
+    /**
+     * @apiNote 教师管理-查询教师
+     * @param tClass 教师组
+     * @param role 角色
+     * @return list
+     */
     @RequestMapping("/findTeachers")
     public CommonResponseForm findTeachers(@RequestParam(required = false) String tClass,
                                            @RequestParam(required = false) String role,
                                            @RequestParam(required = false) String material_privilege,
                                            @RequestParam(required = false) String overwork_privilege) {
+
         try {
-            List<Teacher> teachers = teacherService.findTeachers(tClass, role, material_privilege, overwork_privilege);
+            List<Map<String,String>> teachers = teacherService.findTeachers(tClass, role, material_privilege, overwork_privilege);
             return CommonResponseForm.of200("查询成功", teachers);
         } catch (Exception e) {
             return CommonResponseForm.of400("查询错误");

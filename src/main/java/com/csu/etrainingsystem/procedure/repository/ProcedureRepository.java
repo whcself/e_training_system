@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Repository
@@ -46,6 +48,16 @@ public interface ProcedureRepository extends JpaRepository<Proced,ProcedId> {
     @Query(value = "update proced set weight=?3 where batch_name=?1 and pro_name=?2",nativeQuery = true)
     void setWeightByBatchNameAndProName(String batch_name,String pro_name,float weight);
 
+
+    @Query(value = "select distinct template_name from proced_template where del_status=0",nativeQuery = true)
+    Iterable<String>findAllTemplateName();
+
+    @Query(value = "select * from proced_template where template_name=?1 and del_status=0",nativeQuery = true)
+    List<Map<String,Float>> findTemplateItemByName(String name);
+
+    @Modifying
+    @Query(value = "update proced_template set del_status=1 where template_name=?1 ",nativeQuery = true)
+    void deleteTemplate(String name);
     /**
      * 不管删除了，只需要得到老师组名
      * @param proName pro
