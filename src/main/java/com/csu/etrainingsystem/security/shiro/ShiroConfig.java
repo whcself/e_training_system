@@ -52,7 +52,20 @@ public class ShiroConfig {
 		filterMap.put("/login", "anon");
 		//授权过滤器
 		//注意：当前授权拦截后，shiro会自动跳转到未授权页面
-		//filterMap.put("/manager", "perms[user:admin]");
+		filterMap.put("/admin/**", "perms[user:admin]");
+		filterMap.put("/teacher/**", "perms[user:teacher]");
+		//添加资源的授权字符串
+		//info.addStringPermission("user:add");
+		//其中权限一共有以下几种
+		//管理员权限 user:admin
+		//教师权限   user:teacher
+		//教师权限中又包括加班权限/物料权限user:material/user:overwork
+		//学生权限 user:student
+
+		//perms参数可以多个，用逗号隔开
+		filterMap.put("/material/decrMaterialNum", "perms[user:material]");
+		filterMap.put("/purchase/addPurchase", "perms[user:material]");
+
 		//filterMap.put("/update", "perms[user:update]");
 		filterMap.put("/swagger-ui.html", "anon");
 		filterMap.put("/swagger-resources", "anon");

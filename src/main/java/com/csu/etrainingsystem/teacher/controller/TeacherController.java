@@ -23,8 +23,9 @@ public class TeacherController {
 
 
     @RequestMapping("/addTeacher")
-    public CommonResponseForm addTeacher(Teacher teacher){
-        teacherService.addTeacher(teacher);
+    public CommonResponseForm addTeacher(Teacher teacher,String t_group_id){
+
+        teacherService.addTeacher(teacher,t_group_id);
         return CommonResponseForm.of204("添加教师成功");
     }
     @RequestMapping("/getTeacher/{id}")
@@ -37,9 +38,9 @@ public class TeacherController {
         return CommonResponseForm.of200("获取全体教师成功",teacherService.getAllTeacher());
     }
 
-    @RequestMapping("/deleteTeacher/{id}")
-    public  CommonResponseForm deleteTeacherById(@PathVariable("id") String id){
-        teacherService.deleteTeacher(id);
+    @RequestMapping("/deleteTeacher")
+    public  CommonResponseForm deleteTeacherById( String[] ids){
+        teacherService.deleteTeacher(ids);
         return CommonResponseForm.of204("删除教师成功");
     }
     @RequestMapping("/updateTeacher")

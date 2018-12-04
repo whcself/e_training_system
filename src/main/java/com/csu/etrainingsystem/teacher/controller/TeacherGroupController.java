@@ -34,7 +34,7 @@ public class TeacherGroupController {
     @RequestMapping("/addTeacherGroup")
     public CommonResponseForm addTeacherGroup(TeacherAndGroup teacherAndGroup){
         System.out.println ("新增加教师组:"+ teacherAndGroup);
-        this.teacherGroupService.addTeacherGroup (teacherAndGroup);
+        this.teacherGroupService.addTGroupConn(teacherAndGroup);
         return CommonResponseForm.of204("添加教师组成功");
     }
     @RequestMapping("/getTeacherGroup/{tid}/{t_group_id}")
@@ -43,7 +43,7 @@ public class TeacherGroupController {
 
         TeacherGroupId id=new  TeacherGroupId (tid,t_group_id);
         System.out.println (id.getT_group_id ());
-        return CommonResponseForm.of200("获取该老师的教师组成功",teacherGroupService.getTeacherGroup (id));
+        return CommonResponseForm.of200("获取该老师的教师组成功",teacherGroupService.getTGroupConnByGroupIdAndTid (id));
     }
 //x-www-form-urlencoded
     @RequestMapping("/getAllTeacherGroup")
@@ -59,7 +59,7 @@ public class TeacherGroupController {
     }
     @RequestMapping("/updateTeacherGroup")
     public CommonResponseForm updateTeacherGroup(TeacherAndGroup teacherAndGroup){
-       this.teacherGroupService.updateTeacherGroup (teacherAndGroup);
+       this.teacherGroupService.updateTGroupConn (teacherAndGroup);
         return CommonResponseForm.of204("更新教师组记录成功");
     }
 }

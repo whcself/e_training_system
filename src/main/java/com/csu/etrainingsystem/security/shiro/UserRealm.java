@@ -2,6 +2,12 @@ package com.csu.etrainingsystem.security.shiro;
 
 
 
+import com.csu.etrainingsystem.administrator.service.AdminService;
+import com.csu.etrainingsystem.security.Role;
+import com.csu.etrainingsystem.student.entity.Student;
+import com.csu.etrainingsystem.student.service.StudentService;
+import com.csu.etrainingsystem.teacher.entity.Teacher;
+import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.service.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -31,9 +37,13 @@ public class UserRealm extends AuthorizingRealm{
 	 * 执行授权逻辑
 	 */
 	@Autowired
-	private UserService userSerivce;
-
-
+	private UserService userService;
+	@Autowired
+	private TeacherService teacherService;
+	@Autowired
+	private StudentService studentService;
+	@Autowired
+	private AdminService adminService;
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
 		System.out.println("执行授权逻辑");
@@ -43,14 +53,34 @@ public class UserRealm extends AuthorizingRealm{
 
 		//添加资源的授权字符串
 		//info.addStringPermission("user:add");
+        //其中权限一共有以下几种
+		//管理员权限 user:admin
+		//教师权限   user:teacher
+		//教师权限中又包括加班权限/物料权限user:material/user:overwork
+		//学生权限 user:student
 
 		//到数据库查询当前登录用户的授权字符串
 		//获取当前登录用户
 		Subject subject = SecurityUtils.getSubject();
 		User user = (User)subject.getPrincipal();
 		//根据不同的角色授予不同权限,管理员权限才能打开管理员界面,老师权限才能打开老师界面;
-		User dbUser = userSerivce.getUser (user.getAccount ());
-		info.addStringPermission("user:admin");
+       if(user.getRole ()=="admin"){
+		   info.addStringPermission("user:admin");
+		   info.addStringPermission("user:material");
+		   info.addStringPermission("user:overwork");
+	   }
+	  else if(user.getRole ()=="student"){
+		   info.addStringPermission("user:student");
+	   }
+	   else {
+
+       	Teacher teacher=teacherService.getTeacher (user.getAccount ());
+       	if(teacher!=null){
+			info.addStringPermission("user:teacher");
+       		if(teacher.getMaterial_privilege ()==1) info.addStringPermission("user:material");
+			if(teacher.getOvertime_privilege ()==1) info.addStringPermission("user:overwork");
+		}
+	   }
 
 		return info;
 	}
@@ -66,7 +96,7 @@ public class UserRealm extends AuthorizingRealm{
 		//1.判断用户名
 		UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
 
-		User user = userSerivce.getUser (token.getUsername ());
+		User user = userService.getUser (token.getUsername ());
 		Subject subject = SecurityUtils.getSubject();
 
 		if(user==null){
@@ -100,7 +130,7 @@ public class UserRealm extends AuthorizingRealm{
 			}
 
 		}
-
+          //最后通过密码判断
 		return new SimpleAuthenticationInfo(user,user.getPwd (),"");
 	}
 

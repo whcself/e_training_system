@@ -11,7 +11,6 @@ import com.csu.etrainingsystem.student.form.StudentInfoForm;
 import com.csu.etrainingsystem.student.service.StudentService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -45,14 +44,16 @@ public class StudentController {
         return CommonResponseForm.of204("学生添加增加成功");
     }
     @RequestMapping(value = "/addSpStudent")
-    public CommonResponseForm addSpStudent(Student student,String template_name) {
+    public CommonResponseForm addSpStudent(String sid,String template_name) {
        //如果学生表里面存在这个学生,就先将其删除,然后再添加到特殊学深表
-
-        SpecialStudent specialStudent=new SpecialStudent (student.getSid (),student.getSname (),student.getClazz (),template_name,student.getSdept (),student.getDepart (),student.getTotal_score (),student.isDel_status (),student.isScore_lock (),student.getDegree ());
+       //查询该学生的批次以及所在组的所有实验;然后将实验的时间和工序名称赋值到新的sp_score里面
+        Student student=studentService.getStudentById (sid);
+        if(student==null)return CommonResponseForm.of400 ("特殊学生添加失败,不存在该学生");
+        System.out.println (student+template_name);
         studentService.deleteById (student.getSid ());
-        studentService.addSpStudent (specialStudent);
+        studentService.addSpStudent (student,template_name);
         //Score score = new Score();需要一个特殊成绩表来实现
-        //todo:在service层添加学生的同时需要添加他对应的成绩表
+        //todo:在service层添加特殊学生的同时需要添加他对应的成绩表;已经安排
         //this.scoreService.addScore(score);
         return CommonResponseForm.of204("特殊学生添加增加成功");
     }

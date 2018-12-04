@@ -2,6 +2,9 @@ package com.csu.etrainingsystem.teacher.service;
 
 import com.csu.etrainingsystem.authority.TeacherAuthority;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
+import com.csu.etrainingsystem.teacher.entity.TeacherAndGroup;
+import com.csu.etrainingsystem.teacher.entity.TeacherGroupId;
+import com.csu.etrainingsystem.teacher.repository.T_Group_ConnRepository;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,14 +16,30 @@ import java.util.List;
 public class TeacherService {
     private  final TeacherRepository teacherRepository;
     private  final TeacherGroupService teacherGroupService;
+    private final T_Group_ConnRepository tGroupConnRepository;
     @Autowired
-    public TeacherService(TeacherRepository teacherRepository, TeacherGroupService teacherGroupService) {
+    public TeacherService(TeacherRepository teacherRepository, TeacherGroupService teacherGroupService, T_Group_ConnRepository tGroupConnRepository) {
         this.teacherRepository = teacherRepository;
         this.teacherGroupService = teacherGroupService;
+        this.tGroupConnRepository = tGroupConnRepository;
     }
 
     @Transactional
-    public void addTeacher(Teacher teacher){teacherRepository.save(teacher);}
+    public void addTeacher(Teacher teacher,String t_group_id){
+        teacherRepository.save(teacher);
+    //如果分组记录不为空,还要将该记录添加到teacherandgroup实体里面去
+    if(t_group_id!=null){
+        TeacherAndGroup tag=new TeacherAndGroup ();
+        TeacherGroupId id=new TeacherGroupId ();
+        id.setT_group_id (t_group_id);
+        id.setTid (teacher.getTid ());
+        tag.setTeacherGroupId (id);
+        tGroupConnRepository.save (tag);
+    }
+
+
+
+    }
 
     @Transactional
     public Teacher getTeacher(String id){return teacherRepository.findTeacherByTid(id);}
@@ -33,12 +52,16 @@ public class TeacherService {
     public void updateTeacher(Teacher teacher){teacherRepository.saveAndFlush(teacher);}
 
     @Transactional
-    public void deleteTeacher(String tid){
-      Teacher teacher=getTeacher(tid);
-      teacher.setDel_status(true);
-        updateTeacher(teacher);
+    public void deleteTeacher(String[] tids){
+        for (String tid : tids) {
+            Teacher teacher=getTeacher(tid);
+            teacher.setDel_status(true);
+            //删除该老师在t_group_conn的记录
+            this.teacherGroupService.deleteTGroupConnByTeacher (tid);
+            updateTeacher(teacher);
+        }
       //删除这个老师在教师组的记录
-      this.teacherGroupService.deleteTeacherGroupByTeacher(tid);
+
       /*
       todo:消除删除一个老师所带来的影响:
       所在教师组的记录需要被删除,实验表的提交老师需要被删除?暂定不删除,好追责

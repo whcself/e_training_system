@@ -7,12 +7,11 @@ import com.csu.etrainingsystem.score.entity.SpecialScore;
 import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.repository.ScoreRepository;
+import com.csu.etrainingsystem.score.repository.SpScoreRepository;
 import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
-import com.fasterxml.jackson.databind.util.ArrayIterator;
-import jdk.nashorn.internal.runtime.linker.LinkerCallSite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,17 +27,23 @@ public class ScoreService {
     private final StudentRepository studentRepository;
     private final ExperimentRepository experimentRepository;
     private final SpStudentRepository spStudentRepository;
+    private  final SpScoreRepository spScoreRepository;
     @Autowired
-    public ScoreService(ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository, SpStudentRepository spStudentRepository) {
+    public ScoreService(ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository, SpStudentRepository spStudentRepository, SpScoreRepository spScoreRepository) {
         this.scoreRepository = scoreRepository;
         this.studentRepository = studentRepository;
         this.experimentRepository = experimentRepository;
         this.spStudentRepository = spStudentRepository;
+        this.spScoreRepository = spScoreRepository;
     }
 
     @Transactional
     public void addScore(Score score) {
         this.scoreRepository.save(score);
+    }
+    @Transactional
+    public void addSpScore(SpecialScore score) {
+        this.spScoreRepository.save (score);
     }
 
     @Transactional
@@ -68,8 +73,8 @@ public class ScoreService {
     }
     @Transactional
     public void deleteSpScoreBySid(String sid) {
-        Iterable<SpecialScore> scores= scoreRepository.findSpScoreBySid (sid);
-        if(scores!=null)this.scoreRepository.deleteSpScoreBySid (sid);
+        Iterable<SpecialScore> scores= spScoreRepository.findSpScoreBySid (sid);
+        if(scores!=null)this.spScoreRepository.deleteSpScoreBySid (sid);
     }
 
     @Transactional
@@ -151,7 +156,7 @@ public class ScoreService {
             students = (List<SpecialStudent>) spStudentRepository.findSpStudentBySName (sName);
         }
         for (SpecialStudent student : students) {
-            scores=this.scoreRepository.findSpScoreBySid (student.getSid ());
+            scores=this.spScoreRepository.findSpScoreBySid (student.getSid ());
             ScoreForm scoreForm = new ScoreForm();
             scoreForm.setStuName(student.getSname());
             for (SpecialScore score : scores) {

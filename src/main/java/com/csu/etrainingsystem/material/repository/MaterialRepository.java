@@ -10,7 +10,9 @@ import java.util.Optional;
 @Repository
 public interface MaterialRepository extends JpaRepository<Material,String> {
     @Query(value="select * from material where material.clazz=? and material.del_status=0",nativeQuery = true)
-    Optional<Material> findMaterialByClazz(String clazz);
+    Material findMaterialByClazz(String clazz);
     @Query(value="select * from material where  material.del_status=0",nativeQuery = true)
     Iterable<Material> findAllMaterial();
+    @Query(value="select * from material where material.num>0 and material.del_status=0",nativeQuery = true)
+    Iterable<Material> findMaterialNotEmpty();
 }

@@ -1,13 +1,11 @@
 package com.csu.etrainingsystem.teacher.service;
 
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
-import com.csu.etrainingsystem.procedure.entity.Proced;
-import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.entity.TeacherAndGroup;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroup;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroupId;
 import com.csu.etrainingsystem.teacher.repository.GroupRepository;
-import com.csu.etrainingsystem.teacher.repository.TeacherGroupRepository;
+import com.csu.etrainingsystem.teacher.repository.T_Group_ConnRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,14 +13,14 @@ import javax.transaction.Transactional;
 
 @Service
 public class TeacherGroupService {
-    private  final TeacherGroupRepository teacherGroupRepository;
+    private  final T_Group_ConnRepository tGroupConnRepository;
     private  final MarkingService markingService;
     private final ExperimentService experimentService;
     private final GroupRepository groupRepository;
     @Autowired
-    public TeacherGroupService(GroupRepository groupRepository,TeacherGroupRepository teacherGroupRepository, MarkingService markingService, ExperimentService experimentService) {
+    public TeacherGroupService(GroupRepository groupRepository, T_Group_ConnRepository tGroupConnRepository, MarkingService markingService, ExperimentService experimentService) {
         this.groupRepository=groupRepository;
-        this.teacherGroupRepository = teacherGroupRepository;
+        this.tGroupConnRepository = tGroupConnRepository;
         this.markingService = markingService;
         this.experimentService = experimentService;
     }
@@ -48,9 +46,11 @@ public class TeacherGroupService {
     public Iterable<String> getProcedByGroup(String groupName){
         return groupRepository.getProcedByGroup(groupName);
     }
+
+
     @Transactional
-    public void addTeacherGroup(TeacherAndGroup TeacherAndGroup) {
-        this.teacherGroupRepository.save(TeacherAndGroup);
+    public void addTGroupConn(TeacherAndGroup TeacherAndGroup) {
+        this.tGroupConnRepository.save(TeacherAndGroup);
     }
 
     /**
@@ -59,17 +59,21 @@ public class TeacherGroupService {
      * @return
      */
     @Transactional
-    public TeacherAndGroup getTeacherGroup(TeacherGroupId id) {
-        return this.teacherGroupRepository.findTeacherGroupById(id.getTid(),id.getT_group_id());
+    public TeacherAndGroup getTGroupConnByGroupIdAndTid(TeacherGroupId id) {
+        return this.tGroupConnRepository.findTeacherGroupById(id.getTid(),id.getT_group_id());
     }
+
+
+
+
     @Transactional
     public Iterable<TeacherAndGroup> getAllTeacherGroup() {
-        return this.teacherGroupRepository.findAllTeacherGroup();
+        return this.tGroupConnRepository.findAllTeacherGroup();
     }
 
     @Transactional
-    public void  updateTeacherGroup(TeacherAndGroup TeacherAndGroup) {
-        this.teacherGroupRepository.saveAndFlush(TeacherAndGroup);
+    public void  updateTGroupConn(TeacherAndGroup TeacherAndGroup) {
+        this.tGroupConnRepository.saveAndFlush(TeacherAndGroup);
     }
 
     /**
@@ -77,8 +81,8 @@ public class TeacherGroupService {
      * @param tid
      */
     @Transactional
-    public void deleteTeacherGroupByTeacher(String tid ){
-        this.teacherGroupRepository.DeleteTeacherGroupByTidSQL(tid);
+    public void deleteTGroupConnByTeacher(String tid ){
+        this.tGroupConnRepository.DeleteTeacherGroupByTidSQL(tid);
     }
 
     /**
@@ -87,13 +91,13 @@ public class TeacherGroupService {
      */
     @Transactional
     public void  deleteTeacherGroup(TeacherGroupId id) {
-        TeacherAndGroup teacherAndGroup =getTeacherGroup(id);
+        TeacherAndGroup teacherAndGroup =getTGroupConnByGroupIdAndTid(id);
          if (teacherAndGroup ==null){
              return ;
          }
          else {
              teacherAndGroup.setDel_status(true);
-             updateTeacherGroup(teacherAndGroup);
+             updateTGroupConn(teacherAndGroup);
              //消除打分权限
              this.markingService.deleteMarking(id.getT_group_id());
              //删除指导的实验

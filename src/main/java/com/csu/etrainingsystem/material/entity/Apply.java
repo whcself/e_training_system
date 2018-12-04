@@ -10,17 +10,17 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
 @Data
-@Table(name = "purchase")
-public class Purchase implements Serializable {
-
+@Entity
+@Table(name = "material_apply")
+public class Apply implements Serializable {
     @Id
     @Column
-    private int purchase_id;
-    private String clazz ;
-    private String tname ;
-    private String pur_time ;
-    private int pur_num;
-    private boolean del_status;
+    private  int apply_id;
+    private String apply_time;
+   private String sid;
+   private String tid ;
+    private String sname;
+   private String clazz;
+   private int num;
 }

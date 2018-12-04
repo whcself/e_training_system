@@ -1,8 +1,10 @@
 package com.csu.etrainingsystem.student.service;
 
 
+import com.csu.etrainingsystem.experiment.entity.Experiment;
+import com.csu.etrainingsystem.experiment.service.ExperimentService;
 import com.csu.etrainingsystem.overwork.service.Overwork_applyService;
-import com.csu.etrainingsystem.score.repository.ScoreRepository;
+import com.csu.etrainingsystem.score.entity.SpecialScore;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
@@ -11,6 +13,7 @@ import com.csu.etrainingsystem.student.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -23,12 +26,14 @@ public class StudentService {
     private final ScoreService scoreService;
     private final Overwork_applyService overwork_applyService;
     private final SpStudentRepository spStudentRepository;
+    private final ExperimentService experimentService;
     @Autowired
-    public StudentService(StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository)
+    public StudentService(StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository, ExperimentService experimentService)
     { this.studentRepository = studentRepository;
         this.scoreService = scoreService;
         this.overwork_applyService = overwork_applyService;
         this.spStudentRepository = spStudentRepository;
+        this.experimentService = experimentService;
     }
 
     @Transactional
@@ -105,7 +110,23 @@ public class StudentService {
     }
 
     @Transactional
-    public void addSpStudent(SpecialStudent student) { spStudentRepository.save (student); }
+    public void addSpStudent(Student student,String template_name) {
+        System.out.println (student+template_name);
+        SpecialStudent specialStudent=new SpecialStudent (student.getSid (),student.getSname (),student.getClazz (),template_name,student.getSdept (),student.getDepart (),student.getTotal_score (),student.isDel_status (),student.isScore_lock (),student.getDegree ());
+        System.out.println (specialStudent);
+       Iterable<Experiment> experiments= experimentService.getStudentExperiment (student.getS_group_id (),student.getBatch_name ());
+       Iterable<SpecialScore>specialScores =new ArrayList<SpecialScore> ();
+      if(experiments!=null) {
+          for (Experiment experiment : experiments) {
+              SpecialScore s = new SpecialScore ();
+              s.setSid (specialStudent.getSid ());
+              s.setPro_name (experiment.getPro_name ());
+              s.setTime_quant (experiment.getTime_quant ());
+              s.setClass_time (experiment.getClass_time ());
+              scoreService.addSpScore (s);
+          }
+      }
+        spStudentRepository.save (specialStudent); }
 
 
     @Transactional

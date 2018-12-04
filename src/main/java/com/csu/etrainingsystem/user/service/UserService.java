@@ -73,7 +73,9 @@ public class UserService {
         if (user.getRole ().equals ("teacher")) {
             Teacher teacher = this.teacherService.getTeacher (id);
             if (teacher != null) {
-                this.teacherService.deleteTeacher (id);
+                String []ids=new String[1];
+                ids[0]=id;
+                this.teacherService.deleteTeacher (ids);
             }
         }
         if (user.getRole ().equals ("student")) {
