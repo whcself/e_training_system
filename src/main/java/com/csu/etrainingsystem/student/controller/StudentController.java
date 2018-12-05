@@ -110,7 +110,7 @@ public class StudentController {
     }
     @ApiOperation ("根据传递过来的id数组删除学生")
     @RequestMapping(value = "/deleteStudent")
-    public CommonResponseForm deleteStudentById(@RequestParam(required = false) String[] ids) {
+    public CommonResponseForm deleteStudentById(@RequestParam(required = false) List<String> ids) {
 
         for (String id : ids) {
             this.studentService.deleteById (id);
@@ -119,7 +119,9 @@ public class StudentController {
     }
     @ApiOperation ("根据传递过来的id数组删除特殊学生")
     @RequestMapping(value = "/deleteSpStudentById")
-    public CommonResponseForm deleteSpStudentById(@RequestParam(required = false) String[] ids) {
+    public CommonResponseForm deleteSpStudentById(@RequestParam(required = false) List<String> ids) {
+
+
 
         for (String id : ids) {
             this.studentService.deleteSpStudentById (id);
