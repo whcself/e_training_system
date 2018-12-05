@@ -41,6 +41,10 @@ public interface ExperimentRepository extends JpaRepository<Experiment,Integer> 
     @Query(value="select * from experiment where experiment.template_id=? and experiment.batch_name=null and experiment.del_status=0",nativeQuery = true)
     Iterable<Experiment> findExperimentByTemplate(String template_id);
 
+    @Query(value="update experiment SET experiment.del_status=1 WHERE experiment.template_id=?",nativeQuery = true)
+    @Modifying
+    Iterable<Experiment> deleteExperimentByTemplate(String template_id);
+
     /**
      * 根据工序删除实验表,或者说就按这样的方式存?
      * @param pro_name

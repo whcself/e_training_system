@@ -1,10 +1,13 @@
 package com.csu.etrainingsystem.experiment.service;
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.repository.ExperimentRepository;
+import org.apache.commons.collections.IteratorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -94,6 +97,18 @@ public class ExperimentService {
     public void  deleteExperimentByT_group(String t_group_id) {
         this.experimentRepository.deleteExperimentByT_group(t_group_id);
     }
-
+    @Transactional
+    public void  modifyTemplate(Iterable<Experiment> experiments) {
+       //将传递过来的实验的templateid获取出来,然后删除数据库中的记录,
+        //然后再更新,已经存在的就更新了,删除的因为id变化,无法恢复
+        if(experiments!=null) {
+            List<Experiment> experimentList = IteratorUtils.toList (experiments.iterator ());
+            Experiment experiment= experimentList.get (0);
+          String   templateId =experiment.getTemplate_id ();
+          experimentRepository.deleteExperimentByTemplate (templateId);
+                experimentRepository.saveAll (experiments);
+        }
+        else return ;
+    }
 
 }

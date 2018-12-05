@@ -62,7 +62,8 @@ public class UserRealm extends AuthorizingRealm{
 		//到数据库查询当前登录用户的授权字符串
 		//获取当前登录用户
 		Subject subject = SecurityUtils.getSubject();
-		User user = (User)subject.getPrincipal();
+		User u = (User)subject.getPrincipal();
+		User user=this.userService.getUser (u.getAccount ());
 		//根据不同的角色授予不同权限,管理员权限才能打开管理员界面,老师权限才能打开老师界面;
        if(user.getRole ()=="admin"){
 		   info.addStringPermission("user:admin");

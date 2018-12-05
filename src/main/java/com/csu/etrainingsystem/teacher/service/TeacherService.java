@@ -55,7 +55,7 @@ public class TeacherService {
             Teacher teacher=getTeacher(tid);
             teacher.setDel_status(true);
             updateTeacher(teacher);
-            //删除这个老师在教师组的记录
+            //删除这个老师在teachergroup中的记录
             this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
         }
 

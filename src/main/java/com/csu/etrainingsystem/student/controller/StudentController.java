@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController()
+@RestController
 @RequestMapping(value = "/student", method = RequestMethod.POST)
 public class StudentController {
 

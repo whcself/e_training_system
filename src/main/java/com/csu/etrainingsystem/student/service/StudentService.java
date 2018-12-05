@@ -71,7 +71,7 @@ public class StudentService {
         if(student!=null) {
             //删除该学生的成绩记录
             this.scoreService.deleteScoreBySid(sid);
-            //删除这个学生申请加班的记录
+            //删除这个学生申请加班的记录,由于只是记录,就不删除了
             // this.overwork_applyService.deleteOverwork_apply();
             student.setDel_status(true);
             updateStudent(student);
