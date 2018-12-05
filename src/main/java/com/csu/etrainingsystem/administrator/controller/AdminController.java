@@ -114,8 +114,12 @@ public class AdminController {
      */
 
 
-    /*
-    导入学生接口
+    /**
+     * @apiNote 导入学生
+     * @param request 没用
+     * @param file file
+     * @param batchName 批次
+     * @return
      */
     @PostMapping("/importStudents")
     public CommonResponseForm importStudents(HttpServletRequest request,
