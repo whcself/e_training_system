@@ -4,10 +4,7 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/teacher",method = RequestMethod.POST)
@@ -23,7 +20,8 @@ public class TeacherController {
 
 
     @RequestMapping("/addTeacher")
-    public CommonResponseForm addTeacher(Teacher teacher,String t_group_id){
+    public CommonResponseForm addTeacher(Teacher teacher,
+                                         @RequestParam(required = false) String t_group_id){
 
         teacherService.addTeacher(teacher,t_group_id);
         return CommonResponseForm.of204("添加教师成功");

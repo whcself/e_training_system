@@ -5,7 +5,6 @@ import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.entity.TeacherAndGroup;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroupId;
 import com.csu.etrainingsystem.teacher.repository.T_Group_ConnRepository;
-import com.csu.etrainingsystem.teacher.repository.T_Group_ConnRepository;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,8 @@ import java.util.Map;
 @Service
 public class TeacherService {
     private  final TeacherRepository teacherRepository;
-    private final T_Group_ConnRepository tGroupConnRepository;
     private  final TeacherGroupService teacherGroupService;
-
+    private final T_Group_ConnRepository tGroupConnRepository;
     @Autowired
     public TeacherService(TeacherRepository teacherRepository, TeacherGroupService teacherGroupService, T_Group_ConnRepository tGroupConnRepository) {
         this.teacherRepository = teacherRepository;
@@ -28,50 +26,38 @@ public class TeacherService {
     }
 
     @Transactional
-    public void addTeacher(Teacher teacher) {
+    public void addTeacher(Teacher teacher,String t_group_id ){
+        //添加教师,同时指定分组
         teacherRepository.save(teacher);
-    }
-    public void addTeacher(Teacher teacher,String t_group_id){
-        teacherRepository.save(teacher);
-    //如果分组记录不为空,还要将该记录添加到teacherandgroup实体里面去
-    if(t_group_id!=null){
-        TeacherAndGroup tag=new TeacherAndGroup ();
-        TeacherGroupId id=new TeacherGroupId ();
-        id.setT_group_id (t_group_id);
-        id.setTid (teacher.getTid ());
-        tag.setTeacherGroupId (id);
-        tGroupConnRepository.save (tag);
-    }
-
-
-
+        if(t_group_id!=null){
+        TeacherAndGroup teacherAndGroup=new TeacherAndGroup ();
+        TeacherGroupId teacherGroupId=new TeacherGroupId ();
+        teacherGroupId.setTid (teacher.getTid ());
+        teacherGroupId.setT_group_id (t_group_id);
+        teacherAndGroup.setTeacherGroupId (teacherGroupId);
+        tGroupConnRepository.save (teacherAndGroup);
+        }
     }
 
     @Transactional
-    public Teacher getTeacher(String id) {
-        return teacherRepository.findTeacherByTid(id);
-    }
+    public Teacher getTeacher(String id){return teacherRepository.findTeacherByTid(id);}
 
     @Transactional
     public Iterable<Teacher>getAllTeacher(){
-        return teacherRepository.findAllTeacher();
-    }
+        return teacherRepository.findAllTeacher();}
 
     @Transactional
-    public void updateTeacher(Teacher teacher) {
-        teacherRepository.saveAndFlush(teacher);
-    }
+    public void updateTeacher(Teacher teacher){teacherRepository.saveAndFlush(teacher);}
 
     @Transactional
     public void deleteTeacher(String[] tids){
         for (String tid : tids) {
             Teacher teacher=getTeacher(tid);
             teacher.setDel_status(true);
-            //删除该老师在t_group_conn的记录
-            this.teacherGroupService.deleteTGroupConnByTeacher (tid);
             updateTeacher(teacher);
+            //删除这个老师在教师组的记录
+            this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
         }
-      //删除这个老师在教师组的记录
 
       /*
       todo:消除删除一个老师所带来的影响:
@@ -89,7 +75,7 @@ public class TeacherService {
      * @param overwork_privilege String 转换成 int
      * @return
      */
-    public List<Map<String, String>> findTeachers(String tClass, String role, String material_privilege, String overwork_privilege) {
+    public List<Map<String, String>> findTeachers(String tClass, String role, String  material_privilege, String overwork_privilege) {
         switch (material_privilege) {
             case "物料登记":
                 material_privilege = TeacherAuthority.MATERIAL_REGISTER;//1
@@ -115,13 +101,10 @@ public class TeacherService {
                 overwork_privilege = TeacherAuthority.ALL;
                 break;
         }
-        if (role.equals("all")) role = TeacherAuthority.ALL;
-        if (tClass.equals("all")) {
-            return teacherRepository.findTeacherByRMO(role,material_privilege,overwork_privilege);
-        } else {
-            System.out.println(tClass + " " + role + " " + material_privilege + " " + overwork_privilege);
-            return teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege);
-        }
-
+        if(tClass.equals("all"))tClass=TeacherAuthority.ALL;
+        if(role.equals("all"))role=TeacherAuthority.ALL;
+        System.out.println(tClass + " " + role + " " + material_privilege + " " + overwork_privilege);
+        System.out.println(teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege));
+        return teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege);
     }
 }

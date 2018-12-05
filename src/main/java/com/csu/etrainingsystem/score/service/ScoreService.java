@@ -9,6 +9,7 @@ import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.repository.ScoreRepository;
 import com.csu.etrainingsystem.score.repository.ScoreSubmitRepository;
+import com.csu.etrainingsystem.score.repository.SpScoreRepository;
 import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.repository.SpStudentRepository;
@@ -26,23 +27,33 @@ public class ScoreService {
     private final ExperimentRepository experimentRepository;
     private final SpStudentRepository spStudentRepository;
     private final ScoreSubmitRepository scoreSubmitRepository;
+    private final SpScoreRepository spScoreRepository;
     @Autowired
-    public ScoreService(ScoreSubmitRepository scoreSubmitRepository,ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository, SpStudentRepository spStudentRepository) {
+    public ScoreService(ScoreSubmitRepository scoreSubmitRepository, ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository, SpStudentRepository spStudentRepository, SpScoreRepository spScoreRepository) {
         this.scoreSubmitRepository=scoreSubmitRepository;
         this.scoreRepository = scoreRepository;
         this.studentRepository = studentRepository;
         this.experimentRepository = experimentRepository;
         this.spStudentRepository = spStudentRepository;
+        this.spScoreRepository = spScoreRepository;
     }
 
     @Transactional
     public void addScore(Score score) {
         this.scoreRepository.save(score);
     }
+    @Transactional
+    public void addSpScore(SpecialScore specialScore) {
+        this.spScoreRepository.save(specialScore);
+    }
 
     @Transactional
     public Iterable<Score> getScoreBySid(String sid) {
         return scoreRepository.findScoreBySid(sid);
+    }
+    @Transactional
+    public Iterable<SpecialScore> getSpScoreBySid(String sid) {
+        return spScoreRepository.findSpScoreBySid(sid);
     }
 
     @Transactional
@@ -67,8 +78,8 @@ public class ScoreService {
     }
     @Transactional
     public void deleteSpScoreBySid(String sid) {
-        Iterable<SpecialScore> scores= scoreRepository.findSpScoreBySid (sid);
-        if(scores!=null)this.scoreRepository.deleteSpScoreBySid (sid);
+        Iterable<SpecialScore> scores= spScoreRepository.findSpScoreBySid (sid);
+        if(scores!=null)this.spScoreRepository.deleteSpScoreBySid (sid);
     }
 
     @Transactional
@@ -155,7 +166,7 @@ public class ScoreService {
             students = (List<SpecialStudent>) spStudentRepository.findSpStudentBySName (sName);
         }
         for (SpecialStudent student : students) {
-            scores=this.scoreRepository.findSpScoreBySid (student.getSid ());
+            scores=this.spScoreRepository.findSpScoreBySid (student.getSid ());
             ScoreForm scoreForm = new ScoreForm();
             scoreForm.setStuName(student.getSname());
             for (SpecialScore score : scores) {

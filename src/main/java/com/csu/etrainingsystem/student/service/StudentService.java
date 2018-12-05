@@ -111,9 +111,8 @@ public class StudentService {
 
     @Transactional
     public void addSpStudent(Student student,String template_name) {
-        System.out.println (student+template_name);
         SpecialStudent specialStudent=new SpecialStudent (student.getSid (),student.getSname (),student.getClazz (),template_name,student.getSdept (),student.getDepart (),student.getTotal_score (),student.isDel_status (),student.isScore_lock (),student.getDegree ());
-        System.out.println (specialStudent);
+
        Iterable<Experiment> experiments= experimentService.getStudentExperiment (student.getS_group_id (),student.getBatch_name ());
        Iterable<SpecialScore>specialScores =new ArrayList<SpecialScore> ();
       if(experiments!=null) {
@@ -126,7 +125,8 @@ public class StudentService {
               scoreService.addSpScore (s);
           }
       }
-        spStudentRepository.save (specialStudent); }
+        spStudentRepository.save (specialStudent);
+    }
 
 
     @Transactional
