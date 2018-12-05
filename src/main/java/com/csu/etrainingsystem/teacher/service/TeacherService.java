@@ -67,15 +67,13 @@ public class TeacherService {
     }
 
     /**
-     *
-     *
      * @param tClass             String
      * @param role               String
      * @param material_privilege String 转换成int
      * @param overwork_privilege String 转换成 int
      * @return
      */
-    public List<Map<String, String>> findTeachers(String tClass, String role, String  material_privilege, String overwork_privilege) {
+    public List<Map<String, String>> findTeachers(String tClass, String role, String material_privilege, String overwork_privilege) {
         switch (material_privilege) {
             case "物料登记":
                 material_privilege = TeacherAuthority.MATERIAL_REGISTER;//1
@@ -101,10 +99,13 @@ public class TeacherService {
                 overwork_privilege = TeacherAuthority.ALL;
                 break;
         }
-        if(tClass.equals("all"))tClass=TeacherAuthority.ALL;
-        if(role.equals("all"))role=TeacherAuthority.ALL;
-        System.out.println(tClass + " " + role + " " + material_privilege + " " + overwork_privilege);
-        System.out.println(teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege));
-        return teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege);
+        if (role.equals("all")) role = TeacherAuthority.ALL;
+        if (tClass.equals("all")) {
+            return teacherRepository.findTeacherByRMO(role,material_privilege,overwork_privilege);
+        } else {
+            System.out.println(tClass + " " + role + " " + material_privilege + " " + overwork_privilege);
+            return teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege);
+        }
+
     }
 }
