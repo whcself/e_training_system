@@ -10,11 +10,16 @@ import com.csu.etrainingsystem.student.form.SpStudentInfoForm;
 import com.csu.etrainingsystem.student.form.StudentInfoForm;
 import com.csu.etrainingsystem.student.service.StudentService;
 import io.swagger.annotations.ApiOperation;
+import org.nutz.mvc.adaptor.WhaleAdaptor;
+import org.nutz.mvc.annotation.AdaptBy;
+import org.nutz.mvc.annotation.Ok;
+import org.nutz.mvc.annotation.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +65,9 @@ public class StudentController {
         return CommonResponseForm.of204("特殊学生添加增加成功");
     }
     @RequestMapping(value = "/updateStudent")
-    public CommonResponseForm updateStudent(Student student) {
+    public CommonResponseForm updateStudent( @RequestBody Student student) {
+
+        System.out.println (student);
         studentService.updateStudent(student);
         return CommonResponseForm.of204("学生更新成功");
     }
@@ -109,9 +116,13 @@ public class StudentController {
         return CommonResponseForm.of200("获取全部特殊学生成功",studentInfoForms );
     }
     @ApiOperation ("根据传递过来的id数组删除学生")
+   // @Ok("json")
+   // @AdaptBy(type=WhaleAdaptor.class)
     @RequestMapping(value = "/deleteStudent")
-    public CommonResponseForm deleteStudentById(@RequestParam(required = false) List<String> ids) {
-
+    public CommonResponseForm deleteStudentById(@RequestBody  String[] ids) {
+        for (String id : ids) {
+            System.out.println (id);
+        }
         for (String id : ids) {
             this.studentService.deleteById (id);
         }
@@ -119,10 +130,7 @@ public class StudentController {
     }
     @ApiOperation ("根据传递过来的id数组删除特殊学生")
     @RequestMapping(value = "/deleteSpStudentById")
-    public CommonResponseForm deleteSpStudentById(@RequestParam(required = false) List<String> ids) {
-
-
-
+    public CommonResponseForm deleteSpStudentById(@RequestBody String[] ids) {
         for (String id : ids) {
             this.studentService.deleteSpStudentById (id);
         }
