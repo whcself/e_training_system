@@ -64,13 +64,15 @@ public class UserRealm extends AuthorizingRealm{
 		Subject subject = SecurityUtils.getSubject();
 		User u = (User)subject.getPrincipal();
 		User user=this.userService.getUser (u.getAccount ());
+		System.out.println (user.getRole ());
 		//根据不同的角色授予不同权限,管理员权限才能打开管理员界面,老师权限才能打开老师界面;
-       if(user.getRole ()=="admin"){
+       if(user.getRole ().equals ("admin")){
+
 		   info.addStringPermission("user:admin");
 		   info.addStringPermission("user:material");
 		   info.addStringPermission("user:overwork");
 	   }
-	  else if(user.getRole ()=="student"){
+	  else if(user.getRole ().equals("student")){
 		   info.addStringPermission("user:student");
 	   }
 	   else {
