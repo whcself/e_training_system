@@ -22,13 +22,14 @@ public class MyCorsFilter implements javax.servlet.Filter {
         System.out.println ("自定义过滤器在工作");
 
         HttpServletResponse response = (HttpServletResponse) resp;
-        response.setHeader("Access-Control-Allow-Origin", "runtofuture.cn");
+        HttpServletRequest res=(HttpServletRequest)req;
+        System.out.println ("本次请求的session是:"+res.getSession ().getId ());
+        response.setHeader("Access-Control-Allow-Origin", res.getHeader ("Origin"));
         response.setHeader ("Access-Control-Allow-Credentials","true");
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE");
 //        response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
-        HttpServletRequest res=(HttpServletRequest)req;
-        System.out.println (res.getSession (false));
+
         filterChain.doFilter(req, resp);
     }
 
