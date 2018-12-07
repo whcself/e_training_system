@@ -27,5 +27,10 @@ public class MyAuthFilter extends FormAuthenticationFilter {
         }
         return allowed;
     }
-
+    @Bean
+    public FilterRegistrationBean registration(MyAuthFilter filter) {
+        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+        registration.setEnabled(false);
+        return registration;
+    }
 }
