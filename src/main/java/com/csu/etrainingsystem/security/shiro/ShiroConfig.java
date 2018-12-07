@@ -31,7 +31,7 @@ public class ShiroConfig {
 	public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager")DefaultWebSecurityManager securityManager, @Qualifier("sessionManager") DefaultWebSessionManager sessionManager){
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
-		filtersMap.put("hasToken",new MyAuthFilter());
+		filtersMap.put("authc",new MyAuthFilter());
 		shiroFilterFactoryBean.setFilters(filtersMap);
         //设置session管理器
 		securityManager.setSessionManager (sessionManager);
