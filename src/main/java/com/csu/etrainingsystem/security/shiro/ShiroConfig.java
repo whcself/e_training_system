@@ -30,9 +30,9 @@ public class ShiroConfig {
 	@Bean
 	public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager")DefaultWebSecurityManager securityManager, @Qualifier("sessionManager") DefaultWebSessionManager sessionManager){
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
-		filtersMap.put("authc",new MyAuthFilter());
-		shiroFilterFactoryBean.setFilters(filtersMap);
+//		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
+//		filtersMap.put("authc",new MyAuthFilter());
+//		shiroFilterFactoryBean.setFilters(filtersMap);
         //设置session管理器
 		securityManager.setSessionManager (sessionManager);
 		//设置安全管理器
@@ -125,9 +125,9 @@ public class ShiroConfig {
 	defaultWebSessionManager.setSessionDAO (sessionDAO);
 	return defaultWebSessionManager;
 	}
-    @Bean
-	public MyCorsFilter getMyCorsFilter(){
-
-		return new MyCorsFilter ();
-	}
+//    @Bean
+//	public MyCorsFilter getMyCorsFilter(){
+//
+//		return new MyCorsFilter ();
+//	}
 }

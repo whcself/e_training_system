@@ -15,16 +15,14 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping(value = "material",method = RequestMethod.POST)
 public class MaterialController {
     private final MaterialService materialService;
