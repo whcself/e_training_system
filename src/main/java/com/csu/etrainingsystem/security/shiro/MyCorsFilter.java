@@ -23,7 +23,13 @@ public class MyCorsFilter implements javax.servlet.Filter {
 
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpServletRequest res=(HttpServletRequest)req;
-        System.out.println ("本次请求的session是:"+res.getSession ().getId ());
+        if(res.getSession (false)==null){
+            System.out.println("本次请求的session为空");
+        }
+        else {
+            System.out.println ("本次请求的session是:"+res.getSession ().getId ());
+
+        }
         response.setHeader("Access-Control-Allow-Origin", res.getHeader ("Origin"));
         response.setHeader ("Access-Control-Allow-Credentials","true");
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE");
