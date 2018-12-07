@@ -125,5 +125,9 @@ public class ShiroConfig {
 	defaultWebSessionManager.setSessionDAO (sessionDAO);
 	return defaultWebSessionManager;
 	}
+    @Bean
+	public MyCorsFilter getMyCorsFilter(){
 
+		return new MyCorsFilter ();
+	}
 }
