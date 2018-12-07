@@ -71,6 +71,8 @@ public class UserRealm extends AuthorizingRealm{
 		   info.addStringPermission("user:admin");
 		   info.addStringPermission("user:material");
 		   info.addStringPermission("user:overwork");
+		   info.addStringPermission("user:teacher");
+		   info.addStringPermission("user:student");
 	   }
 	  else if(user.getRole ().equals("student")){
 		   info.addStringPermission("user:student");

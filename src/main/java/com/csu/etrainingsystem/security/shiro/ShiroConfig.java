@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,6 +30,9 @@ public class ShiroConfig {
 	@Bean
 	public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager")DefaultWebSecurityManager securityManager, @Qualifier("sessionManager") DefaultWebSessionManager sessionManager){
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
+		filtersMap.put("hasToken",new MyAuthFilter());
+		shiroFilterFactoryBean.setFilters(filtersMap);
         //设置session管理器
 		securityManager.setSessionManager (sessionManager);
 		//设置安全管理器
