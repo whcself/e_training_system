@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping(value = "material",method = RequestMethod.POST)
 public class MaterialController {
     private final MaterialService materialService;
