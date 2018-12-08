@@ -15,6 +15,7 @@ import org.springframework.web.filter.CorsFilter;
 //        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 //        CorsConfiguration config = new CorsConfiguration();
 //        config.setAllowCredentials(true);
+//        config.setMaxAge (Long.max (4000,50000));
 //        // 设置你要允许的网站域名，如果全允许则设为 *
 //        config.addAllowedOrigin("*");
 //        // 如果要限制 HEADER 或 METHOD 请自行更改
