@@ -52,22 +52,22 @@ public class PurchaseController {
     public CommonResponseForm increMaterialNum(@RequestParam(required = false) int num,
                                                @RequestParam String clazz,
                                                HttpSession session){
-        SimplePrincipalCollection simplePrincipalCollection=(SimplePrincipalCollection)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-        User user=(User)simplePrincipalCollection.getPrimaryPrincipal ();
-        String tname="";
-       // System.out.println (user.getRole ());
-        if(user.getRole ().equals ("teacher")) {
-            Teacher teacher = teacherService.getTeacher (user.getAccount ());
-            if (teacher != null)
-                tname = teacher.getTname ();
-        }
-        else if(user.getRole ().equals ("admin")) {
-            Admin admin = adminService.getAdminById (user.getAccount ());
-            if (admin != null)
-                tname = admin.getAid ();
-        }
+//        SimplePrincipalCollection simplePrincipalCollection=(SimplePrincipalCollection)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+//        User user=(User)simplePrincipalCollection.getPrimaryPrincipal ();
+//        String tname="";
+//       // System.out.println (user.getRole ());
+//        if(user.getRole ().equals ("teacher")) {
+//            Teacher teacher = teacherService.getTeacher (user.getAccount ());
+//            if (teacher != null)
+//                tname = teacher.getTname ();
+//        }
+//        else if(user.getRole ().equals ("admin")) {
+//            Admin admin = adminService.getAdminById (user.getAccount ());
+//            if (admin != null)
+//                tname = admin.getAid ();
+//        }
         Purchase purchase=new Purchase();
-        purchase.setTname (tname);
+//        purchase.setTname (tname);
         //申购时间
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
         String time= format.format (new Date ());
