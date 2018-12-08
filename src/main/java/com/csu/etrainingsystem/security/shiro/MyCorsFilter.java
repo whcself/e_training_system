@@ -6,6 +6,7 @@ import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,11 +24,16 @@ public class MyCorsFilter implements javax.servlet.Filter {
 
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpServletRequest res=(HttpServletRequest)req;
+//        Cookie[] cookies=res.getCookies ();
+//        Cookie cookie=new Cookie ();
+//        cookie.setPath ("/");
+    //    response.addCookie (cookie);
         if(res.getSession (false)==null){
             System.out.println("本次请求的session为空");
+            System.out.println (res.getSession(true).getId ());
         }
         else {
-            System.out.println ("本次请求的session是:"+res.getSession ().getId ());
+            System.out.println ("本次请求的session是:"+res.getSession (false).getId ());
 
         }
         response.setHeader("Access-Control-Allow-Origin", res.getHeader ("Origin"));

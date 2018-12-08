@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-@RequestMapping(value = "material",method = RequestMethod.POST)
+@RequestMapping(value = "/material",method = RequestMethod.POST)
 public class MaterialController {
     private final MaterialService materialService;
     private final TeacherService teacherService;
