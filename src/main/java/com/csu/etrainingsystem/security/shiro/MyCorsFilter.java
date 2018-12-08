@@ -10,7 +10,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-@Component
+
+
 public class MyCorsFilter implements javax.servlet.Filter {
 
     @Override
@@ -21,7 +22,6 @@ public class MyCorsFilter implements javax.servlet.Filter {
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain filterChain) throws IOException, ServletException {
         System.out.println ("自定义过滤器在工作");
-
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpServletRequest res=(HttpServletRequest)req;
 //        Cookie[] cookies=res.getCookies ();

@@ -103,7 +103,6 @@ public class UserRealm extends AuthorizingRealm{
 
 		User user = userService.getUser (token.getUsername ());
 		Subject subject = SecurityUtils.getSubject();
-
 		if(user==null){
 			//用户不存在
 			return null;//shiro底层会抛出UnKnowAccountException
