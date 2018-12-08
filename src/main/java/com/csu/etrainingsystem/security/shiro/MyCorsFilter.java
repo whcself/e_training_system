@@ -39,7 +39,7 @@ public class MyCorsFilter implements javax.servlet.Filter {
         response.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
- //     response.setHeader("Set-Cookie","name=SHIRO-COOKIE;M; Expires=0; Domain=*; Path=/");
+        response.setHeader("Set-Cookie","name=SHIRO-COOKIE;M;Domain="+res.getHeader("Origin")+"; Path=/");
 
         filterChain.doFilter(req, resp);
     }
