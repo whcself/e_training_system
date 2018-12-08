@@ -55,7 +55,7 @@ public class PurchaseController {
         SimplePrincipalCollection simplePrincipalCollection=(SimplePrincipalCollection)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
         User user=(User)simplePrincipalCollection.getPrimaryPrincipal ();
         String tname="";
-        System.out.println (user.getRole ());
+       // System.out.println (user.getRole ());
         if(user.getRole ().equals ("teacher")) {
             Teacher teacher = teacherService.getTeacher (user.getAccount ());
             if (teacher != null)

@@ -35,7 +35,7 @@ public class LoginController {
 		 */
 		//1.获取Subject
 		Subject subject = SecurityUtils.getSubject();
-		System.out.println ("登录时验证的session:"+subject.getSession ().getId ());
+		//System.out.println ("登录时验证的session:"+subject.getSession ().getId ());
 		//2.封装用户数据
 		UsernamePasswordToken token = new UsernamePasswordToken(name,password);
 

@@ -41,7 +41,6 @@ public class ShiroConfig {
 		//设置安全管理器
 		SecurityUtils.setSecurityManager (securityManager);
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
-
 		//添加Shiro内置过滤器
 		/**
 		 * Shiro内置过滤器，可以实现权限相关的拦截器
@@ -68,7 +67,6 @@ public class ShiroConfig {
 		//教师权限   user:teacher
 		//教师权限中又包括加班权限/物料权限user:material/user:overwork
 		//学生权限 user:student
-
 		//perms参数可以多个，用逗号隔开
 		filterMap.put("/material/decrMaterialNum", "perms[user:material]");
 		filterMap.put("/purchase/addPurchase", "perms[user:material]");
@@ -84,10 +82,8 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setLoginUrl("/toLogin");
 		//设置未授权提示页面
 		shiroFilterFactoryBean.setUnauthorizedUrl("/noAuth");
-		
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterMap);
-		
-		
+
 		return shiroFilterFactoryBean;
 	}
 	
@@ -128,7 +124,7 @@ public class ShiroConfig {
 	){
 
 		DefaultWebSessionManager defaultWebSessionManager= new DefaultWebSessionManager ();
-	defaultWebSessionManager.setSessionDAO (sessionDAO);
+	    defaultWebSessionManager.setSessionDAO (sessionDAO);
 		defaultWebSessionManager.setSessionIdCookie (simpleCookie );
 		//defaultWebSessionManager.setSessionIdCookieEnabled (false);
 		defaultWebSessionManager.setSessionValidationSchedulerEnabled (false);
