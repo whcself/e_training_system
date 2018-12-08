@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 /**
  * 解决跨域问题springboot所需配置
  */
-@Configuration
+//@Configuration
 public class CORSConfiguration {
     @Bean
     public WebMvcConfigurer CORSConfigurer() {

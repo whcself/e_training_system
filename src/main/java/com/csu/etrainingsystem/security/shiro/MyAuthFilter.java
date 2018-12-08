@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@Component
+//@Component
 public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
 {
     @Override
@@ -33,18 +33,18 @@ public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
         return super.preHandle(request,response);
     }
 
-//    @Override
-//    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-//        boolean allowed = super.isAccessAllowed(request, response, mappedValue);
-//        if (!allowed) {
-//            // 判断请求是否是options请求
-//            String method = WebUtils.toHttp(request).getMethod();
-//            if (StringUtils.equalsIgnoreCase("OPTIONS", method)) {
-//                return true;
-//            }
-//        }
-//        return allowed;
-//    }
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        boolean allowed = super.isAccessAllowed(request, response, mappedValue);
+        if (!allowed) {
+            // 判断请求是否是options请求
+            String method = WebUtils.toHttp(request).getMethod();
+            if (StringUtils.equalsIgnoreCase("OPTIONS", method)) {
+                return true;
+            }
+        }
+        return allowed;
+    }
 //    @Bean
 //    public FilterRegistrationBean registration(MyAuthFilter filter) {
 //        FilterRegistrationBean registration = new FilterRegistrationBean(filter);

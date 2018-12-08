@@ -25,7 +25,7 @@ public class MyCorsFilter implements javax.servlet.Filter {
         System.out.println ("自定义过滤器在工作");
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpServletRequest res=(HttpServletRequest)req;
-        System.out.println ("subject是:"+SecurityUtils.getSubject ());
+        //       System.out.println ("subject是:"+SecurityUtils.getSubject ());
         if(SecurityUtils.getSubject ().getSession(false)!=null){
             System.out.println("本次请求的session为空");
             System.out.println (SecurityUtils.getSubject ().getSession(false).getId ());
