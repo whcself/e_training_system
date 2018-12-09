@@ -55,10 +55,7 @@ public class MaterialService {
     @Transactional
     public void  deleteMaterial(String clazz) {
 
-       /*
-       todo:消除删除一个物料种类所带来的影响,这个需要悬空吗?
-       即:购买表的记录应该还是需要有
-        */
+     this.materialRepository.deleteMaterialByClazz (clazz);
     }
     @Transactional
     public Iterable<Apply> getAplyBySidAndSnameAndClazzAndTime(String sid, String sname , String clazz, Date startTime, Date endTime) {

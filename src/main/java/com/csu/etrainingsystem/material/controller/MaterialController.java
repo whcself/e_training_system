@@ -42,11 +42,11 @@ public class MaterialController {
         return CommonResponseForm.of200 ("获取物料成功",this.materialService.getAllMaterial ());
     }
 
-    @ApiOperation (value = "查询所有物料")
+    @ApiOperation (value = "删除物料")
     @RequestMapping(value ="/deleteMaterial")
     public CommonResponseForm deleteMaterial(String clazz){
         this.materialService.deleteMaterial (clazz);
-        return CommonResponseForm.of204 ("获取物料成功");
+        return CommonResponseForm.of204 ("删除物料成功");
     }
     @ApiOperation (value = "查询所有存量大于0的物料")
     @RequestMapping(value ="/getMaterialsNotEmpty")
