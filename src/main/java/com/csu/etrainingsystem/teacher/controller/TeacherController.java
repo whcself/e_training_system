@@ -37,12 +37,12 @@ public class TeacherController {
     }
 
     @RequestMapping("/deleteTeacher")
-    public  CommonResponseForm deleteTeacherById( String[] ids){
+    public  CommonResponseForm deleteTeacherById(@RequestBody String[] ids){
         teacherService.deleteTeacher(ids);
         return CommonResponseForm.of204("删除教师成功");
     }
     @RequestMapping("/updateTeacher")
-    public CommonResponseForm updateTeacher(Teacher teacher){
+    public CommonResponseForm updateTeacher(@RequestBody Teacher teacher){
         teacherService.updateTeacher(teacher);
         return CommonResponseForm.of204("更新教师成功");
     }
