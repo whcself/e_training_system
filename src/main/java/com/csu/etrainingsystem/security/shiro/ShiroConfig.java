@@ -12,6 +12,7 @@ import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,9 +34,9 @@ public class ShiroConfig {
 	@Bean
 	public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager")DefaultWebSecurityManager securityManager){
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-//		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
-//		filtersMap.put("authc",new MyAuthFilter());
-//		shiroFilterFactoryBean.setFilters(filtersMap);
+		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
+		filtersMap.put("authc",new MyAuthFilter());
+		shiroFilterFactoryBean.setFilters(filtersMap);
 //        //设置session管理器
 //		securityManager.setSessionManager (sessionManager);
 		//设置安全管理器
@@ -138,6 +139,14 @@ public class ShiroConfig {
 		simpleCookie.setMaxAge (600000);
 		simpleCookie.setHttpOnly (true);
        return simpleCookie;
+	}
+	@Bean
+	public FilterRegistrationBean registration() {
+		MyAuthFilter filter=new MyAuthFilter ();
+		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+		registration.setEnabled(false);
+		registration.setOrder (0);
+		return registration;
 	}
 	/**
 	 * <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
