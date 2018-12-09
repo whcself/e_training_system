@@ -33,7 +33,7 @@ public class LoginController {
 		/**
 		 * 使用Shiro编写认证操作
 		 */
-		//1.获取Subject
+		//1.获取Subject 如果不存在就创建并且绑定到当前线程,如果已经存在就从当前线程拿出来就行了
 		Subject subject = SecurityUtils.getSubject();
 		//System.out.println ("登录时验证的session:"+subject.getSession ().getId ());
 		//2.封装用户数据

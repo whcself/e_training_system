@@ -102,6 +102,7 @@ public class UserRealm extends AuthorizingRealm{
 		UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
 
 		User user = userService.getUser (token.getUsername ());
+		//如果不能存在就创建
 		Subject subject = SecurityUtils.getSubject();
 		if(user==null){
 			//用户不存在

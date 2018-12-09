@@ -27,7 +27,7 @@ public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         if (httpRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
-            //setHeader(httpRequest,httpResponse);
+            setHeader(httpRequest,httpResponse);
             return true;
         }
         return super.preHandle(request,response);
@@ -40,17 +40,15 @@ public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
             // 判断请求是否是options请求
             String method = WebUtils.toHttp(request).getMethod();
             if (StringUtils.equalsIgnoreCase("OPTIONS", method)) {
+                HttpServletResponse httpResponse = (HttpServletResponse) response;
+                HttpServletRequest httpRequest = (HttpServletRequest) request;
+                setHeader(httpRequest,httpResponse);
                 return true;
             }
         }
         return allowed;
     }
-//    @Bean
-//    public FilterRegistrationBean registration(MyAuthFilter filter) {
-//        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-//        registration.setEnabled(false);
-//        return registration;
-//    }
+
 
 
     /**
