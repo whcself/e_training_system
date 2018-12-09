@@ -41,7 +41,12 @@ public class MaterialController {
     public CommonResponseForm getAllMaterial(){
         return CommonResponseForm.of200 ("获取物料成功",this.materialService.getAllMaterial ());
     }
-
+    @ApiOperation (value = "添加物料")
+    @RequestMapping(value ="/addMaterial")
+    public CommonResponseForm addMaterial(Material material){
+        this.materialService.addMaterial (material);
+        return CommonResponseForm.of204 ("天加物料成功") ;
+    }
     @ApiOperation (value = "删除物料")
     @RequestMapping(value ="/deleteMaterial")
     public CommonResponseForm deleteMaterial(String clazz){
