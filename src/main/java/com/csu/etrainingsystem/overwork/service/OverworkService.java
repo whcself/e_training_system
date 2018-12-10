@@ -81,7 +81,7 @@ public class OverworkService {
      * @param timeLen   时长
      */
 
-    public boolean addTeacherOverwork(String beginTime,String proName,String timeLen,String tName){
+    public boolean addTeacherOverwork(String beginTime,String proName,String timeLen,String tName,String reason){
 
         Teacher teacher=teacherRepository.findTeacherByTName(tName);
         if(teacher==null)return false;
@@ -92,6 +92,7 @@ public class OverworkService {
         overwork.setOverwork_time_end(end);
         overwork.setPro_name(proName);
         overwork.setTname(tName);
+        overwork.setReason(reason);
         overworkRepository.save(overwork);
         return true;
     }

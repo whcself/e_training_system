@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/overwork")
@@ -44,7 +45,7 @@ public class OverWorkController {
     public CommonResponseForm getOverworkApplyByTime(@RequestParam(required = false) String begin,
                                                      @RequestParam(required = false) String end,
                                                      @RequestParam(required = false) String pro_name) {
-        List<Overwork_apply> overworkApplyList = overworkApplyService.getOverworkApplyByBeginAndEndTime(begin, end, pro_name);
+        List<Map<String,String>> overworkApplyList = overworkApplyService.getOverworkApplyByBeginAndEndTime(begin, end, pro_name);
         if (overworkApplyList.size() == 0) return CommonResponseForm.of400("查询错误");
         else return CommonResponseForm.of200("查询成功", overworkApplyList);
     }
@@ -87,12 +88,13 @@ public class OverWorkController {
                                                  @RequestParam(defaultValue = "2") String duration,
                                                  @RequestParam String pro_name,
                                                  @RequestParam String t_name,
+                                                 @RequestParam String reason,
                                                  HttpSession session) {
 //        User user=UserRole.getUser(session);
 //        if(!UserRole.hasRole(user,UserRole.ADMIN)){
 //            return CommonResponseForm.of401("没有权限");
 //        }
-        boolean isOk = overworkService.addTeacherOverwork(begin, pro_name, duration, t_name);
+        boolean isOk = overworkService.addTeacherOverwork(begin, pro_name, duration, t_name,reason);
         if (!isOk) return CommonResponseForm.of400("增加错误，没有该老师");
         return CommonResponseForm.of204("增加成功");
     }

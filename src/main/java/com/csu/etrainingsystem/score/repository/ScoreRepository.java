@@ -20,9 +20,27 @@ import java.util.Optional;
 public interface ScoreRepository extends JpaRepository<Score, Integer> {
 
     // TODO: 2018/11/29 scjn 计算总成绩
-//    @Modifying
-//    @Query()
-//    void executeScore(String batchName);
+    @Modifying
+//    @Query(value = "UPDATE student" +
+//            "INNER JOIN (" +
+//            "SELECT" +
+//            "newscore.sid," +
+//            "sum( newscore.pro_score * p.weight ) AS total_score " +
+//            "FROM" +
+//            "( SELECT s.*, stu.batch_name FROM score AS s, student AS stu WHERE s.sid = stu.sid ) AS newscore," +
+//            "proced AS p " +
+//            "WHERE" +
+//            "newscore.batch_name = p.batch_name " +
+//            "AND newscore.pro_name = p.pro_name and newscore.batch_name=?1" +
+//            "GROUP BY" +
+//            "newscore.sid " +
+//            ") total ON student.sid = total.sid " +
+//            "SET student.total_score = total.total_score",nativeQuery = true)
+    @Query(value = "UPDATE student INNER JOIN (SELECT newscore.sid, sum( newscore.pro_score * p.weight ) AS total_score  FROM " +
+            "( SELECT s.*, stu.batch_name FROM score AS s, student AS stu WHERE s.sid = stu.sid ) AS newscore, proced AS p  " +
+            "WHERE newscore.batch_name = p.batch_name AND newscore.pro_name = p.pro_name  and newscore.batch_name=? GROUP BY newscore.sid  ) total " +
+            "ON student.sid = total.sid  SET student.total_score = total.total_score",nativeQuery = true)
+    void executeScore(String batchName);
     //查找该同学所有工序的成绩
     @Query(value = "select * from score where score.sid=? and score.del_status=0", nativeQuery = true)
     Iterable<Score> findScoreBySid(String sid);

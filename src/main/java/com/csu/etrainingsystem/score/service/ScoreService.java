@@ -4,11 +4,13 @@ import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.repository.ExperimentRepository;
 import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.entity.ScoreSubmit;
+import com.csu.etrainingsystem.score.entity.ScoreUpdate;
 import com.csu.etrainingsystem.score.entity.SpecialScore;
 import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.repository.ScoreRepository;
 import com.csu.etrainingsystem.score.repository.ScoreSubmitRepository;
+import com.csu.etrainingsystem.score.repository.ScoreUpdateRepository;
 import com.csu.etrainingsystem.score.repository.SpScoreRepository;
 import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Service
@@ -28,8 +31,10 @@ public class ScoreService {
     private final SpStudentRepository spStudentRepository;
     private final ScoreSubmitRepository scoreSubmitRepository;
     private final SpScoreRepository spScoreRepository;
+    private final ScoreUpdateRepository scoreUpdateRepository;
     @Autowired
-    public ScoreService(ScoreSubmitRepository scoreSubmitRepository, ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository, SpStudentRepository spStudentRepository, SpScoreRepository spScoreRepository) {
+    public ScoreService(ScoreUpdateRepository scoreUpdateRepository,ScoreSubmitRepository scoreSubmitRepository, ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository, SpStudentRepository spStudentRepository, SpScoreRepository spScoreRepository) {
+        this.scoreUpdateRepository=scoreUpdateRepository;
         this.scoreSubmitRepository=scoreSubmitRepository;
         this.scoreRepository = scoreRepository;
         this.studentRepository = studentRepository;
@@ -47,6 +52,11 @@ public class ScoreService {
         this.spScoreRepository.save(specialScore);
     }
 
+
+    @Transactional
+    public void executeScore(String batch_name){
+        scoreRepository.executeScore(batch_name);
+    }
     @Transactional
     public Iterable<Score> getScoreBySid(String sid) {
         return scoreRepository.findScoreBySid(sid);
@@ -93,14 +103,7 @@ public class ScoreService {
     }
 
 
-    /**
-     *
-     */
-    // TODO: 2018/12/2 计算总成绩
-    public void executeScore(String batchName){
 
-//        scoreRepository.executeScore(batchName);
-    }
     /**
      * 重要
      *
@@ -265,6 +268,26 @@ public class ScoreService {
         return scoreSubmitRepository.findScoreRecord(batchName, sGroup, proName);
     }
 
+    public List<ScoreUpdate> getScoreUpdate(String batchName, String begin,String end,String sname,String sid){
+        sid=toAll(sid);
+        sname=toAll(sname);
+        batchName=toAll(batchName);
+        if(begin==null)begin="1999-10-10";
+        if(end==null)end="2999-10-10";
+        System.out.println(sid+" "+sname+" "+batchName+" "+begin+" "+end);
+        return scoreUpdateRepository.findScoreUpdate(batchName,begin,end,sname,sid);
+    }
+
+//    public CommonResponseForm addTeacherOverwork(@RequestParam String begin,
+//                                                 @RequestParam(defaultValue = "2") String duration,
+//                                                 @RequestParam String pro_name,
+//                                                 @RequestParam String t_name,
+//                                                 @RequestParam String reason,
+//                                                 HttpSession session)
+    private String toAll(String para){
+        if(para==null)return "%";
+        else return para;
+    }
     /**
      * 等级
      */
@@ -310,7 +333,7 @@ public class ScoreService {
     }
 
     /**
-     * 修改成绩
+     *
      *
      * 修改的话，以前就有记录了
      * 2中类别的分数，分开来执行，一个用studentRepo
@@ -331,6 +354,13 @@ public class ScoreService {
                 else updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)));
             }
         }
+
+        String reason=scoreForm.get("原因");
+        ScoreUpdate update=new ScoreUpdate();
+        update.setReason(reason);
+        update.setSid(sid);
+        update.setUpdate_time(new Timestamp(System.currentTimeMillis()));
+        scoreUpdateRepository.save(update);
         return true;
 
 

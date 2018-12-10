@@ -3,6 +3,7 @@ package com.csu.etrainingsystem.score.controller;
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.score.entity.ScoreSubmit;
+import com.csu.etrainingsystem.score.entity.ScoreUpdate;
 import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
@@ -62,11 +63,11 @@ public class ScoreController {
                                                              @RequestParam(required = false) String pro_name,
                                                              @RequestParam(required = false) String sId,
                                                              @RequestParam(required = false) String sName) {
-        List<HashMap<String,String>> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName);
+        List<HashMap<String, String>> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName);
 //        if ( == 0) {
 //            return CommonResponseForm.of400("查询失败，结果为空");
 //        }
-        return CommonResponseForm.of200("查询成功:共"+scoreForms.size()+"条记录", scoreForms);
+        return CommonResponseForm.of200("查询成功:共" + scoreForms.size() + "条记录", scoreForms);
     }
 
     /**
@@ -78,7 +79,7 @@ public class ScoreController {
     public CommonResponseForm getMyScore(HttpSession session) {
         User user = UserRole.getUser(session);
         String sId = user.getAccount();
-        List<HashMap<String,String>> scoreForms= scoreService.getScoreByBatchAndSGroupOrProName(null, null, null, sId, null);
+        List<HashMap<String, String>> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(null, null, null, sId, null);
         if (scoreForms.size() == 0) {
             return CommonResponseForm.of400("查询失败，结果为空");
         }
@@ -96,13 +97,22 @@ public class ScoreController {
     @PostMapping("/getScoreRecord")
     public CommonResponseForm getScoreRecord(@RequestParam(required = false) String batch_name,
                                              @RequestParam(required = false) String s_group_id,
-                                             @RequestParam(required = false) String pro_name){
-        List<ScoreSubmit> scoreSubmits=scoreService.getScoreRecord(batch_name,s_group_id,pro_name);
-        return CommonResponseForm.of200("查询成功：共"+scoreSubmits.size()+"条记录",scoreSubmits);
+                                             @RequestParam(required = false) String pro_name) {
+        List<ScoreSubmit> scoreSubmits = scoreService.getScoreRecord(batch_name, s_group_id, pro_name);
+        return CommonResponseForm.of200("查询成功：共" + scoreSubmits.size() + "条记录", scoreSubmits);
+    }
+
+    @PostMapping("/getScoreUpdate")
+    public CommonResponseForm getScoreUpdate(@RequestParam(required = false) String batch_name,
+                                             @RequestParam(required = false) String begin,
+                                             @RequestParam(required = false) String end,
+                                             @RequestParam(required = false) String sname,
+                                             @RequestParam(required = false) String sid) {
+        List<ScoreUpdate> updates = scoreService.getScoreUpdate(batch_name,begin,end,sname,sid);
+        return CommonResponseForm.of200("查询成功共："+updates.size()+"条记录",updates);
     }
 
     /**
-     *
      * @param batch_name
      * @param s_group_id
      * @param pro_name
@@ -147,7 +157,7 @@ public class ScoreController {
     }
 
     @PostMapping("/executeScore")
-    public CommonResponseForm executeScore(@RequestParam String batch_name){
+    public CommonResponseForm executeScore(@RequestParam String batch_name) {
         scoreService.executeScore(batch_name);
         return CommonResponseForm.of204("计算成功");
 

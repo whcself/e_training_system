@@ -40,6 +40,9 @@ public interface ProcedureRepository extends JpaRepository<Proced,ProcedId> {
     @Query(value="select * from proced where  proced.pro_name=? and proced.batch_name=? and proced.del_status=0",nativeQuery = true)
     Optional<Proced> findProcedByNameAndBatch(String pro_name,String batch_name);
 
+    @Query(value = "select distinct pro_name from proced where del_status=0",nativeQuery = true)
+    List<String>findAllProced2();
+
     /**
      * 设置权重
      *
