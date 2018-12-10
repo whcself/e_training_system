@@ -19,9 +19,9 @@ public interface ApplyRepository extends JpaRepository<Apply,Integer> {
 
 
 
-    @Query(value="  SELECT  MAX(material_apply.apply_time) FROM material_apply where material_apply.del_status=0",nativeQuery = true)
+    @Query(value="  SELECT  MAX(material_apply.apply_time) FROM material_apply ",nativeQuery = true)
     List<Date> findMaxTime();
-    @Query(value="   SELECT MIN(material_apply.apply_time) FROM material_apply where material_apply.del_status=0",nativeQuery = true)
+    @Query(value="   SELECT MIN(material_apply.apply_time) FROM material_apply ",nativeQuery = true)
     List<Date> findMinTime();
 
 }

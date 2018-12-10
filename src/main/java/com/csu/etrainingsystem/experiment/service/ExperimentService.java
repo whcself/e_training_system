@@ -105,6 +105,7 @@ public class ExperimentService {
             List<Experiment> experimentList = IteratorUtils.toList (experiments.iterator ());
             Experiment experiment= experimentList.get (0);
           String   templateId =experiment.getTemplate_id ();
+          //修改模板的时候需要将之前的模板清空
           experimentRepository.deleteExperimentByTemplate (templateId);
                 experimentRepository.saveAll (experiments);
         }

@@ -29,3 +29,11 @@ spring:
       timeout: 72h
 server:
   port: 8084
+nutz:
+  json:
+    auto-unicode: false
+    quote-name: true
+    ignore-null: true
+    null-as-emtry: true
+    enabled: true
+    mode: compact

@@ -15,17 +15,14 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
-@RequestMapping(value = "material",method = RequestMethod.POST)
+@RequestMapping(value = "/material",method = RequestMethod.POST)
 public class MaterialController {
     private final MaterialService materialService;
     private final TeacherService teacherService;
@@ -43,6 +40,18 @@ public class MaterialController {
     @RequestMapping(value ="/getAllMaterial")
     public CommonResponseForm getAllMaterial(){
         return CommonResponseForm.of200 ("获取物料成功",this.materialService.getAllMaterial ());
+    }
+    @ApiOperation (value = "添加物料")
+    @RequestMapping(value ="/addMaterial")
+    public CommonResponseForm addMaterial(Material material){
+        this.materialService.addMaterial (material);
+        return CommonResponseForm.of204 ("天加物料成功") ;
+    }
+    @ApiOperation (value = "删除物料")
+    @RequestMapping(value ="/deleteMaterial")
+    public CommonResponseForm deleteMaterial(String clazz){
+        this.materialService.deleteMaterial (clazz);
+        return CommonResponseForm.of204 ("删除物料成功");
     }
     @ApiOperation (value = "查询所有存量大于0的物料")
     @RequestMapping(value ="/getMaterialsNotEmpty")
