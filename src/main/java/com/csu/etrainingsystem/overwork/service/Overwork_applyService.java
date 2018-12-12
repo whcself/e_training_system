@@ -18,6 +18,7 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -70,7 +71,7 @@ public class Overwork_applyService {
      * @param endTime   结束时间
      * @return 申请列表
      */
-    public List<Overwork_apply> getOverworkApplyByBeginAndEndTime(String beginTime, String endTime, String proName) {
+    public List<Map<String,String>> getOverworkApplyByBeginAndEndTime(String beginTime, String endTime, String proName) {
         if (beginTime == null) beginTime = "1999-1-1";
         if (endTime == null)
             endTime = "2999-1-1";

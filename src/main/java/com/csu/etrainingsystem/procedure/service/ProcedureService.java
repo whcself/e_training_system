@@ -52,8 +52,8 @@ public class ProcedureService {
         return procedureRepository.findProcedByNameAndBatch (procedId.getPro_name (),procedId.getBatch_name ()).get ();
     }
     @Transactional
-    public Iterable<Proced> getAllProcedure() {
-        return this.procedureRepository.findAllProced();
+    public Iterable<String> getAllProcedure() {
+        return this.procedureRepository.findAllProced2();
     }
 
     @Transactional
