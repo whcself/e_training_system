@@ -106,15 +106,19 @@ public class PurchaseController {
     @ApiOperation (value = "获取申请记录")
     @RequestMapping(value ="/getSelectedPurchase")
     public CommonResponseForm getSelectedPurchase(
-                                        @RequestParam(required = false) String clazz,
                                         @RequestParam(required = false)String tname ,
-                                        @RequestParam(required = false)Date startTime,//起始时间
-                                        @RequestParam(required = false)Date endTime//截止时间
+                                        @RequestParam(required = false) String clazz,
+                                        @RequestParam(required = false)String startTime,//起始时间
+                                        @RequestParam(required = false)String endTime//截止时间
     )
     {
         return CommonResponseForm.of200("查询记录成功",purchaseService.getSelectedPurchase (tname,clazz,startTime,endTime));
     }
-
+    @ApiOperation ("获取所有具有申请权限的用户")
+    @RequestMapping(value ="/getPurchaser")
+    public CommonResponseForm getAllPurchaser(){
+        return  CommonResponseForm.of200 ("获取所有记录成功",this.purchaseService.getAllPurchaserName ());
+    }
 
 
 }

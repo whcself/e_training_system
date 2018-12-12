@@ -58,17 +58,12 @@ public class MaterialService {
      this.materialRepository.deleteMaterialByClazz (clazz);
     }
     @Transactional
-    public Iterable<Apply> getAplyBySidAndSnameAndClazzAndTime(String sid, String sname , String clazz, Date startTime, Date endTime) {
+    public Iterable<Apply> getAplyBySidAndSnameAndClazzAndTime(String sid, String sname , String clazz, String startTime, String endTime) {
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-        String start="";
-        String end="";
-        if(startTime!=null)start = format.format (startTime);
-        else start= format.format(applyRepository.findMinTime ().get (0));
-        if(endTime!=null) end= format.format (endTime);
-        else end= format.format(applyRepository.findMaxTime ().get (0));
+        if(startTime==null)startTime = format.format(applyRepository.findMinTime ().get (0));
+        if(endTime==null) endTime=  format.format(applyRepository.findMaxTime ().get (0));
         if(sid==null)sid="%";if(sname==null)sname="%";if(clazz==null)clazz="%";
-        System.out.println (sid+sname+clazz);
-        return this.applyRepository.findAplyBySidAndSnameAndClazzAndTime(sid, sname ,clazz, start, end);
+        return this.applyRepository.findAplyBySidAndSnameAndClazzAndTime(sid, sname ,clazz, startTime, endTime);
     }
     @Transactional
     public void addAply(Apply apply) {
