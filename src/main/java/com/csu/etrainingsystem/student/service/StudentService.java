@@ -3,19 +3,29 @@ package com.csu.etrainingsystem.student.service;
 
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
+import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.overwork.service.Overwork_applyService;
 import com.csu.etrainingsystem.score.entity.SpecialScore;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
+import com.csu.etrainingsystem.student.form.StudentInfoForm;
 import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.io.*;
+import java.util.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 
 @Service
@@ -102,8 +112,8 @@ public class StudentService {
 
     @Transactional
     public Iterable<Student> findStudentByBatchNameAndSGroup(String batchName, String groupId) {
-        if(batchName==null)batchName="%";
-        if (groupId==null)groupId="%";
+        if (batchName == null) batchName = "%";
+        if (groupId == null) groupId = "%";
         return studentRepository.findStudentByS_group_idAndBatch(groupId, batchName);
     }
 
@@ -147,6 +157,66 @@ public class StudentService {
         spStudentRepository.save(specialStudent);
     }
 
+    @Transactional
+    public CommonResponseForm updateSGroup(String sid, String sGroupId) {
+        Optional<Student> optionalStudent = studentRepository.findStudentBySid(sid);
+        if (optionalStudent.isPresent()) {
+            Student student = optionalStudent.get();
+            student.setS_group_id(sGroupId);
+            studentRepository.save(student);
+        } else {
+            return CommonResponseForm.of400("该学号不存在");
+        }
+        return CommonResponseForm.of204("修改成功");
+    }
+
+
+    /**
+     * 将List集合数据写入excel（单个sheet）
+     */
+    public void downloadStudentList(List<StudentInfoForm> formList, HttpServletResponse response) throws Exception {
+        System.out.println("开始写入文件>>>>>>>>>>>>");
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        //create sheet
+        Sheet sheet = workbook.createSheet("StudentList");
+        int rowIndex = 0;//标识位，用于标识sheet的行号
+        String[] excelTitle = {"学号", "姓名", "班级", "批次", "组号"};
+        try {
+            //写表头数据
+            Row titleRow = sheet.createRow(rowIndex);
+            for (int i = 0; i < excelTitle.length; i++) {
+                //创建表头单元格,填值
+                titleRow.createCell(i).setCellValue(excelTitle[i]);
+            }
+            System.out.println("表头写入完成>>>>>>>>");
+            rowIndex++;
+            //循环写入主表数据
+            for (StudentInfoForm studentInfoForm :formList) {
+                //create sheet row
+                Row row = sheet.createRow(rowIndex);
+                //create sheet coluum(单元格)
+                Cell cell0 = row.createCell(0);
+                cell0.setCellValue(studentInfoForm.getSid());
+                Cell cell1 = row.createCell(1);
+                cell1.setCellValue(studentInfoForm.getSname());
+                Cell cell2 = row.createCell(2);
+                cell2.setCellValue(studentInfoForm.getClazz());
+                Cell cell3 = row.createCell(3);
+                cell3.setCellValue(studentInfoForm.getBatch_name());
+                Cell cell4 = row.createCell(4);
+                cell4.setCellValue(studentInfoForm.getS_group_id());
+                rowIndex++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        OutputStream out = new BufferedOutputStream(response.getOutputStream());
+        response.setHeader("Content-Disposition", "fileName=studentList.xlsx");
+        response.setContentType("application/octet-stream;charset=UTF-8");
+        workbook.write(out);
+        out.close();
+    }
 
     @Transactional
     public void updateSpStudent(SpecialStudent student) {
