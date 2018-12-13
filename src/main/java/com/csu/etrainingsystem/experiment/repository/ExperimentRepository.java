@@ -4,11 +4,13 @@ import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.material.entity.Material;
 import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.entity.ScoreSubmit;
+import org.hibernate.annotations.SQLUpdate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +23,17 @@ public interface ExperimentRepository extends JpaRepository<Experiment,Integer> 
     @Query(value="select * from experiment where experiment.exp_id=? and experiment.del_status=0",nativeQuery = true)
     Optional<Experiment> findExperimentByExp_id(int exp_id);
 
+    @Query(value="insert experiment(class_time,template_id,s_group_id," +
+            "pro_name,t_group_id,batch_name)values(?,?,?,?,?,?)",nativeQuery = true)
+    @Modifying
+    void  addExp(String class_time,String template_id,String s_group_id,String pro_name,String t_group_id,String batch_name);
+
     @Query(value="select * from experiment where experiment.calss_time=? and experiment.del_status=0",nativeQuery = true)
     Iterable<Experiment> findExperimentByClass_time(String class_time);
+
+    @Query(value="select template_id from experiment where experiment.template_id is not null and experiment.del_status=0",nativeQuery = true)
+    Iterable<String> findAllTemplate();
+
 
     @Query(value="select * from experiment where experiment.del_status=0",nativeQuery = true)
     Iterable<Experiment> findAllExperiment();
@@ -38,12 +49,12 @@ public interface ExperimentRepository extends JpaRepository<Experiment,Integer> 
      * @param template_id
      * @return
      */
-    @Query(value="select * from experiment where experiment.template_id=? and experiment.batch_name=null and experiment.del_status=0",nativeQuery = true)
+    @Query(value="select * from experiment where experiment.template_id=? and experiment.batch_name is null and experiment.del_status=0",nativeQuery = true)
     Iterable<Experiment> findExperimentByTemplate(String template_id);
-
+//     @SQLUpdate (sql = "update experiment SET experiment.del_status=1 WHERE experiment.template_id=?")
     @Query(value="update experiment SET experiment.del_status=1 WHERE experiment.template_id=?",nativeQuery = true)
     @Modifying
-    Iterable<Experiment> deleteExperimentByTemplate(String template_id);
+     void  deleteExperimentByTemplate(String template_id);
 
     /**
      * 根据工序删除实验表,或者说就按这样的方式存?

@@ -109,8 +109,8 @@ public class MaterialController {
     public CommonResponseForm getApplys(@RequestParam(required = false) String clazz,
                                         @RequestParam(required = false)String sid,
                                         @RequestParam(required = false)String sname ,
-                                        @RequestParam(required = false)Date startTime,//起始时间
-                                        @RequestParam(required = false)Date endTime//截止时间
+                                        @RequestParam(required = false)String startTime,//起始时间
+                                        @RequestParam(required = false)String endTime//截止时间
                                         ){
         return CommonResponseForm.of200("查询记录成功",materialService.getAplyBySidAndSnameAndClazzAndTime (sid,sname,clazz,startTime,endTime));
     }

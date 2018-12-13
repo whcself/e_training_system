@@ -3,6 +3,7 @@ import com.csu.etrainingsystem.material.entity.Apply;
 import com.csu.etrainingsystem.material.entity.Material;
 import com.csu.etrainingsystem.material.repository.ApplyRepository;
 import com.csu.etrainingsystem.material.repository.MaterialRepository;
+import org.apache.poi.util.StringUtil;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,17 +59,14 @@ public class MaterialService {
      this.materialRepository.deleteMaterialByClazz (clazz);
     }
     @Transactional
-    public Iterable<Apply> getAplyBySidAndSnameAndClazzAndTime(String sid, String sname , String clazz, Date startTime, Date endTime) {
+    public Iterable<Apply> getAplyBySidAndSnameAndClazzAndTime(String sid, String sname , String clazz, String startTime, String endTime) {
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-        String start="";
-        String end="";
-        if(startTime!=null)start = format.format (startTime);
-        else start= format.format(applyRepository.findMinTime ().get (0));
-        if(endTime!=null) end= format.format (endTime);
-        else end= format.format(applyRepository.findMaxTime ().get (0));
-        if(sid==null)sid="%";if(sname==null)sname="%";if(clazz==null)clazz="%";
-        System.out.println (sid+sname+clazz);
-        return this.applyRepository.findAplyBySidAndSnameAndClazzAndTime(sid, sname ,clazz, start, end);
+        if(startTime==null||startTime.equals (""))startTime = format.format(applyRepository.findMinTime ().get (0));
+        if(endTime==null||endTime.equals ("")) endTime=  format.format(applyRepository.findMaxTime ().get (0));
+        if(sid==null||sid.equals (""))sid="%";
+        if(sname==null||sname.equals (""))sname="%";
+        if(clazz==null||clazz.equals (""))clazz="%";
+        return this.applyRepository.findAplyBySidAndSnameAndClazzAndTime(sid, sname ,clazz, startTime, endTime);
     }
     @Transactional
     public void addAply(Apply apply) {
