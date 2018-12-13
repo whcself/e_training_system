@@ -136,21 +136,8 @@ public class ExcelPort {
             XSSFSheet sheet = workbook.getSheetAt(0);
             int rowNum = sheet.getLastRowNum();
             //人数多一个的group数
-            int exGroupNum = rowNum % groupNum;
-            int stuNum = rowNum / groupNum;
-            for (int i = 0; i < groupNum; i++) {
 
-                if (i < exGroupNum) {
-                    numOfGroup1[i] = stuNum + 1;
-                } else numOfGroup1[i] = stuNum;
-                studentGroupService.addStudentGroup(
-                        new StudentGroup(new StudentGroupId(groupName[i], batchName), numOfGroup1[i], false)
-                );
-                if (i != 0)
-                    numOfAdd[i] = numOfAdd[i - 1] + numOfGroup1[i];
-                else numOfAdd[i] = numOfGroup1[i];
-                System.out.println(i + " " + numOfGroup1[i] + " " + numOfAdd[i]);
-            }
+
             System.out.println("rowNum:" + rowNum);
             DecimalFormat decimalFormat = new DecimalFormat();
             Row firstRow = sheet.getRow(0);

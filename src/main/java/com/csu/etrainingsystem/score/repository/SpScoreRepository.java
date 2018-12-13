@@ -44,4 +44,10 @@ public interface SpScoreRepository extends JpaRepository<SpecialScore,Integer> {
     void updateSpScore(String sid,String pro_name,String pro_score);
 
 
+
+    @Modifying
+    @Query(value = "update sp_student set score_lock=1 ",nativeQuery = true)
+    void releaseSpScore();
+
+
 }

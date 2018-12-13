@@ -80,4 +80,13 @@ public interface ExperimentRepository extends JpaRepository<Experiment,Integer> 
     @Query(value = "select * from experiment where batch_name like ?1 and s_group_id like ?2 and pro_name like ?3 and del_status=0",nativeQuery = true)
     List<Experiment> findExperimentByBatchOrSGroupOrProName(String batchName, String sGroup, String proName);
 
+
+    /**
+     * -ScJn
+     * 注意，在调用此方法之前，务必将批次与模板绑定好，保证所有的组号都出现在实验表中
+     * @param batchName batch
+     * @return num of group
+     */
+    @Query(value = "select distinct s_group_id from experiment where batch_name=?1",nativeQuery = true)
+    List<String> getNumOfGroup(String batchName);
 }

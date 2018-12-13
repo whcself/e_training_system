@@ -7,6 +7,7 @@ import com.csu.etrainingsystem.score.entity.ScoreUpdate;
 import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
+import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.entity.UserRole;
@@ -19,11 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.print.attribute.standard.Sides;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/score", method = RequestMethod.POST)
@@ -206,10 +209,25 @@ public class ScoreController {
     @PostMapping("/updateSpScore")
     public CommonResponseForm updateSpScore(@RequestParam String sid,
                                             @RequestBody HashMap<String,String> map){
-        if(scoreService.updateSpScore(sid,map)){
+
+        SpecialStudent spStudent;
+        try {
+             spStudent = studentService.findSpStudentById(sid);
+        }catch (Exception e){
+            return CommonResponseForm.of204("修改失败,该学号不存在");
+        }
+        if(spStudent.isScore_lock()){
+            return  CommonResponseForm.of400("成绩已经发布，不能修改");
+        }else{
+            scoreService.updateSpScore(spStudent,map);
             return CommonResponseForm.of204("修改成功");
         }
-        return CommonResponseForm.of204("修改失败,可能是学号或者是工序名出错了");
+    }
+
+    @PostMapping("/releaseSpScore")
+    public CommonResponseForm releaseSpScore(){
+        scoreService.releaseSpScore();
+        return CommonResponseForm.of204("发布成功");
     }
 
 

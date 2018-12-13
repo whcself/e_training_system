@@ -47,5 +47,6 @@ public interface StudentRepository extends JpaRepository<Student,String> {
     @Modifying
     @Query(value = "update student set score_lock=1 where batch_name=?1 and del_status=0", nativeQuery = true)
     void releaseScore(String batchName);
+
 }
 

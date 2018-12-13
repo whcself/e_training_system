@@ -19,35 +19,36 @@ import java.io.Serializable;
 @Data
 @Entity
 @Table(name = "sp_student")
-public class SpecialStudent  implements Serializable {
-        @Id
-        @Column(length = 20)
-        private String sid;
-        private String  sname;
-        @Column(name="clazz")
-        private String clazz;
-        //每个特殊学生都有一个打分模板
-        private String template_name;
-        private String sdept;
-        private String depart;
-        private float total_score;
-        private boolean del_status;
-        private boolean score_lock;
-        private String degree;
+public class SpecialStudent implements Serializable {
+    @Id
+    @Column(length = 20)
+    private String sid;
+    private String sname;
+    @Column(name = "clazz")
+    private String clazz;
+    //每个特殊学生都有一个打分模板
+    private String template_name;
+    private String sdept;
+    private String depart;
+    private float total_score;
+    private boolean del_status;
+    private boolean score_lock;
+    private String degree;
 
-        public SpecialStudent(String sid, String sname, String clazz, String template_name, String sdept, String depart, float total_score, boolean del_status, boolean score_lock, String degree) {
-                this.sid = sid;
-                this.sname = sname;
-                this.clazz = clazz;
-                this.template_name = template_name;
-                this.sdept = sdept;
-                this.depart = depart;
-                this.total_score = total_score;
-                this.del_status = del_status;
-                this.score_lock = score_lock;
-                this.degree = degree;
-        }
+    public SpecialStudent(String sid, String sname, String clazz, String template_name, String sdept, String depart, float total_score, boolean del_status, boolean score_lock, String degree) {
+        this.sid = sid;
+        this.sname = sname;
+        this.clazz = clazz;
+        this.template_name = template_name;
+        this.sdept = sdept;
+        this.depart = depart;
+        this.total_score = total_score;
+        this.del_status = del_status;
+        this.score_lock = score_lock;
+        this.degree = degree;
+    }
 
-        public SpecialStudent() {
-        }
+
+    public SpecialStudent() {
+    }
 }

@@ -164,11 +164,14 @@ public class StudentController {
 //        return CommonResponseForm.of200("查询成功", studentService.findStudentByBatchNameAndSGroup(studentInfoForm));
 //    }
 
-    @PostMapping("/importStudent")
-    public void dome1(HttpServletRequest request, MultipartFile file) throws Exception{
-        //file对象名记得和前端name属性值一致
-        System.out.println(file.getOriginalFilename());
-    }
+//    @PostMapping("/importStudent")
+//    public void dome1(HttpServletRequest request, MultipartFile file) throws Exception{
+//        //file对象名记得和前端name属性值一致
+//        System.out.println(file.getOriginalFilename());
+//    }
+
+
+
 
 
 

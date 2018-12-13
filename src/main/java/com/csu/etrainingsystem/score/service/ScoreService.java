@@ -591,14 +591,10 @@ public class ScoreService {
     }
 
     @Transactional
-    public boolean updateSpScore(String sid, HashMap<String, String> map) {
+    public boolean updateSpScore(SpecialStudent specialStudent, HashMap<String, String> map) {
 
         boolean flag = true;
-        SpecialStudent specialStudent = null;
-        Optional<SpecialStudent> optionalSpecialStudent = spStudentRepository.findSpStudentBySid(sid);
-        if (optionalSpecialStudent.isPresent()) {
-            specialStudent = optionalSpecialStudent.get();
-        } else return false; //如果没有这个id
+
         for (String key : map.keySet()) {
             switch (key) {
                 case "等级":
@@ -609,7 +605,7 @@ public class ScoreService {
                     break;
                 default:
                     try {
-                        spScoreRepository.updateSpScore(sid, key, map.get(key));
+                        spScoreRepository.updateSpScore(specialStudent.getSid(), key, map.get(key));
                     } catch (Exception e) {
                         flag = false;
                         e.printStackTrace();
@@ -621,4 +617,8 @@ public class ScoreService {
         return flag;
     }
 
+    @Transactional
+    public  void releaseSpScore(){
+        spScoreRepository.releaseSpScore();
+    }
 }
