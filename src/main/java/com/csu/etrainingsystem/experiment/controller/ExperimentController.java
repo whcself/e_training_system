@@ -12,6 +12,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 @RestController
 @RequestMapping(value = "experiment",method = RequestMethod.POST)
 public class ExperimentController {
@@ -33,6 +36,10 @@ public class ExperimentController {
     public CommonResponseForm getExperiment(@PathVariable("id") int id){
          return CommonResponseForm.of200("获取成功",this.experimentService.getExperiment (id));
     }
+    @RequestMapping(value ="/getAllTemplate")
+    public CommonResponseForm getAllTemplate(){
+        return CommonResponseForm.of200("获取成功",this.experimentService.getAllTemplate ());
+    }
     @ApiOperation ("根据批次选择实验,用于后面展示")
     @RequestMapping(value ="/getExperiment/{batch_name}")
     public CommonResponseForm getExperimentByBatch(@PathVariable("batch_name") String batch_name){
@@ -43,9 +50,13 @@ public class ExperimentController {
 
         return CommonResponseForm.of200("获取成功", this.experimentService.getAllExperiment ());
     }
+    //更新实验表,在将实验排课完成之后写回的时候调用
     @RequestMapping(value ="/updateExperiment/")
-    public CommonResponseForm updateExperiment(Experiment experiment){
-        this.experimentService.updateExperiment (experiment);
+    public CommonResponseForm updateExperiment(Iterable<Experiment> experiments){
+        for (Experiment experiment : experiments) {
+            this.experimentService.updateExperiment (experiment);
+        }
+
         return CommonResponseForm.of204("更新成功");
     }
     @RequestMapping(value ="/deleteExperiment/{id}")
@@ -59,9 +70,9 @@ public class ExperimentController {
      * @param template_id
      * @return
      */
-    @ApiOperation (value = "根据模板名称查询批次为空的模板")
-    @RequestMapping(value ="/getTemplate/{template_id}")
-    public CommonResponseForm getTemplate(@PathVariable("template_id") String template_id){
+    @ApiOperation (value = "根据模板名称查询模板")
+    @RequestMapping(value ="/getTemplate")
+    public CommonResponseForm getTemplate( String template_id){
         return CommonResponseForm.of200("查询成功",this.experimentService.getExperimentByTemplate (template_id));
     }
 
@@ -85,73 +96,74 @@ public class ExperimentController {
      * @param experiments
      * 该参数有两种情况:1该实验在数据库中不存在,是新模板中的实验
      *                2该实验在数据库中已经存在,是将原有模板中的实验进行修改
-     * @param studentGroups
-     *                创建学生分组,该分组没有批次,是独立于批次的,当批次和模板绑定的时候再分配批次
      *
      * @return
      */
     @ApiOperation (value = "添加新模板")
     @RequestMapping(value ="/addTemplate")
-    public CommonResponseForm addTemplate(@RequestParam Iterable<Experiment> experiments,
-                                          @RequestParam Iterable<StudentGroup>studentGroups){
+    public CommonResponseForm addTemplate(@RequestBody List<Experiment> experiments){
 
-        //这里的学生组不具有批次,以及人数;
-        for (StudentGroup studentGroup : studentGroups) {
-            this.studentGroupService.updateStudentGroup (studentGroup);
-        }
-        //这里的实验具有模板号,具有学生组(该学生组没有批次,没有学生),具有课时;不具有批次,和时间段
-        //由于外键关系,学生组必须先加入
+//        这里的实验具有模板号,具有学生组id;后面经过绑定之后将学生组id和批次传递过去给俊贤即可
+//        判断模板号是否为空以及是否重复;需要添加,不能加入既没有模板又没有批次的实验
         for (Experiment experiment : experiments) {
-            this.experimentService.updateExperiment (experiment);
-        }
+            if(experiment.getTemplate_id ()!=null){
+                // Integer exp_id=new Integer (null);
+             //   experiment.setExp_id (exp_id);
+                //experimentService.addExperiment (experiment);
+                 experimentService.addExperimentByHand (experiment);
+            }
 
+
+        }
         return CommonResponseForm.of204("更新模板成功");
     }
 
     @ApiOperation (value = "绑定模板")
     @RequestMapping(value ="/bundleTemplate")
     public CommonResponseForm bundleTemplate(
-                                       @RequestParam Iterable<Experiment> experiments,
+                                       @RequestParam String template_id,
                                        @RequestParam String batch_name){
         //如果是再次绑定,就需要将之前的实验删掉
         //并且在绑定模板的时候,将分组也绑定好
         this.experimentService.deleteExperimentByBatch (batch_name);
-        StudentGroupId studentGroupId=new StudentGroupId();
+        Experiment exp=new Experiment ();
+       Iterable<Experiment> experiments= experimentService.getExperimentByTemplate (template_id);
         for (Experiment experiment : experiments) {
-            String sGroupId=experiment.getS_group_id ();
-            studentGroupId.setBatch_name (batch_name);
-            studentGroupId.setS_group_id (sGroupId);
-            StudentGroup studentGroup=new StudentGroup ();
-            studentGroup.setStudentGroupId (studentGroupId);
-            studentGroupService.addStudentGroup (studentGroup);
-
             //然后将实验号码设置为空,batch_nam设置为本批次,模板设置为空
-            Integer id=null;
-            experiment.setExp_id (id);
-            //设置为空,脱离模板
-            experiment.setTemplate_id (null);
-            experiment.setBatch_name (batch_name);
-            experimentService.addExperiment (experiment);
+           //设置为空,脱离模板
+           //     experiment.setExp_id (null);
+            //添加到批次
+            exp.setBatch_name (batch_name);
+            exp.setDel_status (experiment.isDel_status ());
+            exp.setClass_time (experiment.getClass_time ());
+            exp.setPro_name (experiment.getPro_name ());
+            exp.setS_group_id (experiment.getS_group_id ());
+            exp.setT_group_id (experiment.getT_group_id ());
+            exp.setSubmit_time (experiment.getSubmit_time ());
+            exp.setTid (experiment.getTid ());
+            exp.setTime_quant (experiment.getTime_quant ());
+            experimentService.addExperimentByHand (exp);
+            System.out.println (exp.toString ());
         }
-        return CommonResponseForm.of204("实验安排成功成功");
+        return CommonResponseForm.of204("实验绑定成功");
      }
 
     @ApiOperation (value = "修改模板")
     @RequestMapping(value ="/modifyTemplate")
     public CommonResponseForm modifyTemplate(
-            @RequestParam Iterable<Experiment> experiments){
+            @RequestBody Iterable<Experiment> experiments){
         //如果是再次绑定,就需要将之前的实验删掉,之前的实验是指的两部分,第一
-        //模板中的实验,第二,绑定的批次的实验,不过第二种不用,上面已经判断了
+        //模板中的实验,第二,绑定的批次的实验,不过第二种不用,上面绑定函数已经判断了
         //那么需要有一个根据模板号删除实验的函数,先删除再添加;
          //并且该函数是一个事务类型的函数
         experimentService.modifyTemplate (experiments);
-        return CommonResponseForm.of204("实验安排成功成功");
+        return CommonResponseForm.of204("模板修改成功");
     }
 
 /**ok
  * 添加新模板:需要异步判断是否模板名已经存在
  * 同理:其他板块也需要
- * 在添加新模板的同时也需要添加新的学生组,如果存在就更新(实际上不会有任何修改),如果不存在就添加
+ * 在添加模板的时候添加分组(已经取消外键)
  *ok
  * 绑定模板:也即是将具有该模板号(并且批次为空的)为空的实验赋予批次号,为保证模板得纯洁性,赋予了
  * 批次的实验id设置为空,也即是自增长,永远不重复,并且将实验的模板id取消,表示该实验已经脱离模板
@@ -161,21 +173,20 @@ public class ExperimentController {
  * 如何确定已经绑定过?塞选该批次的实验,如果不为空,就表示已经绑定过,先删除再绑定
  *
  *
- *  ok
+ * ok
  * 模板修改:考虑修改会对原有的课时删改,也就是删除某些实验;导致写回数据库的时候;有些实验没有被覆盖
  * 那就选出来后就都删掉好了;等待写回,如果没有保存修改怎么办?也就是不写回,比如断网
  * 那就在save函数里面判断,采取回滚的机制,就行了
  *
  *
- *
+ *ok
  *给学生排课表:这个时候就不再是对模板进行操作,而是对已经确定下来的实验进行操作
  * 具体方法:
- *
  * 将传递过去的实验根据课时分组;
- *传回来的
+ *然后更新即可
  *
  *
- * 将s_group修改成batch可以置空的形式
+ *
  */
 
 }

@@ -19,8 +19,20 @@ public class ExperimentService {
     }
 
     @Transactional
+
     public void addExperiment(Experiment experiment) {
         this.experimentRepository.save(experiment);
+    }
+    @Transactional
+    public void addExperimentByHand(Experiment experiment) {
+
+        this.experimentRepository.addExp (experiment.getClass_time (),experiment.getTemplate_id (),
+               experiment.getS_group_id () ,experiment.getPro_name (),
+                experiment.getT_group_id (),experiment.getBatch_name ());
+    }
+    @Transactional
+    public void addall(Iterable<Experiment> experiments) {
+        this.experimentRepository.saveAll (experiments);
     }
     @Transactional
     public Experiment getExperiment(int id) {
@@ -37,6 +49,12 @@ public class ExperimentService {
     public Iterable<Experiment> getExperimentByBatch(String batch_name) {
         return this.experimentRepository.findExperimentByBatch (batch_name);
     }
+
+    @Transactional
+    public Iterable<String>  getAllTemplate() {
+        return this.experimentRepository.findAllTemplate ();
+    }
+
     @Transactional
     public Iterable<Experiment> getAllExperiment() {
         return this.experimentRepository.findAllExperiment();
@@ -103,13 +121,17 @@ public class ExperimentService {
         //然后再更新,已经存在的就更新了,删除的因为id变化,无法恢复
         if(experiments!=null) {
             List<Experiment> experimentList = IteratorUtils.toList (experiments.iterator ());
+            System.out.println (experimentList.toString ());
             Experiment experiment= experimentList.get (0);
           String   templateId =experiment.getTemplate_id ();
+            System.out.println (templateId);
+           // System.out.println (experiments.toString ());
           //修改模板的时候需要将之前的模板清空
           experimentRepository.deleteExperimentByTemplate (templateId);
-                experimentRepository.saveAll (experiments);
+            for (Experiment experiment1 : experiments) {
+               experimentRepository.save (experiment1);
+            }
         }
-        else return ;
     }
 
 }

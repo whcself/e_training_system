@@ -65,15 +65,12 @@ public class PurchaseService {
     @Transactional
     public Iterable<Purchase> getSelectedPurchase( String tname , String clazz, String startTime, String endTime) {
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-        //if(startTime!=null)start = format.format (startTime);
-        //else start= format.format(purchaseRepository.findMinTime ().get (0));
-        if(startTime==null)startTime=format.format(purchaseRepository.findMinTime ().get (0));
-        System.out.println (startTime);
-//        if(endTime!=null) end= format.format (endTime);
-//        else end= format.format(purchaseRepository.findMaxTime ().get (0));
-        if(endTime==null)endTime=format.format(purchaseRepository.findMaxTime ().get (0));
-        System.out.println (endTime);
-        if(tname==null)tname="%";if(clazz==null)clazz="%";
+
+        if(startTime==null||startTime.equals (""))startTime=format.format(purchaseRepository.findMinTime ());
+        System.out.println ("开始时间"+startTime);
+        if(endTime==null||endTime.equals (""))endTime=format.format(purchaseRepository.findMaxTime ());
+        System.out.println ("截止时间"+endTime);
+        if(tname==null||tname.equals (""))tname="%";if(clazz==null||clazz.equals (""))clazz="%";
         return this.purchaseRepository.getSelectedPurchase(tname ,clazz, startTime,endTime);
     }
     @Transactional
