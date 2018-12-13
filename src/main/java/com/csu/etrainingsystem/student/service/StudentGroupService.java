@@ -97,15 +97,13 @@ public class StudentGroupService {
         int groupNum, studentNum;
         List<String> groups;
         List<Student> students;
-        try {
-            groups = experimentRepository.getNumOfGroup(batchName);
-            groupNum = groups.size();
-            students = (List<Student>) studentRepository.findStudentByBatch_name(batchName);
-            studentNum = students.size();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return CommonResponseForm.of400("出错了，请检查批次名是否有问题");
-        }
+        groups = experimentRepository.getNumOfGroup(batchName);
+        groupNum = groups.size();
+        students = (List<Student>) studentRepository.findStudentByBatch_name(batchName);
+        studentNum = students.size();
+        if(groupNum == 0||studentNum==0)
+            return CommonResponseForm.of400("出错了，请检查批次名是否有问题,批次是否已经绑定好了模板");
+
         for (int i = 0; i < studentNum; i++) {
             Student student = students.get(i);
             student.setS_group_id(groups.get(i % groupNum));

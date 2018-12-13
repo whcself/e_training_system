@@ -140,7 +140,7 @@ public class StudentController {
 
     /**
      * -ScJn
-     * 重要，学生分组板块，只根据批次
+     * @apiNote 查询学生列表
      *
      * @param batchName
      * @return
@@ -150,9 +150,14 @@ public class StudentController {
         return CommonResponseForm.of200("查询成功", studentService.findStudentByBatchName(batchName));
     }
 
+    @RequestMapping("/getStudent")
+    public CommonResponseForm getStudent(@RequestParam(required = false)String batch_name,
+                                         @RequestParam(required = false)String s_group_id){
+        return CommonResponseForm.of200("查询成功",studentService.findStudentByBatchNameAndSGroup(batch_name,s_group_id));
+    }
     /**
      * -ScJn
-     * 重要 学生分组板块，根据批次和组名
+     * @apiNote 查询学生列表
      * String s_group_id,
      * String batch_name,
      * String pro_name,

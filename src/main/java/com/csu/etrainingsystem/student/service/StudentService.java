@@ -102,6 +102,8 @@ public class StudentService {
 
     @Transactional
     public Iterable<Student> findStudentByBatchNameAndSGroup(String batchName, String groupId) {
+        if(batchName==null)batchName="%";
+        if (groupId==null)groupId="%";
         return studentRepository.findStudentByS_group_idAndBatch(groupId, batchName);
     }
 

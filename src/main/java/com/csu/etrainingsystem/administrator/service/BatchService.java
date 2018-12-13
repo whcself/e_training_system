@@ -36,7 +36,6 @@ public class BatchService {
         return semesterForms;
     }
 
-    @Deprecated
     public void addSemester(String semesterName) {
         Batch batch = new Batch();
         batch.setSemester_name(semesterName);
@@ -52,6 +51,10 @@ public class BatchService {
     @Transactional
     public void deleteSemester(String semesterName) {
         batchRepository.deleteSemester(semesterName);
+    }
+
+    public Iterable<String>getAllSGroup(String batchName){
+       return batchRepository.getAllSGroup(batchName);
     }
 
 }
