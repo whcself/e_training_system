@@ -554,8 +554,8 @@ public class ScoreService {
 
     }
 
-    public List<Map<String,String>> getSpScore(String sid, String sname) {
-        List<Map<String, String>>maps=new ArrayList<>();
+    public List<Map<String, String>> getSpScore(String sid, String sname) {
+        List<Map<String, String>> maps = new ArrayList<>();
         List<SpecialStudent> spStudents = new ArrayList<>();
         /* 拿到所有的学生,所有或者具体一个 */
         if (sid == null && sname == null) {
@@ -569,17 +569,17 @@ public class ScoreService {
                 return null;
             }
         } else {
-            spStudents= (List<SpecialStudent>) spStudentRepository.findSpStudentBySName(sname);
+            spStudents = (List<SpecialStudent>) spStudentRepository.findSpStudentBySName(sname);
         }
         //*************************
         for (SpecialStudent student : spStudents) {
-            Map<String,String>map=new HashMap<>();
+            Map<String, String> map = new HashMap<>();
             List<SpecialScore> scores = null;
-            scores= (List<SpecialScore>) spScoreRepository.findSpScoreBySid(student.getSid());
+            scores = (List<SpecialScore>) spScoreRepository.findSpScoreBySid(student.getSid());
             /* 一个学生的所有分数信息 */
-            map.put("姓名",student.getSname());
-            map.put("学号",student.getSid());
-            map.put("等级",student.getDegree());
+            map.put("姓名", student.getSname());
+            map.put("学号", student.getSid());
+            map.put("等级", student.getDegree());
             map.put("总成绩", String.valueOf(student.getTotal_score()));
             for (SpecialScore score : scores) {
                 map.put(score.getPro_name(), String.valueOf(score.getPro_score()));
@@ -591,20 +591,28 @@ public class ScoreService {
     }
 
     @Transactional
-    public boolean updateSpScore(String sid,HashMap<String,String> map){
+    public boolean updateSpScore(String sid, HashMap<String, String> map) {
 
-        boolean flag=true;
-            for (String key : map.keySet()) {
+        boolean flag = true;
+        SpecialStudent specialStudent = null;
+        Optional<SpecialStudent> optionalSpecialStudent = spStudentRepository.findSpStudentBySid(sid);
+        if (optionalSpecialStudent.isPresent()) {
+            specialStudent = optionalSpecialStudent.get();
+        } else return false; //如果没有这个id
+        for (String key : map.keySet()) {
+            if (key.equals("等级")) specialStudent.setDegree(map.get(key));
+            else if (key.equals("总成绩")) specialStudent.setTotal_score(Float.parseFloat(map.get(key)));
+            else {
                 try {
-                spScoreRepository.updateSpScore(sid, key, map.get(key));
-                }catch (Exception e){
-                    flag=false;
+                    spScoreRepository.updateSpScore(sid, key, map.get(key));
+                } catch (Exception e) {
+                    flag = false;
+                    e.printStackTrace();
                 }
             }
 
+        }
         return flag;
-
     }
-
 
 }
