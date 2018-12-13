@@ -600,15 +600,21 @@ public class ScoreService {
             specialStudent = optionalSpecialStudent.get();
         } else return false; //如果没有这个id
         for (String key : map.keySet()) {
-            if (key.equals("等级")) specialStudent.setDegree(map.get(key));
-            else if (key.equals("总成绩")) specialStudent.setTotal_score(Float.parseFloat(map.get(key)));
-            else {
-                try {
-                    spScoreRepository.updateSpScore(sid, key, map.get(key));
-                } catch (Exception e) {
-                    flag = false;
-                    e.printStackTrace();
-                }
+            switch (key) {
+                case "等级":
+                    specialStudent.setDegree(map.get(key));
+                    break;
+                case "总成绩":
+                    specialStudent.setTotal_score(Float.parseFloat(map.get(key)));
+                    break;
+                default:
+                    try {
+                        spScoreRepository.updateSpScore(sid, key, map.get(key));
+                    } catch (Exception e) {
+                        flag = false;
+                        e.printStackTrace();
+                    }
+                    break;
             }
 
         }
