@@ -159,12 +159,10 @@ public class AdminService {
     /**
      * -ScJn 2018.10.26
      *
-     * @param path      the path of the excel file
      * @param batchName 2018S101/2018S201/2018S501
      * @return the students list
      * <p>
      * 2018 11.3 update:
-     * 增加批次，组数参数，导入excel时确定批次和组数
      * @apiNote 管理员端-学生管理
      */
     public ArrayList<Student> importStudent(MultipartFile file, String batchName) {

@@ -16,11 +16,11 @@ public class SpecialScore  implements Serializable {
 
     @Column
     @Id
-    private int sp_scoreid;//无意义,自增长
+    private Integer sp_scoreid;//无意义,自增长
     private String tid;
     private String sid;
     private String pro_name;
-    private float pro_score;
+    private Float pro_score;
     private String time_quant;//对于特殊学生,查询上课时间是在成绩表里面实现的吗,一开始就指定他的课程
     private String class_time;
 }

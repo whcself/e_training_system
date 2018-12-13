@@ -14,9 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.print.attribute.standard.Sides;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,8 +112,8 @@ public class ScoreController {
                                              @RequestParam(required = false) String end,
                                              @RequestParam(required = false) String sname,
                                              @RequestParam(required = false) String sid) {
-        List<ScoreUpdate> updates = scoreService.getScoreUpdate(batch_name,begin,end,sname,sid);
-        return CommonResponseForm.of200("查询成功共："+updates.size()+"条记录",updates);
+        List<ScoreUpdate> updates = scoreService.getScoreUpdate(batch_name, begin, end, sname, sid);
+        return CommonResponseForm.of200("查询成功共：" + updates.size() + "条记录", updates);
     }
 
     /**
@@ -156,11 +160,44 @@ public class ScoreController {
         return CommonResponseForm.of400("成绩已发布，无法修改");
     }
 
+    /**
+     * @param pro_name 工序
+     * @return f
+     * @apiNote 导入学生成绩
+     */
+    @PostMapping("/importScore")
+    public CommonResponseForm importScore(@RequestParam MultipartFile file, String batch_name, @RequestParam String pro_name) throws IOException {
+        int flag = scoreService.importScore(file, batch_name, pro_name);
+        if (flag == 1) {
+            return CommonResponseForm.of204("导入成绩成功，部分导入失败，不属于该批次");
+        } else if (flag == 2) {
+            return CommonResponseForm.of204("部分导入失败，id不正确");
+        }
+        return CommonResponseForm.of204("导入成绩成功");
+
+    }
+
+    /**
+     * @apiNote 计算总成绩
+     */
     @PostMapping("/executeScore")
     public CommonResponseForm executeScore(@RequestParam String batch_name) {
         scoreService.executeScore(batch_name);
         return CommonResponseForm.of204("计算成功");
 
+    }
+
+    /**
+     * @apiNote 查询 特殊成绩
+     * @param sid di
+     * @param sname sname
+     * @return f
+     */
+    @PostMapping("/getSpScore")
+    public CommonResponseForm getSpScore(@RequestParam(required = false) String sid,
+                                         @RequestParam(required = false) String sname) {
+        List<Map<String, String>> maps=scoreService.getSpScore(sid,sname);
+        return CommonResponseForm.of200("查询成功: 共"+maps.size(),maps);
     }
 
 

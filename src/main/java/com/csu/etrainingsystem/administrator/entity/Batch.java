@@ -14,7 +14,7 @@ public class Batch {
     @Column(name = "batch_name", length = 20)
     private String batch_name;
     @Column(name = "credit")
-    private int credit;
+    private Integer credit;
     @Column(name = "bat_describe")
     private String bat_describe;
     @Column(name = "del_status")

@@ -18,7 +18,7 @@ public class Overwork_apply implements Serializable {
 
     @Id
     @Column
-    private int apply_id;
+    private Integer apply_id;
     private String sid;
     private String reason;
     private java.sql.Timestamp apply_time;
