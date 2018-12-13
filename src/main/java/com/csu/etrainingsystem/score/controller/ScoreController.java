@@ -200,5 +200,17 @@ public class ScoreController {
         return CommonResponseForm.of200("查询成功: 共"+maps.size(),maps);
     }
 
+    /**
+     * @apiNote  修改特殊学生成绩
+     */
+    @PostMapping("/updateSpScore")
+    public CommonResponseForm updateSpScore(@RequestParam String sid,
+                                            @RequestBody HashMap<String,String> map){
+        if(scoreService.updateSpScore(sid,map)){
+            return CommonResponseForm.of204("修改成功");
+        }
+        return CommonResponseForm.of204("修改失败,可能是学号或者是工序名出错了");
+    }
+
 
 }

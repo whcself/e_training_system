@@ -35,6 +35,7 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 public class ScoreService {
@@ -577,6 +578,7 @@ public class ScoreService {
             scores= (List<SpecialScore>) spScoreRepository.findSpScoreBySid(student.getSid());
             /* 一个学生的所有分数信息 */
             map.put("姓名",student.getSname());
+            map.put("学号",student.getSid());
             map.put("等级",student.getDegree());
             map.put("总成绩", String.valueOf(student.getTotal_score()));
             for (SpecialScore score : scores) {
@@ -586,6 +588,22 @@ public class ScoreService {
             maps.add(map);
         }
         return maps;
+    }
+
+    @Transactional
+    public boolean updateSpScore(String sid,HashMap<String,String> map){
+
+        boolean flag=true;
+            for (String key : map.keySet()) {
+                try {
+                spScoreRepository.updateSpScore(sid, key, map.get(key));
+                }catch (Exception e){
+                    flag=false;
+                }
+            }
+
+        return flag;
+
     }
 
 

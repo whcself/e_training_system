@@ -33,8 +33,15 @@ public interface SpScoreRepository extends JpaRepository<SpecialScore,Integer> {
     @Modifying
     void deleteSpScoreBySidAndPro_name(String sid, String pro_name);
 
+    /*
+    -ScJn
+     */
     @Query(value = "select * from sp_score where sid in (select sid from sp_student where sname=? and del_status=0)",nativeQuery = true)
     List<SpecialScore> findSpStudentBySname(String sname);
+
+    @Modifying
+    @Query(value = "update sp_score set pro_score=?3 where sid=?1 and pro_name=?2",nativeQuery = true)
+    void updateSpScore(String sid,String pro_name,String pro_score);
 
 
 }
