@@ -13,5 +13,6 @@ public class Proced_template {
     @Column
     private ProcedTemplateId procedTemplateId;
     private float weight;
+    private boolean del_status;
 }
 

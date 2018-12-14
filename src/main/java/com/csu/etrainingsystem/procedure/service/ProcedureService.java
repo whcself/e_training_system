@@ -130,7 +130,6 @@ public class ProcedureService {
             Proced_template template=new Proced_template();
             template.setProcedTemplateId(new ProcedTemplateId(templateName,proName));
             template.setWeight(form.get(proName));
-
             procedTemplateRepository.save(template);
 
         }
