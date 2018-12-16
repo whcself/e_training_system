@@ -32,5 +32,8 @@ public interface BatchRepository extends JpaRepository<Batch,String> {
     @Modifying
     @Query(value = "update batch set del_status=1 where semester_name=?1",nativeQuery = true)
     void deleteSemester(String semesterName);
+
+    @Query(value = "select distinct (s_group_id) from student where batch_name=?1 and del_status=0",nativeQuery = true)
+    Iterable<String >getAllSGroup(String batchName);
 }
 

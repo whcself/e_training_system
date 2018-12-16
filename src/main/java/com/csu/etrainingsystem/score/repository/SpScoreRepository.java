@@ -1,9 +1,12 @@
 package com.csu.etrainingsystem.score.repository;
 
 import com.csu.etrainingsystem.score.entity.SpecialScore;
+import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface SpScoreRepository extends JpaRepository<SpecialScore,Integer> {
 
@@ -29,5 +32,22 @@ public interface SpScoreRepository extends JpaRepository<SpecialScore,Integer> {
     @Query(value = "update sp_score SET sp_score.del_status=1 WHERE sp_score.sid=? and sp_score.pro_name=?", nativeQuery = true)
     @Modifying
     void deleteSpScoreBySidAndPro_name(String sid, String pro_name);
+
+    /*
+    -ScJn
+     */
+    @Query(value = "select * from sp_score where sid in (select sid from sp_student where sname=? and del_status=0)",nativeQuery = true)
+    List<SpecialScore> findSpStudentBySname(String sname);
+
+    @Modifying
+    @Query(value = "update sp_score set pro_score=?3 where sid=?1 and pro_name=?2",nativeQuery = true)
+    void updateSpScore(String sid,String pro_name,String pro_score);
+
+
+
+    @Modifying
+    @Query(value = "update sp_student set score_lock=1 ",nativeQuery = true)
+    void releaseSpScore();
+
 
 }

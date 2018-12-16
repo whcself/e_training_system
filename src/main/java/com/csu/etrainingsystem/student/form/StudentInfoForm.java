@@ -17,4 +17,6 @@ public class StudentInfoForm {
         this.sname = sname;
         this.sid = sid;
     }
+
+    public StudentInfoForm(){}
 }

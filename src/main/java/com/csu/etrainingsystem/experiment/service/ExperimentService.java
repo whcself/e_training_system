@@ -140,6 +140,8 @@ public class ExperimentService {
         }
     }
 
+
+
     @Transactional
     public List<String> getSGroupsOfBatch(String batch_name) {
        return this.experimentRepository.getSGroupsOfBatch (batch_name);

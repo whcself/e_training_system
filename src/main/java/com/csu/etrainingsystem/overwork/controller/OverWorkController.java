@@ -152,11 +152,17 @@ public class OverWorkController {
         return CommonResponseForm.of200("查询成功",overworkApplies);
     }
 
+    /**
+     * @apiNote 删除加班记录
+     */
     @PostMapping("/deleteOverwork")
     public CommonResponseForm deleteOverwork(Integer id){
         return overworkService.deleteOverwork(id);
     }
 
+    /**
+     * @apiNote 获取7天内的老师加班记录
+     */
     @PostMapping("/getTeacherOverworkFromStudent")
     public CommonResponseForm getTeacherOverworkFromStudent(){
         Timestamp now = new Timestamp(System.currentTimeMillis());

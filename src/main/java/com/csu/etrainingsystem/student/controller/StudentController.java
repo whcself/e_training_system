@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -140,7 +142,7 @@ public class StudentController {
 
     /**
      * -ScJn
-     * 重要，学生分组板块，只根据批次
+     * @apiNote 查询学生列表
      *
      * @param batchName
      * @return
@@ -150,9 +152,34 @@ public class StudentController {
         return CommonResponseForm.of200("查询成功", studentService.findStudentByBatchName(batchName));
     }
 
+    @RequestMapping("/getStudent")
+    public CommonResponseForm getStudent(@RequestParam(required = false)String batch_name,
+                                         @RequestParam(required = false)String s_group_id){
+        return CommonResponseForm.of200("查询成功",studentService.findStudentByBatchNameAndSGroup(batch_name,s_group_id));
+    }
+
+    @RequestMapping("/updateSGroup")
+    public CommonResponseForm updateSGroup(@RequestParam String sid,
+                                           @RequestParam String s_group_id){
+        return studentService.updateSGroup(sid,s_group_id);
+    }
+
+    @RequestMapping("/downloadStudentList")
+    public void downloadStudentList(@RequestBody List<StudentInfoForm> formList,
+                                                  HttpServletResponse response) throws Exception {
+         studentService.downloadStudentList(formList,response);
+    }
+
+
+
+
+
+
+
+
     /**
      * -ScJn
-     * 重要 学生分组板块，根据批次和组名
+     * @apiNote 查询学生列表
      * String s_group_id,
      * String batch_name,
      * String pro_name,
@@ -164,11 +191,14 @@ public class StudentController {
 //        return CommonResponseForm.of200("查询成功", studentService.findStudentByBatchNameAndSGroup(studentInfoForm));
 //    }
 
-    @PostMapping("/importStudent")
-    public void dome1(HttpServletRequest request, MultipartFile file) throws Exception{
-        //file对象名记得和前端name属性值一致
-        System.out.println(file.getOriginalFilename());
-    }
+//    @PostMapping("/importStudent")
+//    public void dome1(HttpServletRequest request, MultipartFile file) throws Exception{
+//        //file对象名记得和前端name属性值一致
+//        System.out.println(file.getOriginalFilename());
+//    }
+
+
+
 
 
 

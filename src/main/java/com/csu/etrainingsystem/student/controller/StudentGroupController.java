@@ -46,4 +46,15 @@ public class StudentGroupController {
         this.studentGroupService.deleteStudentGroup (studentGroupId);
         return CommonResponseForm.of204("删除学生分组成功");
     }
+
+
+    /**
+     * -ScJn
+     * @apiNote 学生分组
+     * @param batch_name batch
+     */
+    @PostMapping("/groupStudent")
+    public CommonResponseForm groupStudent(String batch_name){
+        return studentGroupService.groupStudent(batch_name);
+    }
 }

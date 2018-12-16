@@ -18,7 +18,7 @@ public class Overwork implements Serializable {
 
     @Id
     @Column
-    private int overwork_id ;
+    private Integer overwork_id ;
     private String pro_name;
     private java.sql.Timestamp overwork_time;
     private java.sql.Timestamp overwork_time_end;

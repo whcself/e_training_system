@@ -16,12 +16,26 @@ import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.*;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 public class ScoreService {
@@ -32,10 +46,11 @@ public class ScoreService {
     private final ScoreSubmitRepository scoreSubmitRepository;
     private final SpScoreRepository spScoreRepository;
     private final ScoreUpdateRepository scoreUpdateRepository;
+
     @Autowired
-    public ScoreService(ScoreUpdateRepository scoreUpdateRepository,ScoreSubmitRepository scoreSubmitRepository, ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository, SpStudentRepository spStudentRepository, SpScoreRepository spScoreRepository) {
-        this.scoreUpdateRepository=scoreUpdateRepository;
-        this.scoreSubmitRepository=scoreSubmitRepository;
+    public ScoreService(ScoreUpdateRepository scoreUpdateRepository, ScoreSubmitRepository scoreSubmitRepository, ScoreRepository scoreRepository, StudentRepository studentRepository, ExperimentRepository experimentRepository, SpStudentRepository spStudentRepository, SpScoreRepository spScoreRepository) {
+        this.scoreUpdateRepository = scoreUpdateRepository;
+        this.scoreSubmitRepository = scoreSubmitRepository;
         this.scoreRepository = scoreRepository;
         this.studentRepository = studentRepository;
         this.experimentRepository = experimentRepository;
@@ -47,6 +62,7 @@ public class ScoreService {
     public void addScore(Score score) {
         this.scoreRepository.save(score);
     }
+
     @Transactional
     public void addSpScore(SpecialScore specialScore) {
         this.spScoreRepository.save(specialScore);
@@ -54,13 +70,15 @@ public class ScoreService {
 
 
     @Transactional
-    public void executeScore(String batch_name){
+    public void executeScore(String batch_name) {
         scoreRepository.executeScore(batch_name);
     }
+
     @Transactional
     public Iterable<Score> getScoreBySid(String sid) {
         return scoreRepository.findScoreBySid(sid);
     }
+
     @Transactional
     public Iterable<SpecialScore> getSpScoreBySid(String sid) {
         return spScoreRepository.findSpScoreBySid(sid);
@@ -83,13 +101,14 @@ public class ScoreService {
 
     @Transactional
     public void deleteScoreBySid(String sid) {
-        Iterable<Score> scores= scoreRepository.findScoreBySid (sid);
-        if(scores!=null)this.scoreRepository.deleteScoreBySid(sid);
+        Iterable<Score> scores = scoreRepository.findScoreBySid(sid);
+        if (scores != null) this.scoreRepository.deleteScoreBySid(sid);
     }
+
     @Transactional
     public void deleteSpScoreBySid(String sid) {
-        Iterable<SpecialScore> scores= spScoreRepository.findSpScoreBySid (sid);
-        if(scores!=null)this.spScoreRepository.deleteSpScoreBySid (sid);
+        Iterable<SpecialScore> scores = spScoreRepository.findSpScoreBySid(sid);
+        if (scores != null) this.spScoreRepository.deleteSpScoreBySid(sid);
     }
 
     @Transactional
@@ -103,7 +122,6 @@ public class ScoreService {
     }
 
 
-
     /**
      * 重要
      *
@@ -113,9 +131,9 @@ public class ScoreService {
      * @return list scoreForm 分数表单，对应于前端的需求
      * 如果 proName 非空，就查询学号，跟proName的score，空的话就查询学号的score
      */
-    public List<HashMap<String,String>> getScoreByBatchAndSGroupOrProName(String batchName, String sGroup, String proName,
-                                                             String sId, String sName) {
-        List<HashMap<String,String>> scoreForms = new ArrayList<>();
+    public List<HashMap<String, String>> getScoreByBatchAndSGroupOrProName(String batchName, String sGroup, String proName,
+                                                                           String sId, String sName) {
+        List<HashMap<String, String>> scoreForms = new ArrayList<>();
 
         Iterable<Score> scores;
         List<Student> students = new ArrayList<>();
@@ -133,18 +151,18 @@ public class ScoreService {
             students = (List<Student>) studentRepository.findStudentByS_group_idAndBatch(sGroup, batchName);
         }
         for (Student student : students) {
-            System.out.println("***"+student.getSid());
+            System.out.println("***" + student.getSid());
             if (proName != null) {
                 scores = (Iterable<Score>) scoreRepository.findScoreBySidAndPro_name(student.getSid(), proName);
             } else {
                 scores = scoreRepository.findScoreBySid(student.getSid());
             }
-            HashMap<String,String> scoreForm=new HashMap<>();
-            scoreForm.put("sname",student.getSname());
-            scoreForm.put("batch_name",student.getBatch_name());
-            scoreForm.put("s_group_id",student.getS_group_id());
+            HashMap<String, String> scoreForm = new HashMap<>();
+            scoreForm.put("sname", student.getSname());
+            scoreForm.put("batch_name", student.getBatch_name());
+            scoreForm.put("s_group_id", student.getS_group_id());
             for (Score score : scores) {
-                System.out.println(score.getPro_name()+"***"+score.getPro_score());
+                System.out.println(score.getPro_name() + "***" + score.getPro_score());
                 scoreForm.put(score.getPro_name(), String.valueOf(score.getPro_score()));
 
 //                scoreForm = setScoreForScoreForm(score, scoreForm);
@@ -153,6 +171,7 @@ public class ScoreService {
         }
         return scoreForms;
     }
+
     @Transactional
     public List<ScoreForm> getSpScoreBySidOrSname(String sId, String sName) {
         List<ScoreForm> scoreForms = new ArrayList<>();
@@ -163,22 +182,23 @@ public class ScoreService {
         //根据所传的参数，先确定学生
         if (sId != null) {
             students = new ArrayList<>();
-            Optional<SpecialStudent> student = spStudentRepository.findSpStudentBySid (sId);
+            Optional<SpecialStudent> student = spStudentRepository.findSpStudentBySid(sId);
             student.ifPresent(((ArrayList<SpecialStudent>) students)::add);
         } else if (sName != null) {
-            students = (List<SpecialStudent>) spStudentRepository.findSpStudentBySName (sName);
+            students = (List<SpecialStudent>) spStudentRepository.findSpStudentBySName(sName);
         }
         for (SpecialStudent student : students) {
-            scores=this.spScoreRepository.findSpScoreBySid (student.getSid ());
+            scores = this.spScoreRepository.findSpScoreBySid(student.getSid());
             ScoreForm scoreForm = new ScoreForm();
             scoreForm.setStuName(student.getSname());
             for (SpecialScore score : scores) {
-              //  scoreForm = setScoreForScoreForm(score, scoreForm);
+                //  scoreForm = setScoreForScoreForm(score, scoreForm);
             }
             scoreForms.add(scoreForm);
         }
         return scoreForms;
     }
+
     ////铸造/数控车/Cimatron/激光切割/加工中心/热处理/焊接/快速成型/锻压/铣削/磨削/车削/钳工/线切割/数控车仿真/
     private ScoreForm setScoreForScoreForm(Score score, ScoreForm scoreForm) {
         String proName = score.getPro_name();
@@ -260,7 +280,7 @@ public class ScoreService {
         return experimentRepository.findExperimentByBatchOrSGroupOrProName(batchName, sGroup, proName);
     }
 
-    public List<ScoreSubmit> getScoreRecord(String batchName, String sGroup, String proName){
+    public List<ScoreSubmit> getScoreRecord(String batchName, String sGroup, String proName) {
 
         if (batchName == null) batchName = "%";
         if (sGroup == null) sGroup = "%";
@@ -268,26 +288,27 @@ public class ScoreService {
         return scoreSubmitRepository.findScoreRecord(batchName, sGroup, proName);
     }
 
-    public List<ScoreUpdate> getScoreUpdate(String batchName, String begin,String end,String sname,String sid){
-        sid=toAll(sid);
-        sname=toAll(sname);
-        batchName=toAll(batchName);
-        if(begin==null)begin="1999-10-10";
-        if(end==null)end="2999-10-10";
-        System.out.println(sid+" "+sname+" "+batchName+" "+begin+" "+end);
-        return scoreUpdateRepository.findScoreUpdate(batchName,begin,end,sname,sid);
+    public List<ScoreUpdate> getScoreUpdate(String batchName, String begin, String end, String sname, String sid) {
+        sid = toAll(sid);
+        sname = toAll(sname);
+        batchName = toAll(batchName);
+        if (begin == null) begin = "1999-10-10";
+        if (end == null) end = "2999-10-10";
+        System.out.println(sid + " " + sname + " " + batchName + " " + begin + " " + end);
+        return scoreUpdateRepository.findScoreUpdate(batchName, begin, end, sname, sid);
     }
 
-//    public CommonResponseForm addTeacherOverwork(@RequestParam String begin,
+    //    public CommonResponseForm addTeacherOverwork(@RequestParam String begin,
 //                                                 @RequestParam(defaultValue = "2") String duration,
 //                                                 @RequestParam String pro_name,
 //                                                 @RequestParam String t_name,
 //                                                 @RequestParam String reason,
 //                                                 HttpSession session)
-    private String toAll(String para){
-        if(para==null)return "%";
+    private String toAll(String para) {
+        if (para == null) return "%";
         else return para;
     }
+
     /**
      * 等级
      */
@@ -333,8 +354,6 @@ public class ScoreService {
     }
 
     /**
-     *
-     *
      * 修改的话，以前就有记录了
      * 2中类别的分数，分开来执行，一个用studentRepo
      * 一个用scoreRepo
@@ -344,7 +363,7 @@ public class ScoreService {
         Optional<Student> op = studentRepository.findStudentBySid(sid);
         if (op.isPresent()) {
             Student student = op.get();
-            if(student.isScore_lock ())return false;
+            if (student.isScore_lock()) return false;
             System.out.println("*******" + sid + " " + student.getSname());
             for (String itemName : scoreForm.keySet()) {
                 System.out.println("****" + itemName);
@@ -355,8 +374,8 @@ public class ScoreService {
             }
         }
 
-        String reason=scoreForm.get("原因");
-        ScoreUpdate update=new ScoreUpdate();
+        String reason = scoreForm.get("原因");
+        ScoreUpdate update = new ScoreUpdate();
         update.setReason(reason);
         update.setSid(sid);
         update.setUpdate_time(new Timestamp(System.currentTimeMillis()));
@@ -448,6 +467,78 @@ public class ScoreService {
 //        }
     }
 
+
+    public void addScore(String sid, String proName, Float score) {
+        Score score1 = new Score();
+        score1.setPro_score(score);
+        score1.setSid(sid);
+        score1.setPro_name(proName);
+        scoreRepository.save(score1);
+    }
+
+    /**
+     * -ScJn
+     *
+     * @param contactFile 导入成绩的xslx表
+     * @param batchName   指定的批次名
+     * @param proName     工序
+     * @return 状态位
+     */
+    @Transactional
+    public int importScore(MultipartFile contactFile, String batchName, String proName) throws IOException {
+
+        int flag = 0;
+
+
+        File convFile = new File(contactFile.getOriginalFilename());
+        contactFile.transferTo(convFile.getAbsoluteFile()); // 如果不是绝对路径就会找不到
+        FileInputStream file = new FileInputStream(convFile);
+
+        //Create Workbook instance holding reference to .xlsx file
+        XSSFWorkbook workbook = new XSSFWorkbook(file);
+
+        //Get first/desired sheet from the workbook
+        XSSFSheet sheet = workbook.getSheetAt(0);
+        //Iterate through each rows one by one
+        for (Row row : sheet) {
+            if (row.getRowNum() == 0) continue;
+            Cell idCell = row.getCell(0);
+            Cell scoreCell = row.getCell(3);
+            String id = null;
+            if (idCell == null || scoreCell == null) {
+                continue;
+            }
+            if (idCell.getCellType() == CellType.STRING) {
+                id = idCell.getStringCellValue();
+            } else if (idCell.getCellType() == CellType.NUMERIC) {
+                id = new DecimalFormat("#").format(idCell.getNumericCellValue()); // significant code
+            }
+
+            float value = (float) scoreCell.getNumericCellValue();
+            Optional<Student> optionalStudent = studentRepository.findStudentBySid(id);
+            if (optionalStudent.isPresent()) {
+
+                Student student = optionalStudent.get();
+                if (!student.getBatch_name().equals(batchName)) {
+                    flag = 1;  //不属于该批次
+                    continue;
+                }
+                Score newScore = new Score();
+                newScore.setPro_name(proName);
+                newScore.setPro_score(value);
+                newScore.setSid(id);
+                scoreRepository.save(newScore);
+            } else {
+                flag = 2;
+            }
+
+        }
+        file.close();
+        return flag;
+
+    }
+
+
     private void updateScoreInScore(String sid, String proName, float sco) {
 
         Score score = scoreRepository.findScoreBySidAndPro_name(sid, proName);
@@ -463,5 +554,71 @@ public class ScoreService {
 
     }
 
+    public List<Map<String, String>> getSpScore(String sid, String sname) {
+        List<Map<String, String>> maps = new ArrayList<>();
+        List<SpecialStudent> spStudents = new ArrayList<>();
+        /* 拿到所有的学生,所有或者具体一个 */
+        if (sid == null && sname == null) {
+            spStudents = spStudentRepository.findAll();
+        } else if (sid != null) {
+            Optional<SpecialStudent> optionalSpecialStudent = spStudentRepository.findSpStudentBySid(sid);
 
+            if (optionalSpecialStudent.isPresent()) {
+                spStudents.add(optionalSpecialStudent.get());
+            } else {
+                return null;
+            }
+        } else {
+            spStudents = (List<SpecialStudent>) spStudentRepository.findSpStudentBySName(sname);
+        }
+        //*************************
+        for (SpecialStudent student : spStudents) {
+            Map<String, String> map = new HashMap<>();
+            List<SpecialScore> scores = null;
+            scores = (List<SpecialScore>) spScoreRepository.findSpScoreBySid(student.getSid());
+            /* 一个学生的所有分数信息 */
+            map.put("姓名", student.getSname());
+            map.put("学号", student.getSid());
+            map.put("等级", student.getDegree());
+            map.put("总成绩", String.valueOf(student.getTotal_score()));
+            for (SpecialScore score : scores) {
+                map.put(score.getPro_name(), String.valueOf(score.getPro_score()));
+            }
+            //***********************
+            maps.add(map);
+        }
+        return maps;
+    }
+
+    @Transactional
+    public boolean updateSpScore(SpecialStudent specialStudent, HashMap<String, String> map) {
+
+        boolean flag = true;
+
+        for (String key : map.keySet()) {
+            switch (key) {
+                case "等级":
+                    specialStudent.setDegree(map.get(key));
+                    break;
+                case "总成绩":
+                    specialStudent.setTotal_score(Float.parseFloat(map.get(key)));
+                    break;
+                default:
+                    try {
+                        spScoreRepository.updateSpScore(specialStudent.getSid(), key, map.get(key));
+                    } catch (Exception e) {
+                        flag = false;
+                        e.printStackTrace();
+                    }
+                    break;
+            }
+
+        }
+        return flag;
+    }
+
+    @Transactional
+    public  void releaseSpScore(){
+        spScoreRepository.releaseSpScore();
+    }
 }
