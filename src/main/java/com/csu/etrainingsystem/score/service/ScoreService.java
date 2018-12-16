@@ -139,20 +139,21 @@ public class ScoreService {
         List<Student> students = new ArrayList<>();
 
         //根据所传的参数，先确定学生,没有学好就看批次和组号
-        if (sId != null) {
+        if (!sId.equals("all")) {
             students = new ArrayList<>();
             Optional<Student> student = studentRepository.findStudentBySid(sId);
             student.ifPresent(students::add);
-        } else if (sName != null) {
+        } else if (!sName.equals("all")) {
             students = (List<Student>) studentRepository.findStudentBySName(sName);
-        } else if (sGroup != null || batchName != null) {
-            if (sGroup == null) sGroup = "%";
-            if (batchName == null) batchName = "%";
+        } else if (!sGroup.equals("all")|| !batchName.equals("all")) {
+            if (sGroup.equals("all")) sGroup = "%";
+            if (batchName.equals("all")) batchName = "%";
             students = (List<Student>) studentRepository.findStudentByS_group_idAndBatch(sGroup, batchName);
         }
         for (Student student : students) {
+
             System.out.println("***" + student.getSid());
-            if (proName != null) {
+            if (!proName.equals("all")) {
                 scores = (Iterable<Score>) scoreRepository.findScoreBySidAndPro_name(student.getSid(), proName);
             } else {
                 scores = scoreRepository.findScoreBySid(student.getSid());
@@ -161,6 +162,10 @@ public class ScoreService {
             scoreForm.put("sname", student.getSname());
             scoreForm.put("batch_name", student.getBatch_name());
             scoreForm.put("s_group_id", student.getS_group_id());
+            scoreForm.put("total_score", String.valueOf(student.getTotal_score()));
+            scoreForm.put("degree",student.getDegree());
+            scoreForm.put("release", student.isScore_lock()?"已发布":"未发布");
+
             for (Score score : scores) {
                 System.out.println(score.getPro_name() + "***" + score.getPro_score());
                 scoreForm.put(score.getPro_name(), String.valueOf(score.getPro_score()));
@@ -581,6 +586,8 @@ public class ScoreService {
             map.put("学号", student.getSid());
             map.put("等级", student.getDegree());
             map.put("总成绩", String.valueOf(student.getTotal_score()));
+            map.put("发布情况", student.isScore_lock()?"已发布":"未发布");
+            System.out.println(map.get("发布情况")+"********");
             for (SpecialScore score : scores) {
                 map.put(score.getPro_name(), String.valueOf(score.getPro_score()));
             }

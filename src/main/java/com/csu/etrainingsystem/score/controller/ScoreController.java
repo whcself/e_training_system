@@ -109,6 +109,15 @@ public class ScoreController {
         return CommonResponseForm.of200("查询成功：共" + scoreSubmits.size() + "条记录", scoreSubmits);
     }
 
+    /**
+     * @apiNote 查询成绩修改记录
+     * @param batch_name
+     * @param begin
+     * @param end
+     * @param sname
+     * @param sid
+     * @return
+     */
     @PostMapping("/getScoreUpdate")
     public CommonResponseForm getScoreUpdate(@RequestParam(required = false) String batch_name,
                                              @RequestParam(required = false) String begin,
