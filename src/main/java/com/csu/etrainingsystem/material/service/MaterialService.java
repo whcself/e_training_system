@@ -18,6 +18,7 @@ import java.util.Optional;
 public class MaterialService {
     private final MaterialRepository materialRepository;
     private final ApplyRepository applyRepository;
+
     @Autowired
     public MaterialService(MaterialRepository materialRepository, ApplyRepository applyRepository) {
         this.materialRepository = materialRepository;
@@ -26,18 +27,21 @@ public class MaterialService {
 
     @Transactional
     public void addMaterial_apply(Material material) {
-        this.materialRepository.save(material);
+        this.materialRepository.save (material);
     }
+
     @Transactional
     public Material getMaterial(String clazz) {
-        Material material=materialRepository.findMaterialByClazz(clazz);
+        Material material = materialRepository.findMaterialByClazz (clazz);
 
         return material;
     }
+
     @Transactional
     public Iterable<Material> getAllMaterial() {
-        return this.materialRepository.findAllMaterial();
+        return this.materialRepository.findAllMaterial ();
     }
+
     @Transactional
     public Iterable<Material> getMaterialNotEmpty() {
         return this.materialRepository.findMaterialNotEmpty ();
@@ -45,8 +49,8 @@ public class MaterialService {
 
 
     @Transactional
-    public void  addMaterial(Material Material) {
-        this.materialRepository.save(Material);
+    public void addMaterial(Material Material) {
+        this.materialRepository.save (Material);
     }
 
     @Transactional
@@ -58,19 +62,22 @@ public class MaterialService {
 
      this.materialRepository.deleteMaterialByClazz (clazz);
     }
+
     @Transactional
-    public Iterable<Apply> getAplyBySidAndSnameAndClazzAndTime(String sid, String sname , String clazz, String startTime, String endTime) {
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-        if(startTime==null||startTime.equals (""))startTime = format.format(applyRepository.findMinTime ().get (0));
-        if(endTime==null||endTime.equals ("")) endTime=  format.format(applyRepository.findMaxTime ().get (0));
-        if(sid==null||sid.equals (""))sid="%";
-        if(sname==null||sname.equals (""))sname="%";
-        if(clazz==null||clazz.equals (""))clazz="%";
-        return this.applyRepository.findAplyBySidAndSnameAndClazzAndTime(sid, sname ,clazz, startTime, endTime);
+    public Iterable<Apply> getAplyBySidAndSnameAndClazzAndTime(String sid, String sname, String clazz, String startTime, String endTime) {
+        SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
+        if (startTime == null || startTime.equals (""))
+            startTime = format.format (applyRepository.findMinTime ().get (0));
+        if (endTime == null || endTime.equals ("")) endTime = format.format (applyRepository.findMaxTime ().get (0));
+        if (sid == null || sid.equals ("")) sid = "%";
+        if (sname == null || sname.equals ("")) sname = "%";
+        if (clazz == null || clazz.equals ("")) clazz = "%";
+        return this.applyRepository.findAplyBySidAndSnameAndClazzAndTime (sid, sname, clazz, startTime, endTime);
     }
+
     @Transactional
     public void addAply(Apply apply) {
         this.applyRepository.save (apply);
-       }
+    }
 
 }
