@@ -135,7 +135,6 @@ public class ScoreService {
                                                                            String sId, String sName) {
         List<HashMap<String, String>> scoreForms = new ArrayList<>();
 
-        Iterable<Score> scores;
         List<Student> students = new ArrayList<>();
 
         //根据所传的参数，先确定学生,没有学好就看批次和组号
@@ -145,29 +144,30 @@ public class ScoreService {
             student.ifPresent(students::add);
         } else if (!sName.equals("all")) {
             students = (List<Student>) studentRepository.findStudentBySName(sName);
-        } else if (!sGroup.equals("all")|| !batchName.equals("all")) {
+        } else if (sGroup.equals("all") || batchName.equals("all")) {
             if (sGroup.equals("all")) sGroup = "%";
             if (batchName.equals("all")) batchName = "%";
             students = (List<Student>) studentRepository.findStudentByS_group_idAndBatch(sGroup, batchName);
         }
         for (Student student : students) {
-
+            ArrayList<Score> scores = new ArrayList<>();
             System.out.println("***" + student.getSid());
             if (!proName.equals("all")) {
-                scores = (Iterable<Score>) scoreRepository.findScoreBySidAndPro_name(student.getSid(), proName);
+                Score score = scoreRepository.findScoreBySidAndPro_name(student.getSid(), proName);
+                if (score != null)
+                    scores.add(score);
             } else {
-                scores = scoreRepository.findScoreBySid(student.getSid());
+                scores = (ArrayList<Score>) scoreRepository.findScoreBySid(student.getSid());
             }
             HashMap<String, String> scoreForm = new HashMap<>();
             scoreForm.put("sname", student.getSname());
             scoreForm.put("batch_name", student.getBatch_name());
             scoreForm.put("s_group_id", student.getS_group_id());
             scoreForm.put("total_score", String.valueOf(student.getTotal_score()));
-            scoreForm.put("degree",student.getDegree());
-            scoreForm.put("release", student.isScore_lock()?"已发布":"未发布");
+            scoreForm.put("degree", student.getDegree());
+            scoreForm.put("release", student.isScore_lock() ? "已发布" : "未发布");
 
             for (Score score : scores) {
-                System.out.println(score.getPro_name() + "***" + score.getPro_score());
                 scoreForm.put(score.getPro_name(), String.valueOf(score.getPro_score()));
 
 //                scoreForm = setScoreForScoreForm(score, scoreForm);
@@ -586,8 +586,8 @@ public class ScoreService {
             map.put("学号", student.getSid());
             map.put("等级", student.getDegree());
             map.put("总成绩", String.valueOf(student.getTotal_score()));
-            map.put("发布情况", student.isScore_lock()?"已发布":"未发布");
-            System.out.println(map.get("发布情况")+"********");
+            map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
+            System.out.println(map.get("发布情况") + "********");
             for (SpecialScore score : scores) {
                 map.put(score.getPro_name(), String.valueOf(score.getPro_score()));
             }
@@ -625,7 +625,7 @@ public class ScoreService {
     }
 
     @Transactional
-    public  void releaseSpScore(){
+    public void releaseSpScore() {
         spScoreRepository.releaseSpScore();
     }
 }
