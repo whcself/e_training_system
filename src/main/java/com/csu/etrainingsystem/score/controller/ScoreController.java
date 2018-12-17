@@ -129,7 +129,7 @@ public class ScoreController {
                                              @RequestParam(required = false) String end,
                                              @RequestParam(required = false) String sname,
                                              @RequestParam(required = false) String sid) {
-        List<ScoreUpdate> updates = scoreService.getScoreUpdate(batch_name, begin, end, sname, sid);
+        List<Map<String,String>> updates = scoreService.getScoreUpdate(batch_name, begin, end, sname, sid);
         return CommonResponseForm.of200("查询成功共：" + updates.size() + "条记录", updates);
     }
 

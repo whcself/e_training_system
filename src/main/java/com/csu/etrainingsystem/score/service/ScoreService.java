@@ -293,7 +293,7 @@ public class ScoreService {
         return scoreSubmitRepository.findScoreRecord(batchName, sGroup, proName);
     }
 
-    public List<ScoreUpdate> getScoreUpdate(String batchName, String begin, String end, String sname, String sid) {
+    public List<Map<String, String>> getScoreUpdate(String batchName, String begin, String end, String sname, String sid) {
         sid = toAll(sid);
         sname = toAll(sname);
         batchName = toAll(batchName);
@@ -301,6 +301,7 @@ public class ScoreService {
         if (end == null) end = "2999-10-10";
         System.out.println(sid + " " + sname + " " + batchName + " " + begin + " " + end);
         return scoreUpdateRepository.findScoreUpdate(batchName, begin, end, sname, sid);
+
     }
 
     //    public CommonResponseForm addTeacherOverwork(@RequestParam String begin,
