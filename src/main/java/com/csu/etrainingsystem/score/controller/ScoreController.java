@@ -40,6 +40,11 @@ public class ScoreController {
         this.studentService = studentService;
     }
 
+    /**
+     * @apiNote 发布总成绩
+     * @param batch_name
+     * @return
+     */
     @PostMapping("/release")
     public CommonResponseForm releaseScore(@RequestParam String batch_name) {
         studentService.releaseScore(batch_name);
