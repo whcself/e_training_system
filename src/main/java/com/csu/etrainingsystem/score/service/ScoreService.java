@@ -161,6 +161,7 @@ public class ScoreService {
             }
             HashMap<String, String> scoreForm = new HashMap<>();
             scoreForm.put("sname", student.getSname());
+            scoreForm.put("sid",student.getSid());
             scoreForm.put("batch_name", student.getBatch_name());
             scoreForm.put("s_group_id", student.getS_group_id());
             scoreForm.put("total_score", String.valueOf(student.getTotal_score()));
