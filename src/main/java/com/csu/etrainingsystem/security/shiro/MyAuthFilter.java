@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-//@Component
+@Component
 public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
 {
     @Override
