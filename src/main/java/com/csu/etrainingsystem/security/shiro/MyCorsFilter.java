@@ -35,7 +35,7 @@ public class MyCorsFilter implements javax.servlet.Filter {
        //response.setHeader("Set-Cookie","name=SHIRO-COOKIE;Domain=gxxt.runtofuture.cn; Path=/");
         System.out.println ("进行跨域色设置"+res.getHeader("Origin"));
         //     response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
-        response.setHeader("Access-control-Allow-Origin", res.getHeader("*"));
+        response.setHeader("Access-control-Allow-Origin", res.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Methods", res.getMethod());
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Headers", res.getHeader("Access-Control-Request-Headers"));
