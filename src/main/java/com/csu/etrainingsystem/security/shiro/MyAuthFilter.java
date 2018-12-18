@@ -51,7 +51,7 @@ public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
             } else {
                 Subject subject = getSubject(request, response);
                 // If principal is not null, then the user is known and should be allowed access.
-                System.out.println ("返回的subject是"+subject.toString ());
+                System.out.println ("返回的subject是"+subject.toString ()+ subject.getPrincipal() != null);
                 return subject.getPrincipal() != null;
             }
         }
@@ -79,7 +79,9 @@ public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
      */
     private void setHeader(HttpServletRequest request,HttpServletResponse response){
         //跨域的header设置
-        response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
+        System.out.println ("进行跨域色设置"+request.getHeader("Origin"));
+   //     response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-control-Allow-Origin", request.getHeader("*"));
         response.setHeader("Access-Control-Allow-Methods", request.getMethod());
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
