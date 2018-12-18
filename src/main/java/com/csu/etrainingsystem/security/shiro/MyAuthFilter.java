@@ -1,5 +1,6 @@
 package com.csu.etrainingsystem.security.shiro;
 
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.filter.authc.UserFilter;
 import org.apache.shiro.web.util.WebUtils;
@@ -44,6 +45,14 @@ public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
                 HttpServletRequest httpRequest = (HttpServletRequest) request;
                 setHeader(httpRequest,httpResponse);
                 return true;
+            }
+            if (isLoginRequest(request, response)) {
+                return true;
+            } else {
+                Subject subject = getSubject(request, response);
+                // If principal is not null, then the user is known and should be allowed access.
+                System.out.println ("返回的subject是"+subject.toString ());
+                return subject.getPrincipal() != null;
             }
         }
         return allowed;
