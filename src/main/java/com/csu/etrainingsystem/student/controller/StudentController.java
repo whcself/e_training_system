@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/student", method = RequestMethod.POST)
@@ -168,6 +169,12 @@ public class StudentController {
     public void downloadStudentList(@RequestBody List<StudentInfoForm> formList,
                                                   HttpServletResponse response) throws Exception {
          studentService.downloadStudentList(formList,response);
+    }
+
+    @RequestMapping("/getSpProName")
+    public CommonResponseForm getSpProName(@RequestBody Map<String,String> spStudent){
+        return CommonResponseForm.of200("查询成功",studentService.getSpProName(spStudent));
+
     }
 
 

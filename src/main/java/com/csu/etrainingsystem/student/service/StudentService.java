@@ -5,6 +5,8 @@ import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.overwork.service.Overwork_applyService;
+import com.csu.etrainingsystem.procedure.entity.Proced_template;
+import com.csu.etrainingsystem.procedure.repository.ProcedTemplateRepository;
 import com.csu.etrainingsystem.score.entity.SpecialScore;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.SpecialStudent;
@@ -16,11 +18,8 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.*;
@@ -37,9 +36,11 @@ public class StudentService {
     private final Overwork_applyService overwork_applyService;
     private final SpStudentRepository spStudentRepository;
     private final ExperimentService experimentService;
+    private final ProcedTemplateRepository procedTemplateRepository;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository, ExperimentService experimentService) {
+    public StudentService(ProcedTemplateRepository procedTemplateRepository,StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository, ExperimentService experimentService) {
+        this.procedTemplateRepository=procedTemplateRepository;
         this.studentRepository = studentRepository;
         this.scoreService = scoreService;
         this.overwork_applyService = overwork_applyService;
@@ -216,6 +217,12 @@ public class StudentService {
         response.setContentType("application/octet-stream;charset=UTF-8");
         workbook.write(out);
         out.close();
+    }
+
+    public List<String>getSpProName(Map<String,String> spStudent){
+        String sid=spStudent.get("sid");
+        SpecialStudent specialStudent=spStudentRepository.findSpStudentBySid(sid).get();
+        return procedTemplateRepository.findProByName(specialStudent.getTemplate_name());
     }
 
     @Transactional

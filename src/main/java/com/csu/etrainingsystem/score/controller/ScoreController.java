@@ -40,6 +40,11 @@ public class ScoreController {
         this.studentService = studentService;
     }
 
+    /**
+     * @apiNote 发布总成绩
+     * @param batch_name
+     * @return
+     */
     @PostMapping("/release")
     public CommonResponseForm releaseScore(@RequestParam String batch_name) {
         studentService.releaseScore(batch_name);
@@ -109,13 +114,22 @@ public class ScoreController {
         return CommonResponseForm.of200("查询成功：共" + scoreSubmits.size() + "条记录", scoreSubmits);
     }
 
+    /**
+     * @apiNote 查询成绩修改记录
+     * @param batch_name
+     * @param begin
+     * @param end
+     * @param sname
+     * @param sid
+     * @return
+     */
     @PostMapping("/getScoreUpdate")
     public CommonResponseForm getScoreUpdate(@RequestParam(required = false) String batch_name,
                                              @RequestParam(required = false) String begin,
                                              @RequestParam(required = false) String end,
                                              @RequestParam(required = false) String sname,
                                              @RequestParam(required = false) String sid) {
-        List<ScoreUpdate> updates = scoreService.getScoreUpdate(batch_name, begin, end, sname, sid);
+        List<Map<String,String>> updates = scoreService.getScoreUpdate(batch_name, begin, end, sname, sid);
         return CommonResponseForm.of200("查询成功共：" + updates.size() + "条记录", updates);
     }
 
