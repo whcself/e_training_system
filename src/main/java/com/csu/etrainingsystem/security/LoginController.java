@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +30,8 @@ public class LoginController {
 	 */
 	@PostMapping("/login")
 	public CommonResponseForm login(String name, String password,
-									HttpServletRequest request){
+									HttpServletRequest request,
+									HttpServletResponse response){
 		System.out.println("name="+name);
 		/**
 		 * 使用Shiro编写认证操作
@@ -46,6 +49,9 @@ public class LoginController {
 			//登录成功
 			Map<String,String> m=new HashMap<String,String>();
 			m.put ("id",name);//name即是id
+			Cookie cookie=new Cookie ("JSESSIONID",subject.getSession ().getId ().toString ());
+			cookie.setValue (subject.getSession ().getId ().toString ());
+			response.addCookie (cookie);
 			return CommonResponseForm.of200 ("登录成功",m);
 		} catch (UnknownAccountException e) {
 			//e.printStackTrace();
