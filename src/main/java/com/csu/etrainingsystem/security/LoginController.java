@@ -6,6 +6,7 @@ import org.apache.shiro.authc.ConcurrentAccessException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -49,9 +50,11 @@ public class LoginController {
 			//登录成功
 			Map<String,String> m=new HashMap<String,String>();
 			m.put ("id",name);//name即是id
-			Cookie cookie=new Cookie ("JSESSIONID",subject.getSession ().getId ().toString ());
-			cookie.setValue (subject.getSession ().getId ().toString ());
-			response.addCookie (cookie);
+//			Cookie cookie=new Cookie ("JSESSIONID",subject.getSession ().getId ().toString ());
+//			cookie.setValue (subject.getSession ().getId ().toString ());
+//			cookie.setPath ("/");
+//			cookie.setDomain (".runtofuture.cn");
+//			response.addCookie (cookie);
 			return CommonResponseForm.of200 ("登录成功",m);
 		} catch (UnknownAccountException e) {
 			//e.printStackTrace();

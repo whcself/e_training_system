@@ -124,33 +124,34 @@ public class ShiroConfig {
 
 	@Bean("sessionManager")
 	public DefaultWebSessionManager getSessionManager(@Qualifier("sessionDAO") MemorySessionDAO sessionDAO
-			//                                         ,@Qualifier("simpleCookie")SimpleCookie simpleCookie
+			                                         ,@Qualifier("simpleCookie")SimpleCookie simpleCookie
 	){
 
 		DefaultWebSessionManager defaultWebSessionManager= new DefaultWebSessionManager ();
 	    defaultWebSessionManager.setSessionDAO (sessionDAO);
-		//defaultWebSessionManager.setSessionIdCookie (simpleCookie );
+		defaultWebSessionManager.setSessionIdCookie (simpleCookie );
 		//defaultWebSessionManager.setSessionIdCookieEnabled (false);
 		defaultWebSessionManager.setSessionValidationSchedulerEnabled (false);
 	return defaultWebSessionManager;
 	}
-//	@Bean("simpleCookie")
-//	public SimpleCookie getSimpleCookie(){
-//		SimpleCookie simpleCookie=new SimpleCookie ();
-//		simpleCookie.setName ("SHIRO-COOKIE");
-//		simpleCookie.setPath ("/");
-//		simpleCookie.setMaxAge (600000);
-//		simpleCookie.setHttpOnly (true);
-//       return simpleCookie;
-//	}
-//	@Bean
-//	public FilterRegistrationBean registration() {
-//		MyAuthFilter filter=new MyAuthFilter ();
-//		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-//		registration.setEnabled(false);
-//		registration.setOrder (0);
-//		return registration;
-//	}
+	@Bean("simpleCookie")
+	public SimpleCookie getSimpleCookie(){
+		SimpleCookie simpleCookie=new SimpleCookie ();
+		simpleCookie.setName ("SHIRO-COOKIE");
+		simpleCookie.setPath ("/");
+		simpleCookie.setDomain (".runtofuture.cn");
+		simpleCookie.setMaxAge (600000);
+		simpleCookie.setHttpOnly (true);
+       return simpleCookie;
+	}
+	@Bean
+	public FilterRegistrationBean registration() {
+		MyAuthFilter filter=new MyAuthFilter ();
+		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+		registration.setEnabled(false);
+		registration.setOrder (0);
+		return registration;
+	}
 	/**
 	 * <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
 	 * <bean id="simpleCookie" class="org.apache.shiro.web.servlet.SimpleCookie">

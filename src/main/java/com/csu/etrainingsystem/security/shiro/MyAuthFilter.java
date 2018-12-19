@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@Component
 public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
 {
     @Override
@@ -79,7 +78,7 @@ public class MyAuthFilter extends UserFilter//  FormAuthenticationFilter
      */
     private void setHeader(HttpServletRequest request,HttpServletResponse response){
         //跨域的header设置
-        System.out.println ("进行跨域色设置"+request.getHeader("Origin"));
+        System.out.println ("进行跨域设置"+request.getHeader("Origin"));
    //     response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-control-Allow-Origin", request.getHeader("*"));
         response.setHeader("Access-Control-Allow-Methods", request.getMethod());
