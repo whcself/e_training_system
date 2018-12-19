@@ -139,7 +139,7 @@ public class ShiroConfig {
 		SimpleCookie simpleCookie=new SimpleCookie ();
 		simpleCookie.setName ("SHIRO-COOKIE");
 		simpleCookie.setPath ("/");
-		simpleCookie.setDomain (".runtofuture.cn");
+		simpleCookie.setDomain (".gxxt.runtofuture.cn");
 		simpleCookie.setMaxAge (600000);
 		simpleCookie.setHttpOnly (true);
        return simpleCookie;
