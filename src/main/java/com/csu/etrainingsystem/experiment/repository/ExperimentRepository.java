@@ -38,7 +38,7 @@ public interface ExperimentRepository extends JpaRepository<Experiment, Integer>
     @Query(value = "select * from experiment where experiment.del_status=0", nativeQuery = true)
     Iterable<Experiment> findAllExperiment();
 
-    @Query(value = "select * from experiment where experiment.s_group_id=? experiment.batch_name=? and experiment.del_status=0", nativeQuery = true)
+    @Query(value = "select * from experiment where experiment.s_group_id=? and  experiment.batch_name=? and experiment.del_status=0", nativeQuery = true)
     Iterable<Experiment> findStudentExperiment(String s_group_id, String batch_name);
 
     @Query(value = "select * from experiment where experiment.batch_name=? and experiment.del_status=0", nativeQuery = true)
@@ -125,5 +125,6 @@ public interface ExperimentRepository extends JpaRepository<Experiment, Integer>
     int getClassTimeOfBatch(String batch_name);
     @Query(value = "SELECT * FROM experiment WHERE batch_name=? and s_group_id=? and  del_status=0 order by class_time asc" ,nativeQuery = true)
     List<Experiment> getExperimentOfSGroup(String batch_name,String s_group_id);
-
+    @Query(value = "SELECT DISTINCT s_group_id FROM experiment WHERE template_id=? AND del_status=0 ",nativeQuery = true)
+    List<String>getSGroupByTemplate(String template_id);
 }

@@ -159,4 +159,8 @@ public class ExperimentService {
     public List<Experiment> getExperimentOfSGroup(String batch_name,String s_group_id) {
         return this.experimentRepository.getExperimentOfSGroup (batch_name,s_group_id);
     }
+    @Transactional
+    public List<String> getSGroupByTemplate(String template_id) {
+        return this.experimentRepository.getSGroupByTemplate (template_id);
+    }
 }

@@ -85,6 +85,12 @@ public class ExperimentController {
     public CommonResponseForm getTemplate(String template_id) {
         return CommonResponseForm.of200 ("查询成功", this.experimentService.getExperimentByTemplate (template_id));
     }
+    @ApiOperation(value = "根据模板名称查询模板")
+    @RequestMapping(value = "/getSGroupByTemplate")
+    public CommonResponseForm getSGroupByTemplate(String template_id) {
+        return CommonResponseForm.of200 ("查询成功", this.experimentService.getSGroupByTemplate(template_id));
+    }
+
 
     @ApiOperation(value = "根据学生号查询实验,返回结果为该学生的课表安排")
     @RequestMapping(value = "/getClass")
@@ -173,35 +179,14 @@ public class ExperimentController {
         experimentService.deleteExperimentTemplate (template_id);
         return CommonResponseForm.of204 ("模板删除成功");
     }
-/**ok
- * 添加新模板:需要异步判断是否模板名已经存在
- * 同理:其他板块也需要
- * 在添加模板的时候添加分组(已经取消外键)
- *ok
- * 绑定模板:也即是将具有该模板号(并且批次为空的)为空的实验赋予批次号,为保证模板得纯洁性,赋予了
- * 批次的实验id设置为空,也即是自增长,永远不重复,并且将实验的模板id取消,表示该实验已经脱离模板
- *然后获取该这些实验各自的学生分组,查找学生分组然后赋予其批次号
- *ok
- * 模板再次绑定:或者说一次绑定的时候就可以判断
- * 如何确定已经绑定过?塞选该批次的实验,如果不为空,就表示已经绑定过,先删除再绑定
- *
- *
- * ok
- * 模板修改:考虑修改会对原有的课时删改,也就是删除某些实验;导致写回数据库的时候;有些实验没有被覆盖
- * 那就选出来后就都删掉好了;等待写回,如果没有保存修改怎么办?也就是不写回,比如断网
- * 那就在save函数里面判断,采取回滚的机制,就行了
- *
- *
- *ok
- *给学生排课表:这个时候就不再是对模板进行操作,而是对已经确定下来的实验进行操作
- * 具体方法:
- * 将传递过去的实验根据课时分组;
- *然后更新即可
- *
- *
- *
- */
-@RequestMapping(value = "/ExcelDownloads01")
+
+    /**
+     * 获取工序排课表
+     * @param response
+     * @param batch_name
+     * @throws IOException
+     */
+    @RequestMapping(value = "/ExcelDownloads01")
 public void ExcelDownloads01(HttpServletResponse response,String batch_name) throws IOException {
     HSSFWorkbook workbook = new HSSFWorkbook();
     HSSFSheet sheet = workbook.createSheet("信息表");
@@ -246,4 +231,32 @@ public void ExcelDownloads01(HttpServletResponse response,String batch_name) thr
     response.flushBuffer();
     workbook.write(response.getOutputStream());
 }
+/**ok
+ * 添加新模板:需要异步判断是否模板名已经存在
+ * 同理:其他板块也需要
+ * 在添加模板的时候添加分组(已经取消外键)
+ *ok
+ * 绑定模板:也即是将具有该模板号(并且批次为空的)为空的实验赋予批次号,为保证模板得纯洁性,赋予了
+ * 批次的实验id设置为空,也即是自增长,永远不重复,并且将实验的模板id取消,表示该实验已经脱离模板
+ *然后获取该这些实验各自的学生分组,查找学生分组然后赋予其批次号
+ *ok
+ * 模板再次绑定:或者说一次绑定的时候就可以判断
+ * 如何确定已经绑定过?塞选该批次的实验,如果不为空,就表示已经绑定过,先删除再绑定
+ *
+ *
+ * ok
+ * 模板修改:考虑修改会对原有的课时删改,也就是删除某些实验;导致写回数据库的时候;有些实验没有被覆盖
+ * 那就选出来后就都删掉好了;等待写回,如果没有保存修改怎么办?也就是不写回,比如断网
+ * 那就在save函数里面判断,采取回滚的机制,就行了
+ *
+ *
+ *ok
+ *给学生排课表:这个时候就不再是对模板进行操作,而是对已经确定下来的实验进行操作
+ * 具体方法:
+ * 将传递过去的实验根据课时分组;
+ *然后更新即可
+ *
+ *
+ *
+ */
 }
