@@ -111,30 +111,30 @@ public class UserRealm extends AuthorizingRealm{
 
 		/**
 		 * 防止重复登录,踢掉之前登录的用户
-		 */
-		String userName = (String)authenticationToken.getPrincipal();
-		DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
-		DefaultWebSessionManager sessionManager = (DefaultWebSessionManager)securityManager.getSessionManager();
-		Collection<Session> sessions = sessionManager.getSessionDAO().getActiveSessions();//获取当前已登录的用户session列表
+//		 */
+//		String userName = (String)authenticationToken.getPrincipal();
+//		DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
+//		DefaultWebSessionManager sessionManager = (DefaultWebSessionManager)securityManager.getSessionManager();
+//		Collection<Session> sessions = sessionManager.getSessionDAO().getActiveSessions();//获取当前已登录的用户session列表
 
-		for(Session session:sessions){
-	       Object obj=session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-
-            if(obj instanceof SimplePrincipalCollection){
-				SimplePrincipalCollection spc = (SimplePrincipalCollection)obj;
-				obj = spc.getPrimaryPrincipal();
-				if(obj instanceof User){
-					User u=(User)obj;
-					if(userName.equals(u.getAccount ())&&u.getPwd ().equals (user.getPwd ())) {
-							sessionManager.getSessionDAO().delete(session);
-
-							throw new ConcurrentAccessException("重复登录");
-					//
-					}
-				}
-			}
-
-		}
+//		for(Session session:sessions){
+//	       Object obj=session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+//
+//            if(obj instanceof SimplePrincipalCollection){
+//				SimplePrincipalCollection spc = (SimplePrincipalCollection)obj;
+//				obj = spc.getPrimaryPrincipal();
+//				if(obj instanceof User){
+//					User u=(User)obj;
+//					if(userName.equals(u.getAccount ())&&u.getPwd ().equals (user.getPwd ())) {
+//							sessionManager.getSessionDAO().delete(session);
+//
+//							throw new ConcurrentAccessException("重复登录");
+//					//
+//					}
+//				}
+//			}
+//
+//		}
           //最后通过密码判断
 		return new SimpleAuthenticationInfo(user,user.getPwd (),"");
 	}

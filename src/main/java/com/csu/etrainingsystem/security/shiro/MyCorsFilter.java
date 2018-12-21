@@ -27,8 +27,8 @@ public class MyCorsFilter implements javax.servlet.Filter {
        // System.out.println ("自定义过滤器在工作");
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpServletRequest res=(HttpServletRequest)req;
-        System.out.println ("进行跨域色设置"+res.getHeader("Origin"));
-        //     response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
+        System.out.println ("进行跨域设置"+res.getHeader("Origin"));
+        //   response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-control-Allow-Origin", res.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Methods", res.getMethod());
         response.setHeader("Access-Control-Allow-Credentials", "true");
