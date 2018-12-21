@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,138 +51,175 @@ public class StudentController {
         studentService.addStudent(student);
         //Score score = new Score();
         //todo:在service层添加学生的同时需要添加他对应的成绩表
-       // this.scoreService.addScore(score);
+        // this.scoreService.addScore(score);
         return CommonResponseForm.of204("学生添加增加成功");
     }
+
     @RequestMapping(value = "/addSpStudent")
-    public CommonResponseForm addSpStudent(String sid,String template_name) {
-       //如果学生表里面存在这个学生,就先将其删除,然后再添加到特殊学深表
-       //查询该学生的批次以及所在组的所有实验;然后将实验的时间和工序名称赋值到新的sp_score里面
-        Student student=studentService.getStudentById (sid);
-        if(student==null)return CommonResponseForm.of400 ("特殊学生添加失败,不存在该学生");
-        System.out.println (student+template_name);
-        studentService.deleteById (student.getSid ());
-        studentService.addSpStudent (student,template_name);
+    public CommonResponseForm addSpStudent(String sid, String template_name) {
+        //如果学生表里面存在这个学生,就先将其删除,然后再添加到特殊学深表
+        //查询该学生的批次以及所在组的所有实验;然后将实验的时间和工序名称赋值到新的sp_score里面
+        Student student = studentService.getStudentById(sid);
+        if (student == null) return CommonResponseForm.of400("特殊学生添加失败,不存在该学生");
+        System.out.println(student + template_name);
+        studentService.deleteById(student.getSid());
+        studentService.addSpStudent(student, template_name);
         //Score score = new Score();需要一个特殊成绩表来实现
         //todo:在service层添加特殊学生的同时需要添加他对应的成绩表;已经安排
         //this.scoreService.addScore(score);
         return CommonResponseForm.of204("特殊学生添加增加成功");
     }
-    @RequestMapping(value = "/updateStudent")
-    public CommonResponseForm updateStudent( @RequestBody Student student) {
 
-        System.out.println (student);
+    @RequestMapping(value = "/updateStudent")
+    public CommonResponseForm updateStudent(@RequestBody Student student) {
+
+        System.out.println(student);
         studentService.updateStudent(student);
         return CommonResponseForm.of204("学生更新成功");
     }
+
     @RequestMapping(value = "/updateSpStudent")
     public CommonResponseForm updateSpStudent(SpecialStudent student) {
-        studentService.updateSpStudent (student);
+        studentService.updateSpStudent(student);
         return CommonResponseForm.of204("特殊学生更新成功");
     }
 
     @RequestMapping(value = "/getStudent/{id}")
     public CommonResponseForm getStudentById(@PathVariable("id") String id) {
 
-       Student student= studentService.getStudentById(id);
-        StudentInfoForm studentInfoForm =new StudentInfoForm (student.getS_group_id (),student.getBatch_name (),student.getClazz (),student.getSname (),student.getSid ());
+        Student student = studentService.getStudentById(id);
+        StudentInfoForm studentInfoForm = new StudentInfoForm(student.getS_group_id(), student.getBatch_name(), student.getClazz(), student.getSname(), student.getSid());
 
-        return CommonResponseForm.of200("获取学生成功",studentInfoForm);
+        return CommonResponseForm.of200("获取学生成功", studentInfoForm);
     }
-    @ApiOperation ("获取特殊学生,返回数据中sid为数据的唯一标识")
+
+    @ApiOperation("获取特殊学生,返回数据中sid为数据的唯一标识")
     @RequestMapping(value = "/getSpStudentById/{id}")
     public CommonResponseForm getSpStudentById(@PathVariable("id") String id) {
-        SpecialStudent student=studentService.findSpStudentById (id);
-        SpStudentInfoForm spStudentInfoForm=new SpStudentInfoForm (student.getSid (),student.getSname (),student.getClazz (),student.getTemplate_name ());
+        SpecialStudent student = studentService.findSpStudentById(id);
+        SpStudentInfoForm spStudentInfoForm = new SpStudentInfoForm(student.getSid(), student.getSname(), student.getClazz(), student.getTemplate_name());
 
         return CommonResponseForm.of200("获取特殊学生成功", spStudentInfoForm);
     }
+
     @RequestMapping(value = "/getAllStudent")
     public CommonResponseForm getAllStudent() {
-       Iterable<Student> students=studentService.getAllStudent();
-        List<StudentInfoForm> studentInfoForms=new ArrayList<StudentInfoForm> ();
+        Iterable<Student> students = studentService.getAllStudent();
+        List<StudentInfoForm> studentInfoForms = new ArrayList<StudentInfoForm>();
         for (Student student : students) {
-            studentInfoForms.add (new StudentInfoForm (student.getS_group_id (),student.getBatch_name (),student.getClazz (),student.getSname (),student.getSid ()));
+            studentInfoForms.add(new StudentInfoForm(student.getS_group_id(), student.getBatch_name(), student.getClazz(), student.getSname(), student.getSid()));
         }
-        return CommonResponseForm.of200("获取全部学生成功",studentInfoForms);
+        return CommonResponseForm.of200("获取全部学生成功", studentInfoForms);
     }
 
-    @ApiOperation ("获取所有的特殊学生,返回数据中每一條的sid为該数据的唯一标识")
+    @ApiOperation("获取所有的特殊学生,返回数据中每一條的sid为該数据的唯一标识")
     @RequestMapping(value = "/getAllSpStudent")
     public CommonResponseForm getAllSpStudent() {
-       Iterable<SpecialStudent> specialStudents = studentService.findAllSpStudent ();
-        List<SpStudentInfoForm> studentInfoForms=new ArrayList<SpStudentInfoForm> ();
+        Iterable<SpecialStudent> specialStudents = studentService.findAllSpStudent();
+        List<SpStudentInfoForm> studentInfoForms = new ArrayList<SpStudentInfoForm>();
 
         for (SpecialStudent student : specialStudents) {
-            studentInfoForms.add (new SpStudentInfoForm (student.getSid (),student.getSname (),student.getClazz (),student.getTemplate_name ()));
+            studentInfoForms.add(new SpStudentInfoForm(student.getSid(), student.getSname(), student.getClazz(), student.getTemplate_name()));
         }
 
-        return CommonResponseForm.of200("获取全部特殊学生成功",studentInfoForms );
+        return CommonResponseForm.of200("获取全部特殊学生成功", studentInfoForms);
     }
-    @ApiOperation ("根据传递过来的id数组删除学生")
-   // @Ok("json")
-   // @AdaptBy(type=WhaleAdaptor.class)
+
+    @ApiOperation("根据传递过来的id数组删除学生")
+    // @Ok("json")
+    // @AdaptBy(type=WhaleAdaptor.class)
     @RequestMapping(value = "/deleteStudent")
-    public CommonResponseForm deleteStudentById(@RequestBody  String[] ids) {
+    public CommonResponseForm deleteStudentById(@RequestBody String[] ids) {
         for (String id : ids) {
-            System.out.println (id);
+            System.out.println(id);
         }
         for (String id : ids) {
-            this.studentService.deleteById (id);
+            this.studentService.deleteById(id);
         }
         return CommonResponseForm.of204("删除学生成功");
     }
-    @ApiOperation ("根据传递过来的id数组删除特殊学生")
+
+    @ApiOperation("根据传递过来的id数组删除特殊学生")
     @RequestMapping(value = "/deleteSpStudentById")
     public CommonResponseForm deleteSpStudentById(@RequestBody String[] ids) {
         for (String id : ids) {
-            this.studentService.deleteSpStudentById (id);
+            this.studentService.deleteSpStudentById(id);
         }
         return CommonResponseForm.of204("删除特殊学生成功");
     }
 
 
-    /**
-     * -ScJn
-     * @apiNote 查询学生列表
-     *
-     * @param batchName
-     * @return
-     */
     @RequestMapping("/getStudentByBatchName")
     public CommonResponseForm getStudentByBatchName(@RequestParam String batchName) {
         return CommonResponseForm.of200("查询成功", studentService.findStudentByBatchName(batchName));
     }
 
+    /**
+     * -ScJn
+     *
+     * @apiNote 查询学生列表
+     */
     @RequestMapping("/getStudent")
-    public CommonResponseForm getStudent(@RequestParam(required = false)String batch_name,
-                                         @RequestParam(required = false)String s_group_id){
-        return CommonResponseForm.of200("查询成功",studentService.findStudentByBatchNameAndSGroup(batch_name,s_group_id));
+    public CommonResponseForm getStudent(@RequestParam(required = false) String batch_name,
+                                         @RequestParam(required = false) String s_group_id) {
+        return CommonResponseForm.of200("查询成功", studentService.findStudentByBatchNameAndSGroup(batch_name, s_group_id));
     }
 
+    /**
+     * -ScJn
+     *
+     * @apiNote 教师端-查询学生分组
+     */
+    @RequestMapping("/getStudent2")
+    public CommonResponseForm getStudent2(@RequestBody StudentInfoForm form) {
+        return studentService.findStudentByBatchNameAndSGroupOrNameAndId(form.getBatch_name(), form.getS_group_id(), form.getSid(), form.getSname());
+    }
+
+    /**
+     * @apiNote 我的信息
+     * -ScJn
+     */
+    @RequestMapping("/getMyInfo")
+    public CommonResponseForm getMyInfo(@RequestParam(required = false) String sid, HttpSession session) {
+
+        if (sid == null) {
+            String sid2 = (String) session.getAttribute("sid");
+            return CommonResponseForm.of200("查询成功", studentService.getStudentById(sid2));
+
+        } else {
+            return CommonResponseForm.of200("查询成功", studentService.getStudentById(sid));
+        }
+    }
+
+    /**
+     * @apiNote 更新学生组
+     * -ScJn
+     */
     @RequestMapping("/updateSGroup")
     public CommonResponseForm updateSGroup(@RequestParam String sid,
-                                           @RequestParam String s_group_id){
-        return studentService.updateSGroup(sid,s_group_id);
+                                           @RequestParam String s_group_id) {
+        return studentService.updateSGroup(sid, s_group_id);
     }
 
+    /**
+     * @apiNote 下载学生列表
+     * -ScJn
+     */
     @RequestMapping("/downloadStudentList")
     public void downloadStudentList(@RequestBody List<StudentInfoForm> formList,
-                                                  HttpServletResponse response) throws Exception {
-         studentService.downloadStudentList(formList,response);
+                                    HttpServletResponse response) throws Exception {
+        studentService.downloadStudentList(formList, response);
     }
 
+    /**
+     * @apiNote 获取特殊学生的工序
+     * -ScJn
+     */
     @RequestMapping("/getSpProName")
-    public CommonResponseForm getSpProName(@RequestBody Map<String,String> spStudent){
-        return CommonResponseForm.of200("查询成功",studentService.getSpProName(spStudent));
+    public CommonResponseForm getSpProName(@RequestBody Map<String, String> spStudent) {
+        return CommonResponseForm.of200("查询成功", studentService.getSpProName(spStudent));
 
     }
-
-
-
-
-
-
 
 
     /**
@@ -203,10 +241,6 @@ public class StudentController {
 //        //file对象名记得和前端name属性值一致
 //        System.out.println(file.getOriginalFilename());
 //    }
-
-
-
-
 
 
 }

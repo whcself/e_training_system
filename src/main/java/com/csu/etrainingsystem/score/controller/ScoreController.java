@@ -41,9 +41,9 @@ public class ScoreController {
     }
 
     /**
-     * @apiNote 发布总成绩
      * @param batch_name
      * @return
+     * @apiNote 发布总成绩
      */
     @PostMapping("/release")
     public CommonResponseForm releaseScore(@RequestParam String batch_name) {
@@ -67,7 +67,7 @@ public class ScoreController {
      * @return 成绩列表, 上三查询，或确定工序名
      * <p>
      * 学生端就传自己的id
-     * @apiNote 管理员端：成绩列表 学生端：评分查询
+     * @apiNote 管理员端：成绩列表 评分查询
      */
     @RequestMapping("/getScore")
     public CommonResponseForm getScoreByBatchAndTeamOrProced(@RequestParam(required = false) String batch_name,
@@ -88,12 +88,17 @@ public class ScoreController {
      * @apiNote 学生端 我的成绩
      */
     @RequestMapping("/getMyScore")
-    public CommonResponseForm getMyScore(HttpSession session) {
-        User user = UserRole.getUser(session);
-        String sId = user.getAccount();
-        List<HashMap<String, String>> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(null, null, null, sId, null);
-        if (scoreForms.size() == 0) {
-            return CommonResponseForm.of400("查询失败，结果为空");
+    public CommonResponseForm getMyScore(@RequestParam(required = false) String sid, HttpSession session) {
+        List<HashMap<String, String>> scoreForms;
+        if (sid != null) {
+            scoreForms = scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sid, "all");
+        } else {
+            User user = UserRole.getUser(session);
+            String sId = user.getAccount();
+            scoreForms = scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sId, "all");
+            if (scoreForms.size() == 0) {
+                return CommonResponseForm.of400("查询失败，结果为空");
+            }
         }
         return CommonResponseForm.of200("查询成功", scoreForms);
 
@@ -115,13 +120,13 @@ public class ScoreController {
     }
 
     /**
-     * @apiNote 查询成绩修改记录
      * @param batch_name
      * @param begin
      * @param end
      * @param sname
      * @param sid
      * @return
+     * @apiNote 查询成绩修改记录
      */
     @PostMapping("/getScoreUpdate")
     public CommonResponseForm getScoreUpdate(@RequestParam(required = false) String batch_name,
@@ -129,7 +134,7 @@ public class ScoreController {
                                              @RequestParam(required = false) String end,
                                              @RequestParam(required = false) String sname,
                                              @RequestParam(required = false) String sid) {
-        List<Map<String,String>> updates = scoreService.getScoreUpdate(batch_name, begin, end, sname, sid);
+        List<Map<String, String>> updates = scoreService.getScoreUpdate(batch_name, begin, end, sname, sid);
         return CommonResponseForm.of200("查询成功共：" + updates.size() + "条记录", updates);
     }
 
@@ -205,41 +210,41 @@ public class ScoreController {
     }
 
     /**
-     * @apiNote 查询 特殊成绩
-     * @param sid di
+     * @param sid   di
      * @param sname sname
      * @return f
+     * @apiNote 查询 特殊成绩
      */
     @PostMapping("/getSpScore")
     public CommonResponseForm getSpScore(@RequestParam(required = false) String sid,
                                          @RequestParam(required = false) String sname) {
-        List<Map<String, String>> maps=scoreService.getSpScore(sid,sname);
-        return CommonResponseForm.of200("查询成功: 共"+maps.size(),maps);
+        List<Map<String, String>> maps = scoreService.getSpScore(sid, sname);
+        return CommonResponseForm.of200("查询成功: 共" + maps.size(), maps);
     }
 
     /**
-     * @apiNote  修改特殊学生成绩
+     * @apiNote 修改特殊学生成绩
      */
     @PostMapping("/updateSpScore")
     public CommonResponseForm updateSpScore(@RequestParam String sid,
-                                            @RequestBody HashMap<String,String> map){
+                                            @RequestBody HashMap<String, String> map) {
 
         SpecialStudent spStudent;
         try {
-             spStudent = studentService.findSpStudentById(sid);
-        }catch (Exception e){
+            spStudent = studentService.findSpStudentById(sid);
+        } catch (Exception e) {
             return CommonResponseForm.of400("修改失败,该学号不存在");
         }
-        if(spStudent.isScore_lock()){
-            return  CommonResponseForm.of400("成绩已经发布，不能修改");
-        }else{
-            scoreService.updateSpScore(spStudent,map);
+        if (spStudent.isScore_lock()) {
+            return CommonResponseForm.of400("成绩已经发布，不能修改");
+        } else {
+            scoreService.updateSpScore(spStudent, map);
             return CommonResponseForm.of204("修改成功");
         }
     }
 
     @PostMapping("/releaseSpScore")
-    public CommonResponseForm releaseSpScore(@RequestBody Map<String,String> sids){
+    public CommonResponseForm releaseSpScore(@RequestBody Map<String, String> sids) {
         scoreService.releaseSpScore(sids);
         return CommonResponseForm.of204("发布成功");
     }
