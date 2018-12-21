@@ -228,7 +228,7 @@ public class ScoreController {
         try {
              spStudent = studentService.findSpStudentById(sid);
         }catch (Exception e){
-            return CommonResponseForm.of204("修改失败,该学号不存在");
+            return CommonResponseForm.of400("修改失败,该学号不存在");
         }
         if(spStudent.isScore_lock()){
             return  CommonResponseForm.of400("成绩已经发布，不能修改");
@@ -239,8 +239,8 @@ public class ScoreController {
     }
 
     @PostMapping("/releaseSpScore")
-    public CommonResponseForm releaseSpScore(){
-        scoreService.releaseSpScore();
+    public CommonResponseForm releaseSpScore(@RequestBody Map<String,String> sids){
+        scoreService.releaseSpScore(sids);
         return CommonResponseForm.of204("发布成功");
     }
 
