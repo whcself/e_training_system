@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
 public class MyCorsFilter implements javax.servlet.Filter {
 
     @Override
@@ -25,7 +24,7 @@ public class MyCorsFilter implements javax.servlet.Filter {
        // System.out.println ("自定义过滤器在工作");
         HttpServletResponse response = (HttpServletResponse) resp;
         HttpServletRequest res=(HttpServletRequest)req;
-        System.out.println ("进行跨域设置"+res.getHeader("Origin"));
+        System.out.println ("进行跨域设置,请求来自:"+res.getHeader("Origin"));
         //   response.setHeader("Access-control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-control-Allow-Origin", res.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Methods", res.getMethod());
