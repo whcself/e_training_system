@@ -148,10 +148,11 @@ public final class CookieUtils {
                 cookie.setMaxAge(cookieMaxage);
             if (null != request) {// 设置域名的cookie
             	String domainName = getDomainName(request);
+            	//
             	System.out.println("该cookie的域:"+domainName+"但是目前没有设置");
-//                if (!"localhost".equals(domainName)) {
-//                	cookie.setDomain(domainName);
-//                }
+                if (!"localhost".equals(domainName)) {
+                	cookie.setDomain("134.175.152.210");
+                }
             }
             cookie.setPath("/");
             response.addCookie(cookie);
