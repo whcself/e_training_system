@@ -150,9 +150,9 @@ public final class CookieUtils {
             	String domainName = getDomainName(request);
             	//
             	System.out.println("该cookie的域:"+domainName+"但是目前没有设置");
-                if (!"localhost".equals(domainName)) {
-                	cookie.setDomain("134.175.152.210:8084");
-                }
+//                if (!"localhost".equals(domainName)) {
+//                	cookie.setDomain("134.175.152.210:8084");
+//                }
             }
             cookie.setPath("/");
             response.addCookie(cookie);
@@ -229,7 +229,7 @@ public final class CookieUtils {
     private static final String getDomainName(HttpServletRequest request) {
         String domainName = null;
 
-        // 获取完整的请求URL地址。
+        // 获取完整的请求URL地址。http://134.175.152.210
         String serverName = request.getRequestURL().toString()+"/";
        // String serverName = request.getHeader ("Origin").toString ()+"/";
         if (serverName == null || serverName.equals("")) {
