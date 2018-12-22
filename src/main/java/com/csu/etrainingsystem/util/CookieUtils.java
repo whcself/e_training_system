@@ -229,8 +229,8 @@ public final class CookieUtils {
         String domainName = null;
 
         // 获取完整的请求URL地址。
-      //  String serverName = request.getRequestURL().toString()+"/";
-        String serverName = request.getHeader ("Origin").toString ()+"/";
+        String serverName = request.getRequestURL().toString()+"/";
+       // String serverName = request.getHeader ("Origin").toString ()+"/";
         if (serverName == null || serverName.equals("")) {
             domainName = "";
         } else {
