@@ -22,10 +22,14 @@ public class LoginServiceImpl implements LoginService {
 	@Resource
 	private JedisDao jedisDaoImpl;
 	@Override
-	public CommonResponseForm login(User user, HttpServletRequest request, HttpServletResponse response) {
+	public CommonResponseForm login(String account,String password, HttpServletRequest request, HttpServletResponse response) {
 
-		User dbuser = userService.getUser (user.getAccount ());
+		User dbuser = userService.getUser (account);
+
 		if(dbuser!=null){
+			if (!dbuser.getPwd ().equals (password)){
+				return CommonResponseForm.of400 ("密码不正确");
+			}
 			//当用户登录成功后把用户信息放入到redis中
 			String key = UUID.randomUUID().toString();
 			//将用户放入redis中
@@ -35,7 +39,7 @@ public class LoginServiceImpl implements LoginService {
 			//产生Cookie
 			CookieUtils.setCookie(request, response, "TT_TOKEN", key, 60*60*24*7);
 		}else{
-			return CommonResponseForm.of400 ("用户名或密码错误");
+			return CommonResponseForm.of400 ("数据库查询不出结果");
 		}
 		return CommonResponseForm.of204 ("登录成功");
 	}

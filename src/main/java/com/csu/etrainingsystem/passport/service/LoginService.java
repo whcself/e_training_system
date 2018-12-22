@@ -13,7 +13,7 @@ public interface LoginService {
 	 * @param user
 	 * @return
 	 */
-	CommonResponseForm login(User user, HttpServletRequest request, HttpServletResponse response);
+	CommonResponseForm login(String account,String password, HttpServletRequest request, HttpServletResponse response);
 	/**
 	 * 根据token查询用户信息
 	 * @param token

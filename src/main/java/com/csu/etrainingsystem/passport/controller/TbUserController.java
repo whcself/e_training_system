@@ -28,13 +28,13 @@ public class TbUserController {
 	}
 	/**
 	 * 登录
-	 * @param user
 	 * @return
 	 */
 	@PostMapping("/login")
 	@ResponseBody
-	public CommonResponseForm login(User user, HttpServletRequest request, HttpServletResponse response){
-		return loginServiceImpl.login(user,request,response);
+	public CommonResponseForm login(String name,String password, HttpServletRequest request, HttpServletResponse response){
+		System.out.println ("name="+name);
+		return loginServiceImpl.login(name,password,request,response);
 	}
 	/**
 	 * 通过token获取用户信息,将token放入请求头中
