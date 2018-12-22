@@ -90,6 +90,8 @@ public class StudentGroupService {
     /**
      * -ScJn
      *
+     * 在学生分组的时候会将对应的学生组实体建立
+     *
      * @param batchName batch
      */
     @Transactional
@@ -104,10 +106,18 @@ public class StudentGroupService {
         if(groupNum == 0||studentNum==0)
             return CommonResponseForm.of400("出错了，请检查批次名是否有问题,批次是否已经绑定好了模板");
 
+        for(String groupId : groups){
+            StudentGroupId groupId1=new StudentGroupId(groupId,batchName);
+            studentGroupRepository.save(new StudentGroup(groupId1,30,false));
+        }
         for (int i = 0; i < studentNum; i++) {
             Student student = students.get(i);
             student.setS_group_id(groups.get(i % groupNum));
-            studentRepository.save(student);
+            try {
+                studentRepository.save(student);
+            }catch (Exception e){
+                return CommonResponseForm.of400("分组失败");
+            }
         }
         return CommonResponseForm.of204("分组成功");
     }

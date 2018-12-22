@@ -39,8 +39,8 @@ public class StudentService {
     private final ProcedTemplateRepository procedTemplateRepository;
 
     @Autowired
-    public StudentService(ProcedTemplateRepository procedTemplateRepository,StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository, ExperimentService experimentService) {
-        this.procedTemplateRepository=procedTemplateRepository;
+    public StudentService(ProcedTemplateRepository procedTemplateRepository, StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository, ExperimentService experimentService) {
+        this.procedTemplateRepository = procedTemplateRepository;
         this.studentRepository = studentRepository;
         this.scoreService = scoreService;
         this.overwork_applyService = overwork_applyService;
@@ -113,9 +113,33 @@ public class StudentService {
 
     @Transactional
     public Iterable<Student> findStudentByBatchNameAndSGroup(String batchName, String groupId) {
-        if (batchName == null) batchName = "%";
-        if (groupId == null) groupId = "%";
+        if (batchName.equals("all")) batchName = "%";
+        if (groupId.equals("all")) groupId = "%";
         return studentRepository.findStudentByS_group_idAndBatch(groupId, batchName);
+    }
+
+    public CommonResponseForm findStudentByBatchNameAndSGroupOrNameAndId(String batchName, String groupId, String sid, String sname) {
+        ArrayList<Student> students;
+        if (!sid.equals("all")) {
+            Optional<Student> studentOptional = studentRepository.findStudentBySid(sid);
+            if (studentOptional.isPresent()) {
+                return CommonResponseForm.of200("查询成功", studentOptional.get());
+            } else {
+                return CommonResponseForm.of400("查询失败，该学号不存在");
+            }
+//            return studentOptional.map(student -> CommonResponseForm.of200("查询成功", student)).orElseGet(() -> CommonResponseForm.of400("查询失败，该学号不存在")); 操作骚但是看不懂，不用
+
+        } else if (!sname.equals("all")) {
+            students = (ArrayList<Student>) studentRepository.findStudentBySName(sname);
+            if (students.size() == 0) {
+                return CommonResponseForm.of400("查询失败，改姓名不存在");
+            }
+        } else {
+            students = (ArrayList<Student>) findStudentByBatchNameAndSGroup(batchName, groupId);
+        }
+
+        return CommonResponseForm.of200("查询成功，共:" + students.size() + "条数据", students);
+
     }
 
     /**
@@ -192,7 +216,7 @@ public class StudentService {
             System.out.println("表头写入完成>>>>>>>>");
             rowIndex++;
             //循环写入主表数据
-            for (StudentInfoForm studentInfoForm :formList) {
+            for (StudentInfoForm studentInfoForm : formList) {
                 //create sheet row
                 Row row = sheet.createRow(rowIndex);
                 //create sheet coluum(单元格)
@@ -219,9 +243,9 @@ public class StudentService {
         out.close();
     }
 
-    public List<String>getSpProName(Map<String,String> spStudent){
-        String sid=spStudent.get("sid");
-        SpecialStudent specialStudent=spStudentRepository.findSpStudentBySid(sid).get();
+    public List<String> getSpProName(Map<String, String> spStudent) {
+        String sid = spStudent.get("sid");
+        SpecialStudent specialStudent = spStudentRepository.findSpStudentBySid(sid).get();
         return procedTemplateRepository.findProByName(specialStudent.getTemplate_name());
     }
 
