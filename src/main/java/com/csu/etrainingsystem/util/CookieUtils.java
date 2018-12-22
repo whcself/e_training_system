@@ -149,10 +149,9 @@ public final class CookieUtils {
             if (null != request) {// 设置域名的cookie
             	String domainName = getDomainName(request);
             	System.out.println(domainName);
-            	cookie.setDomain (".runtofuture.cn");
-//                if (!"localhost".equals(domainName)) {
-//                	cookie.setDomain(domainName);
-//                }
+                if (!"localhost".equals(domainName)) {
+                	cookie.setDomain(domainName);
+                }
             }
             cookie.setPath("/");
             response.addCookie(cookie);
@@ -191,25 +190,63 @@ public final class CookieUtils {
         }
     }
 
+//    /**
+//     * 得到cookie的域名
+//     */
+//    private static final String getDomainName(HttpServletRequest request) {
+//        String domainName = null;
+//
+//        String serverName = request.getRequestURL().toString();
+//        if (serverName == null || serverName.equals("")) {
+//            domainName = "";
+//        } else {
+//            final int end = serverName.indexOf("/");
+//            serverName = serverName.substring(0, end);
+//            final String[] domains = serverName.split("\\.");
+//            System.out.println (domains.toString ());
+//            int len = domains.length;
+//            if (len > 3) {
+//                // www.xxx.com.cn
+//                domainName = "." + domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
+//            } else if (len <= 3 && len > 1) {
+//                // xxx.com or xxx.cn
+//                domainName = "." + domains[len - 2] + "." + domains[len - 1];
+//            } else {
+//                domainName = serverName;
+//            }
+//        }
+//
+//        if (domainName != null && domainName.indexOf(":") > 0) {
+//            String[] ary = domainName.split("\\:");
+//            domainName = ary[0];
+//        }
+//        return domainName;
+//    }
     /**
      * 得到cookie的域名
      */
     private static final String getDomainName(HttpServletRequest request) {
         String domainName = null;
 
-        String serverName = request.getRequestURL().toString();
+        // 获取完整的请求URL地址。
+        String serverName = request.getRequestURL().toString()+"/";
         if (serverName == null || serverName.equals("")) {
             domainName = "";
         } else {
+            serverName = serverName.toLowerCase();
+            if (serverName.startsWith("http://")){
+                serverName = serverName.substring(7);
+            } else if (serverName.startsWith("https://")){
+                serverName = serverName.substring(8);
+            }
             final int end = serverName.indexOf("/");
+            // .test.com  www.test.com.cn/sso.test.com.cn/.test.com.cn  spring.io/xxxx/xxx
             serverName = serverName.substring(0, end);
             final String[] domains = serverName.split("\\.");
             int len = domains.length;
             if (len > 3) {
-                // www.xxx.com.cn
                 domainName = "." + domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
             } else if (len <= 3 && len > 1) {
-                // xxx.com or xxx.cn
                 domainName = "." + domains[len - 2] + "." + domains[len - 1];
             } else {
                 domainName = serverName;
@@ -222,5 +259,4 @@ public final class CookieUtils {
         }
         return domainName;
     }
-
 }
