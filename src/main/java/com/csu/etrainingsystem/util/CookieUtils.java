@@ -151,7 +151,7 @@ public final class CookieUtils {
             	//
             	System.out.println("该cookie的域:"+domainName+"但是目前没有设置");
                 if (!"localhost".equals(domainName)) {
-                	cookie.setDomain("134.175.152.210");
+                	cookie.setDomain("134.175.152.210:8084");
                 }
             }
             cookie.setPath("/");
