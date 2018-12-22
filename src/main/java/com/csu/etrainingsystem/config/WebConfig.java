@@ -1,11 +1,11 @@
-//package com.csu.etrainingsystem.config;
+//package com.csu.etrainingsystem.RedisConfig;
 //
 //import com.csu.etrainingsystem.security.SecurityInterceptor;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.web.servlet.HandlerInterceptor;
-//import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-//import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+//import org.springframework.web.servlet.RedisConfig.annotation.InterceptorRegistry;
+//import org.springframework.web.servlet.RedisConfig.annotation.WebMvcConfigurationSupport;
 //
 //@Configuration
 //public class WebConfig extends WebMvcConfigurationSupport {

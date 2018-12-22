@@ -4,8 +4,8 @@ import com.csu.etrainingsystem.material.entity.Material;
 import com.csu.etrainingsystem.material.repository.ApplyRepository;
 import com.csu.etrainingsystem.material.repository.MaterialRepository;
 import org.apache.poi.util.StringUtil;
-import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.apache.shiro.subject.support.DefaultSubjectContext;
+//import org.apache.shiro.subject.SimplePrincipalCollection;
+//import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

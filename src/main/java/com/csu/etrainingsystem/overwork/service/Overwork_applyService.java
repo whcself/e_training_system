@@ -4,9 +4,9 @@ import com.csu.etrainingsystem.overwork.entity.Overwork_apply;
 import com.csu.etrainingsystem.overwork.repository.Overwork_applyRepository;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.util.TimeUtil;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.SimplePrincipalCollection;
-import org.apache.shiro.subject.support.DefaultSubjectContext;
+//import org.apache.shiro.SecurityUtils;
+//import org.apache.shiro.subject.SimplePrincipalCollection;
+//import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 //(exclude = {DataSourceAutoConfiguration.class})
-@SpringBootApplication // exclude: because it does not config the dataSource yet.
+@SpringBootApplication // exclude: because it does not RedisConfig the dataSource yet.
 @EnableSwagger2
 public class ETrainingSystemApplication {
     public static void main(String[] args) {
