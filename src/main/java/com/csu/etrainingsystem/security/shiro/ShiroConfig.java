@@ -3,9 +3,12 @@ package com.csu.etrainingsystem.security.shiro;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 
+import com.csu.etrainingsystem.security.MySessionManager;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionIdGenerator;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.Cookie;
@@ -32,11 +35,13 @@ public class ShiroConfig {
 	 * 创建ShiroFilterFactoryBean
 	 */
 	@Bean
-	public ShiroFilterFactoryBean getShiroFilterFactoryBean(@Qualifier("securityManager")DefaultWebSecurityManager securityManager){
+	public ShiroFilterFactoryBean getShiroFilterFactoryBean(
+			@Qualifier("securityManager")DefaultWebSecurityManager securityManager
+	){
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
-		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
-		filtersMap.put("authc",new MyAuthFilter());
-		shiroFilterFactoryBean.setFilters(filtersMap);
+//		Map<String, Filter> filtersMap = shiroFilterFactoryBean.getFilters();
+//		filtersMap.put("authc",new MyAuthFilter());
+//		shiroFilterFactoryBean.setFilters(filtersMap);
 //        //设置session管理器
 //		securityManager.setSessionManager (sessionManager);
 		//设置安全管理器
@@ -94,7 +99,9 @@ public class ShiroConfig {
 	 * 创建DefaultWebSecurityManager
 	 */
 	@Bean(name="securityManager")
-	public DefaultWebSecurityManager getDefaultWebSecurityManager(@Qualifier("userRealm")UserRealm userRealm, @Qualifier("sessionManager") DefaultWebSessionManager sessionManager){
+	public org.apache.shiro.mgt.SecurityManager getDefaultWebSecurityManager(
+			@Qualifier("userRealm")UserRealm userRealm,
+			@Qualifier("sessionManager") SessionManager sessionManager){
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 		//关联realm
 		securityManager.setRealm(userRealm);
@@ -123,16 +130,16 @@ public class ShiroConfig {
 	}
 
 	@Bean("sessionManager")
-	public DefaultWebSessionManager getSessionManager(@Qualifier("sessionDAO") MemorySessionDAO sessionDAO
-			                                         ,@Qualifier("simpleCookie")SimpleCookie simpleCookie
+	public SessionManager getSessionManager(@Qualifier("sessionDAO") MemorySessionDAO sessionDAO
+			                                         , @Qualifier("simpleCookie")SimpleCookie simpleCookie
 	){
 
-		DefaultWebSessionManager defaultWebSessionManager= new DefaultWebSessionManager ();
-	    defaultWebSessionManager.setSessionDAO (sessionDAO);
-		defaultWebSessionManager.setSessionIdCookie (simpleCookie );
+		MySessionManager mySessionManager= new MySessionManager ();
+		mySessionManager.setSessionDAO (sessionDAO);
+	//	mySessionManager.setSessionIdCookie (simpleCookie );
 		//defaultWebSessionManager.setSessionIdCookieEnabled (false);
-		defaultWebSessionManager.setSessionValidationSchedulerEnabled (false);
-	return defaultWebSessionManager;
+	//	mySessionManager.setSessionValidationSchedulerEnabled (false);
+	return mySessionManager;
 	}
 	@Bean("simpleCookie")
 	public SimpleCookie getSimpleCookie(){
@@ -144,24 +151,28 @@ public class ShiroConfig {
 		simpleCookie.setHttpOnly (true);
        return simpleCookie;
 	}
-	@Bean
-	public FilterRegistrationBean registration() {
-		MyAuthFilter filter=new MyAuthFilter ();
-		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
-		registration.setEnabled(false);
-		registration.setOrder (0);
-		return registration;
-	}
+//	@Bean
+//	public FilterRegistrationBean registration() {
+//		MyAuthFilter filter=new MyAuthFilter ();
+//		FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+//		registration.setEnabled(false);
+//		registration.setOrder (0);
+//		return registration;
+//	}
 	/**
-	 * <!-- sessionIdCookie的实现,用于重写覆盖容器默认的JSESSIONID -->
-	 * <bean id="simpleCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-	 *     <!-- 设置Cookie名字, 默认为: JSESSIONID 问题: 与SERVLET容器名冲突, 如JETTY, TOMCAT 等默认JSESSIONID,
-	 *                                 当跳出SHIRO SERVLET时如ERROR-PAGE容器会为JSESSIONID重新分配值导致登录会话丢失! -->
-	 *     <property name="name" value="SHIRO-COOKIE"/>
-	 *     <!-- JSESSIONID的path为/用于多个系统共享JSESSIONID -->
-	 *     <!-- <property name="path" value="/"/> -->
-	 *     <!-- 浏览器中通过document.cookie可以获取cookie属性，设置了HttpOnly=true,在脚本中就不能的到cookie，可以避免cookie被盗用 -->
-	 *     <property name="httpOnly" value="true"/>
-	 * </bean>
+	 * 开启shiro aop注解支持.
+	 * 使用代理方式;所以需要开启代码支持;
+	 *
+	 * @param securityManager
+	 * @return
 	 */
+	@Bean
+	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
+			@Qualifier("securityManager") org.apache.shiro.mgt.SecurityManager securityManager) {
+		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+		return authorizationAttributeSourceAdvisor;
+	}
+
+
 }
