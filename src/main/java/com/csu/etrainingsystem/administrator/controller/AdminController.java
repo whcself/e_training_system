@@ -36,7 +36,7 @@ import java.util.Map;
  * 方法习惯：管理员的权限，功能都写在了controller中，比如导入学生，marking的CRUD
  */
 @RestController
-@RequestMapping(value = "/admin", method = RequestMethod.POST)
+@RequestMapping(value = "/admin")
 public class AdminController {
     private final AdminService adminService;
     private final TeacherService teacherService;
@@ -49,31 +49,31 @@ public class AdminController {
         this.markingService = markingService;
     }
 
-    @RequestMapping(value = "/addAdmin")
+    @PostMapping(value = "/addAdmin")
     public CommonResponseForm addAdmin(Admin admin) {
         adminService.save(admin);
         return CommonResponseForm.of204("管理员增加成功");
     }
 
-    @RequestMapping(value = "/getAdmin/{id}")
+    @PostMapping(value = "/getAdmin/{id}")
     public CommonResponseForm getAdminById(@PathVariable("id") String id) {
         Admin admin = adminService.getAdminById(id);
         return CommonResponseForm.of200("获取管理员成功", admin);
     }
 
-    @RequestMapping(value = "/getAllAdmin")
+    @PostMapping(value = "/getAllAdmin")
     public CommonResponseForm getAllAdmin() {
         Iterable<Admin> admin = adminService.getAllAdmin();
         return CommonResponseForm.of200("获取管理员成功", admin);
     }
 
-    @RequestMapping(value = "/updateAdmin")
+    @PostMapping(value = "/updateAdmin")
     public CommonResponseForm updateAdmin(Admin admin) {
         adminService.updateAdmin(admin);
         return CommonResponseForm.of204("更新管理员成功");
     }
 
-    @RequestMapping(value = "/deleteAdmin/{id}")
+    @PostMapping(value = "/deleteAdmin/{id}")
     public @ResponseBody
     CommonResponseForm deleteAdmin(@PathVariable("id") String id) {
         adminService.deleteAdmin(id);
@@ -85,26 +85,26 @@ public class AdminController {
     marking CRUD
      */
 
-    @RequestMapping("/addMarking")
+    @PostMapping("/addMarking")
     public CommonResponseForm addMarking(Marking marking) {
         markingService.addMarking(marking);
         return CommonResponseForm.of204("增加管理权限条目成功");
     }
 
-    @RequestMapping("/deleteMarking")
+    @PostMapping("/deleteMarking")
     public CommonResponseForm deleteMarking(@RequestParam String markName) {
         markingService.deleteMarking(markName);
         return CommonResponseForm.of204("删除管理权限条目成功");
     }
 
-    @RequestMapping("/updateMarking")
+    @PostMapping("/updateMarking")
     public CommonResponseForm updateMarking(Marking marking) {
         markingService.updateMarking(marking);
         return CommonResponseForm.of204("修改管理权限条目成功");
     }
 
     //查询单个管理权限条目没写，没用
-    @RequestMapping("/getAllMarking")
+    @PostMapping("/getAllMarking")
     public CommonResponseForm getAllMarking() {
         return CommonResponseForm.of200("获取管理权限条目列表成功", markingService.getAllMarking());
     }
@@ -138,7 +138,7 @@ public class AdminController {
      * @param role 角色
      * @return list
      */
-    @RequestMapping("/findTeachers")
+    @PostMapping("/findTeachers")
     public CommonResponseForm findTeachers(@RequestParam(required = false) String tClass,
                                            @RequestParam(required = false) String role,
                                            @RequestParam(required = false) String material_privilege,
@@ -157,7 +157,7 @@ public class AdminController {
      * @param request r
      * @param response r
      */
-    @PostMapping("/download")
+    @GetMapping("/download")
     public void downloadTemplate(HttpServletRequest request,HttpServletResponse response) throws IOException {
         adminService.downloadTemplate(request,response);
     }
