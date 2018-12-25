@@ -30,12 +30,12 @@ public class SpecialStudent implements Serializable {
     private String template_name;
     private String sdept;
     private String depart;
-    private float total_score;
+    private Float total_score;
     private boolean del_status;
     private boolean score_lock;
     private String degree;
 
-    public SpecialStudent(String sid, String sname, String clazz, String template_name, String sdept, String depart, float total_score, boolean del_status, boolean score_lock, String degree) {
+    public SpecialStudent(String sid, String sname, String clazz, String template_name, String sdept, String depart, Float total_score, boolean del_status, boolean score_lock, String degree) {
         this.sid = sid;
         this.sname = sname;
         this.clazz = clazz;

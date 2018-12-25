@@ -115,7 +115,7 @@ public class ProcedureService {
      * update必须要@Transactional， 要不然报错
      */
     @Transactional
-    public void setWeight(String batch_name,String pro_name,float weight){
+    public void setWeight(String batch_name,String pro_name,Float weight){
         procedureRepository.setWeightByBatchNameAndProName(batch_name,pro_name,weight);
     }
 

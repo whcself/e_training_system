@@ -16,7 +16,7 @@ public class Student implements Serializable {
     private  String s_group_id;
     private String batch_name;
     private String  sname;
-    private float total_score;
+    private Float total_score;
     @Column(name="clazz")
     private String clazz;
     private String sdept;
@@ -24,5 +24,6 @@ public class Student implements Serializable {
     private boolean score_lock;
     private boolean del_status;
     private String degree;
+
 }
 

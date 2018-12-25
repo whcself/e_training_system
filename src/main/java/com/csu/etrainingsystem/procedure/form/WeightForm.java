@@ -6,6 +6,6 @@ import lombok.Data;
 public class WeightForm {
     private String proName;
     private String batchName;
-    private float weight;
+    private Float weight;
     private String templateName;
 }
