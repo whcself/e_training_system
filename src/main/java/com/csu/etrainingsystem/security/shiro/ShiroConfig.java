@@ -1,17 +1,11 @@
 
 package com.csu.etrainingsystem.security.shiro;
 
-import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
-import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -118,10 +112,10 @@ public class ShiroConfig {
 	/**
 	 * 配置ShiroDialect，用于thymeleaf和shiro标签配合使用
 	 */
-	@Bean
-	public ShiroDialect getShiroDialect(){
-		return new ShiroDialect();
-	}
+//	@Bean
+//	public ShiroDialect getShiroDialect(){
+//		return new ShiroDialect();
+//	}
 
 	@Bean("sessionManager")
 	public SessionManager getSessionManager(@Qualifier("sessionDAO") MemorySessionDAO sessionDAO
@@ -153,13 +147,13 @@ public class ShiroConfig {
 	 * @param securityManager
 	 * @return
 	 */
-	@Bean
-	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
-			@Qualifier("securityManager") org.apache.shiro.mgt.SecurityManager securityManager) {
-		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-		return authorizationAttributeSourceAdvisor;
-	}
+//	@Bean
+//	public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
+//			@Qualifier("securityManager") org.apache.shiro.mgt.SecurityManager securityManager) {
+//		AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+//		authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+//		return authorizationAttributeSourceAdvisor;
+//	}
 
 
 }

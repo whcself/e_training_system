@@ -4,17 +4,11 @@ import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.student.entity.Student;
-import com.csu.etrainingsystem.student.entity.StudentGroup;
-import com.csu.etrainingsystem.student.entity.StudentGroupId;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
 import com.csu.etrainingsystem.student.service.StudentService;
-import com.sun.deploy.net.HttpResponse;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.collections.IteratorUtils;
-import org.apache.commons.collections.ListUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
