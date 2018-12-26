@@ -8,13 +8,16 @@ import com.csu.etrainingsystem.student.entity.StudentGroup;
 import com.csu.etrainingsystem.student.entity.StudentGroupId;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
 import com.csu.etrainingsystem.student.service.StudentService;
+import com.sun.deploy.net.HttpResponse;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
@@ -45,7 +48,10 @@ public class ExperimentController {
         return CommonResponseForm.of200 ("获取成功", this.experimentService.getExperimentByBAndW (batch_name,time_quant));
     }
     @RequestMapping(value = "/getAllTemplate")
-    public CommonResponseForm getAllTemplate() {
+    public CommonResponseForm getAllTemplate( HttpServletResponse response) {
+        String key = UUID.randomUUID().toString();
+        Cookie cookie=new Cookie ("TT_token",key);
+        response.addCookie (cookie);
         return CommonResponseForm.of200 ("获取成功", this.experimentService.getAllTemplate ());
     }
     @RequestMapping(value = "/getExperimentByProAndBatch")

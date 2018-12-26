@@ -11,6 +11,7 @@ import com.csu.etrainingsystem.user.service.UserService;
 
 import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,15 @@ public class UserController {
         this.teacherService = teacherService;
     }
 
-
+    @PostMapping("/addUser")
+    public CommonResponseForm addUser(@RequestBody User Users[]){
+        for (User user : Users) {
+            SimpleHash hash=new SimpleHash ("md5",user.getPwd (),"e-training-system",3);
+            user.setPwd (hash.toString ());
+            userService.addUser (user);
+        }
+        return CommonResponseForm.of204 ("添加用户成功");
+    }
     @PostMapping("/getUser/{id}")
     public CommonResponseForm getUser(@PathVariable("id") String id){
         User user=userService.getUser(id);
