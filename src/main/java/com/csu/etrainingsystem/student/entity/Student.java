@@ -24,5 +24,6 @@ public class Student implements Serializable {
     private boolean score_lock;
     private boolean del_status;
     private String degree;
+
 }
 

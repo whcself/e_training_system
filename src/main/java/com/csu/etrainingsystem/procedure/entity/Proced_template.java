@@ -12,7 +12,7 @@ public class Proced_template {
     @EmbeddedId
     @Column
     private ProcedTemplateId procedTemplateId;
-    private float weight;
+    private Float weight;
     private boolean del_status;
 }
 

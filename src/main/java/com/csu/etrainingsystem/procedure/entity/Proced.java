@@ -18,7 +18,7 @@ public class Proced implements Serializable {
     @Column
     private ProcedId proid;
     private String t_group_id;
-    private float weight;
+    private Float weight;
     private boolean del_status;
 
 }

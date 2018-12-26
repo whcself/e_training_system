@@ -49,7 +49,7 @@ public interface ProcedureRepository extends JpaRepository<Proced,ProcedId> {
      */
     @Modifying
     @Query(value = "update proced set weight=?3 where batch_name=?1 and pro_name=?2",nativeQuery = true)
-    void setWeightByBatchNameAndProName(String batch_name,String pro_name,float weight);
+    void setWeightByBatchNameAndProName(String batch_name,String pro_name,Float weight);
 
 
     @Query(value = "select distinct template_name from proced_template where del_status=0",nativeQuery = true)

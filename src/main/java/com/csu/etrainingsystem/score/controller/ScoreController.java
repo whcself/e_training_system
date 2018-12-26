@@ -249,5 +249,9 @@ public class ScoreController {
         return CommonResponseForm.of204("发布成功");
     }
 
+    public static void main(String[] args){
+
+
+    }
 
 }

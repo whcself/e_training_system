@@ -17,7 +17,7 @@ public class Score implements Serializable {
     private Integer scoreid;//无意义,自增长
     private String sid;
     private String pro_name;
-    private float pro_score;
+    private Float pro_score;
     private boolean del_status;
 
 
