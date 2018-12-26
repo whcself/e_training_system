@@ -196,10 +196,10 @@
             <!--<version>1.r.66</version>-->
         <!--</dependency>-->
         <!-- jedis -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>redis.clients</groupId>-->
+            <!--<artifactId>jedis</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
