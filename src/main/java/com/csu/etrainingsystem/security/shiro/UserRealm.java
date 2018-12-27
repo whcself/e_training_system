@@ -125,7 +125,7 @@ public class UserRealm extends AuthorizingRealm {
 
         }
         //最后通过密码判断e-training-system
-        return new SimpleAuthenticationInfo (user, user.getPwd (),ByteSource.Util.bytes ("e-training-system"),"");
+        return new SimpleAuthenticationInfo (user, user.getPwd (),"");
     }
 
 }
