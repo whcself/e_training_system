@@ -105,8 +105,7 @@ public class UserRealm extends AuthorizingRealm {
         DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager ();
         DefaultWebSessionManager sessionManager = (DefaultWebSessionManager) securityManager.getSessionManager ();
         Collection<Session> sessions = sessionManager.getSessionDAO ().getActiveSessions ();//获取当前已登录的用户session列表
-        SimpleHash hash = new SimpleHash ("md5", token.getPassword (), "e-training-system", 3);
-        String pwd = hash.toString ();
+
         for (Session session : sessions) {
             Object obj = session.getAttribute (DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
 
@@ -115,7 +114,7 @@ public class UserRealm extends AuthorizingRealm {
                 obj = spc.getPrimaryPrincipal ();
                 if (obj instanceof User) {
                     User u = (User) obj;
-                    if (userName.equals (u.getAccount ()) && u.getPwd ().equals (pwd)) {
+                    if (userName.equals (u.getAccount ()) && u.getPwd ().equals (user.getPwd ())) {
                         //删除之前的session
                         sessionManager.getSessionDAO ().delete (session);
                         //throw new ConcurrentAccessException("重复登录");

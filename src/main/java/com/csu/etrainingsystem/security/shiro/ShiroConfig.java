@@ -102,11 +102,7 @@ public class ShiroConfig {
 	@Bean(name="userRealm")
 	public UserRealm getRealm(){
 		HashedCredentialsMatcher  hashedCredentialsMatcher=new HashedCredentialsMatcher();
-		 hashedCredentialsMatcher.setHashAlgorithmName ("md5");
-		 hashedCredentialsMatcher.setHashIterations (3);
-		 UserRealm userRealm=new UserRealm ();
-		 userRealm.setCredentialsMatcher (hashedCredentialsMatcher);
-		return userRealm;
+		return new UserRealm ();
 	}
 	
 	/**

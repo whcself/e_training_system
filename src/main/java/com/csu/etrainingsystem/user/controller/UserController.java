@@ -36,8 +36,6 @@ public class UserController {
     @PostMapping("/addUser")
     public CommonResponseForm addUser(@RequestBody User Users[]){
         for (User user : Users) {
-            SimpleHash hash=new SimpleHash ("md5",user.getPwd (),"e-training-system",3);
-            user.setPwd (hash.toString ());
             userService.addUser (user);
         }
         return CommonResponseForm.of204 ("添加用户成功");
