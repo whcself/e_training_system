@@ -2,8 +2,10 @@ package com.csu.etrainingsystem.administrator.service;
 
 import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.entity.Batch;
+import com.csu.etrainingsystem.administrator.entity.Semester;
 import com.csu.etrainingsystem.administrator.repository.AdminRepository;
 import com.csu.etrainingsystem.administrator.repository.BatchRepository;
+import com.csu.etrainingsystem.administrator.repository.SemesterRepository;
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
 import com.csu.etrainingsystem.procedure.service.ProcedureService;
 import com.csu.etrainingsystem.student.entity.Student;
@@ -32,9 +34,10 @@ public class AdminService {
     private final ProcedureService procedureService;
     private final MarkingService markingService;
     private final StudentService studentService;
-
+private final SemesterRepository semesterRepository;
     @Autowired
-    public AdminService(AdminRepository adminRepository, BatchRepository batchRepository, StudentGroupService studentGroupService, ExperimentService experimentService, ProcedureService procedureService, MarkingService markingService, StudentService studentService) {
+    public AdminService(AdminRepository adminRepository,SemesterRepository semesterRepository, BatchRepository batchRepository, StudentGroupService studentGroupService, ExperimentService experimentService, ProcedureService procedureService, MarkingService markingService, StudentService studentService) {
+        this.semesterRepository=semesterRepository;
         this.adminRepository = adminRepository;
         this.batchRepository = batchRepository;
         this.studentGroupService = studentGroupService;
@@ -86,6 +89,9 @@ public class AdminService {
 
     @Transactional
     public void addBatch(Batch batch) {
+        String semesterName=batch.getSemester_name();
+        semesterRepository.save(new Semester(semesterName));
+
         batchRepository.save(batch);
     }
 
