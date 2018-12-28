@@ -123,7 +123,7 @@ public class AdminController {
      */
     @PostMapping("/importStudents")
     public CommonResponseForm importStudents(HttpServletRequest request,
-                                             MultipartFile file,
+                                             @RequestParam MultipartFile file,
                                              @RequestParam String batchName) {
         ArrayList<Student> students = adminService.importStudent(file,batchName);
         return CommonResponseForm.of200("导入学生信息成功", students);
