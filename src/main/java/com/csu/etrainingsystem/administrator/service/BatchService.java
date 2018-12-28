@@ -46,7 +46,7 @@ public class BatchService {
 
     @Transactional
     public void updateSemesterName(String old, String semesterName) {
-        semesterRepository.save(new Semester(semesterName));
+//        semesterRepository.save(new Semester(semesterName));
         batchRepository.updateSemesterName(old, semesterName);
     }
 

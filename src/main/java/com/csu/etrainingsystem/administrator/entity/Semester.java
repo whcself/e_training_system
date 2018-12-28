@@ -16,4 +16,6 @@ public class Semester {
     public Semester(String semesterName){
         this.semester_name=semesterName;
     }
+
+    public Semester(){}
 }
