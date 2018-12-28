@@ -178,12 +178,15 @@ private final SemesterRepository semesterRepository;
     }
 
 
-    public void downloadTemplate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadTemplate(HttpServletRequest request, HttpServletResponse response,int way) throws IOException {
         OutputStream out = new BufferedOutputStream(response.getOutputStream());
         response.setHeader("Content-Disposition", "fileName=template.xlsx");
         response.setContentType("application/octet-stream;charset=UTF-8");
-//        String path=request.getServletContext().getContextPath();
-        String filePath = "C:\\doing\\template.xlsx";
+        String filePath;
+        if(way==1)
+             filePath = "C:\\doing\\template.xlsx";
+        else
+            filePath = "C:\\doing\\ScoreTemplate.xlsx";
 //        InputStream in = new FileInputStream()
 
         System.out.println("*************" + filePath);
