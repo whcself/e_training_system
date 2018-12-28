@@ -60,13 +60,13 @@ public class ExcelPort {
             //scjn need learn
             String fileName=inFile.getOriginalFilename();
             System.out.println("fileName:"+fileName);
-            File convFile = new File( inFile.getOriginalFilename());
-            inFile.transferTo(convFile);
+//            File convFile = new File( inFile.getOriginalFilename());
+//            inFile.transferTo(convFile);
 
-            FileInputStream file = new FileInputStream(convFile);
+//            FileInputStream file = new FileInputStream(convFile);
 
             //Create Workbook instance holding reference to .xlsx file
-            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            XSSFWorkbook workbook = new XSSFWorkbook(inFile.getInputStream());
 
             //Get first/desired sheet from the workbook
             XSSFSheet sheet = workbook.getSheetAt(0);
@@ -115,7 +115,7 @@ public class ExcelPort {
                 }// 一行结束
                 students.add(student);
             }
-            file.close();
+//            file.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
