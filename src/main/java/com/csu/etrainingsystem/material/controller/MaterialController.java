@@ -14,6 +14,8 @@ import com.csu.etrainingsystem.user.entity.User;
 import io.swagger.annotations.ApiOperation;
 //import org.apache.shiro.subject.SimplePrincipalCollection;
 //import org.apache.shiro.subject.support.DefaultSubjectContext;
+import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,20 +86,20 @@ public class MaterialController {
         apply.setSname (sname);
         //todo:需要判断是管理员还是老师
         String tid="";
-//        if(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)!=null){
-//        SimplePrincipalCollection spc=(SimplePrincipalCollection)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
-//            User user=(User)spc.getPrimaryPrincipal ();
-//            if(user.getRole ().equals ("teacher")) {
-//                Teacher teacher = teacherService.getTeacher (user.getAccount ());
-//                if (teacher != null)
-//                    tid = teacher.getTid ();
-//            }
-//          else if(user.getRole ().equals ("admin")) {
-//                Admin admin = adminService.getAdminById (user.getAccount ());
-//                if (admin != null)
-//                    tid = admin.getAid ();
-//            }
-//        }
+        if(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)!=null){
+        SimplePrincipalCollection spc=(SimplePrincipalCollection)session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+            User user=(User)spc.getPrimaryPrincipal ();
+            if(user.getRole ().equals ("teacher")) {
+                Teacher teacher = teacherService.getTeacher (user.getAccount ());
+                if (teacher != null)
+                    tid = teacher.getTid ();
+            }
+          else if(user.getRole ().equals ("admin")) {
+                Admin admin = adminService.getAdminById (user.getAccount ());
+                if (admin != null)
+                    tid = admin.getAid ();
+            }
+        }
         apply.setTid (tid);
         materialService.addAply (apply);
         return CommonResponseForm.of204 ("派出物料成功");

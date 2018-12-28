@@ -101,7 +101,6 @@ public class ShiroConfig {
 	 */
 	@Bean(name="userRealm")
 	public UserRealm getRealm(){
-		HashedCredentialsMatcher  hashedCredentialsMatcher=new HashedCredentialsMatcher();
 		return new UserRealm ();
 	}
 	

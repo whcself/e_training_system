@@ -89,8 +89,9 @@ public class UserRealm extends AuthorizingRealm {
         //编写shiro判断逻辑，判断用户名和密码
         //1.判断用户名
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-
+        System.out.println ("登录的密码是"+token.getPassword ().toString ());
         User user = userService.getUser (token.getUsername ());
+        System.out.println ("数据库的密码是"+user.getPwd ());
         //如果不能存在就创建
         Subject subject = SecurityUtils.getSubject ();
         if (user == null) {

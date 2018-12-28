@@ -70,7 +70,7 @@ public class PurchaseService {
         System.out.println ("开始时间"+startTime);
         if(endTime==null||endTime.equals (""))endTime=format.format(purchaseRepository.findMaxTime ());
         System.out.println ("截止时间"+endTime);
-        if(tname==null||tname.equals (""))tname="%";if(clazz==null||clazz.equals (""))clazz="%";
+        if(tname==null||tname.equals ("")||tname.equals ("申购人"))tname="%";if(clazz==null||clazz.equals (""))clazz="%";
         return this.purchaseRepository.getSelectedPurchase(tname ,clazz, startTime,endTime);
     }
     @Transactional
