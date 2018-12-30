@@ -7,10 +7,12 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 
 import com.csu.etrainingsystem.user.entity.User;
 
+import com.csu.etrainingsystem.user.form.UserPwdForm;
 import com.csu.etrainingsystem.user.service.UserService;
 
 import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
+import com.sun.javafx.collections.MappingChange;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -60,6 +62,12 @@ public class UserController {
     public CommonResponseForm changePassword(HttpSession session,String newPassword){
         userService.changePassword(session,newPassword);
         return CommonResponseForm.of204("修改密码成功");
+    }
+
+    @PostMapping("/changePwd")
+    public CommonResponseForm changePwd(@RequestBody UserPwdForm[] forms){
+
+        return userService.changePwd(forms);
     }
 
 

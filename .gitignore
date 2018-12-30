@@ -1,5 +1,6 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
+!static/csu/te.html
 
 ### STS ###
 .apt_generated

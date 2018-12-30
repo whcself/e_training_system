@@ -153,13 +153,21 @@ public class AdminController {
     }
 
     /**
-     * @apiNote 管理员端-下载成绩模板
+     * @apiNote 管理员端-下载导入模板
      * @param request r
      * @param response r
      */
     @GetMapping("/download")
     public void downloadTemplate(HttpServletRequest request,HttpServletResponse response) throws IOException {
-        adminService.downloadTemplate(request,response);
+        adminService.downloadTemplate(request,response,1);
+    }
+
+    /**
+     * @apiNote 下载成绩模板
+     */
+    @GetMapping("/downloadScore")
+    public void downloadScoreTemplate(HttpServletRequest request,HttpServletResponse response) throws IOException {
+        adminService.downloadTemplate(request,response,2);
     }
 
 

@@ -12,4 +12,10 @@ import javax.persistence.Table;
 public class Semester {
     @Id
     private String semester_name;
+
+    public Semester(String semesterName){
+        this.semester_name=semesterName;
+    }
+
+    public Semester(){}
 }

@@ -1,5 +1,6 @@
 package com.csu.etrainingsystem.user.service;
 
+import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.service.AdminService;
@@ -7,6 +8,7 @@ import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
+import com.csu.etrainingsystem.user.form.UserPwdForm;
 import com.csu.etrainingsystem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,22 @@ public class UserService {
         User user = (User) session.getAttribute ("user");
         user.setPwd (newPassword);
         userRepository.saveAndFlush (user);
+    }
+
+    @Transactional
+    public CommonResponseForm changePwd(UserPwdForm[] forms){
+
+        try{
+            for(UserPwdForm form:forms){
+                User user=userRepository.findUserByAccount(form.getId());
+                user.setPwd(form.getPwd());
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+       return CommonResponseForm.of204("修改成功 共修改："+forms.length+"条");
+
     }
 
     @Transactional

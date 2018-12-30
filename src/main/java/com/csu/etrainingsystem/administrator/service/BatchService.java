@@ -1,6 +1,7 @@
 package com.csu.etrainingsystem.administrator.service;
 
 import com.csu.etrainingsystem.administrator.entity.Batch;
+import com.csu.etrainingsystem.administrator.entity.Semester;
 import com.csu.etrainingsystem.administrator.form.SemesterForm;
 import com.csu.etrainingsystem.administrator.repository.BatchRepository;
 import com.csu.etrainingsystem.administrator.repository.SemesterRepository;
@@ -45,6 +46,7 @@ public class BatchService {
 
     @Transactional
     public void updateSemesterName(String old, String semesterName) {
+//        semesterRepository.save(new Semester(semesterName));
         batchRepository.updateSemesterName(old, semesterName);
     }
 

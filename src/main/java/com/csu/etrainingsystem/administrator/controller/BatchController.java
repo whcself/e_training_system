@@ -68,6 +68,8 @@ public class BatchController {
     public CommonResponseForm getAllSemesterName(){
         return CommonResponseForm.of200("获取学期名成功",batchService.getAllSemesterName());
     }
+
+
     @PostMapping("/addSemester")
     public CommonResponseForm addSemester(@RequestParam String semesterName){
         batchService.addSemester(semesterName);

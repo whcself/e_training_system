@@ -5,6 +5,8 @@ import com.csu.etrainingsystem.student.entity.StudentGroup;
 import com.csu.etrainingsystem.student.entity.StudentGroupId;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
 
+import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.service.UserService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
@@ -14,6 +16,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 
 import java.io.File;
@@ -32,9 +35,11 @@ public class ExcelPort {
 
 
     private static StudentGroupService studentGroupService;
+    private static UserService userService;
 
     @Autowired
-    public ExcelPort(StudentGroupService studentGroupService) {
+    public ExcelPort(UserService userService,StudentGroupService studentGroupService) {
+        ExcelPort.userService =userService;
         ExcelPort.studentGroupService = studentGroupService;
     }
 
@@ -57,12 +62,15 @@ public class ExcelPort {
         ArrayList<Student> students = new ArrayList<>();
         try {
             //scjn need learn
-            File convFile = new File( inFile.getOriginalFilename());
-            inFile.transferTo(convFile);
-            FileInputStream file = new FileInputStream(convFile);
+            String fileName=inFile.getOriginalFilename();
+            System.out.println("fileName:"+fileName);
+//            File convFile = new File( inFile.getOriginalFilename());
+//            inFile.transferTo(convFile);
+
+//            FileInputStream file = new FileInputStream(convFile);
 
             //Create Workbook instance holding reference to .xlsx file
-            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            XSSFWorkbook workbook = new XSSFWorkbook(inFile.getInputStream());
 
             //Get first/desired sheet from the workbook
             XSSFSheet sheet = workbook.getSheetAt(0);
@@ -111,91 +119,13 @@ public class ExcelPort {
                 }// 一行结束
                 students.add(student);
             }
-            file.close();
+//            file.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return students;
     }
 
-    public static ArrayList<Student> readExcel2(String path, String batchName, int groupNum) {
-        String[] groupName25 = {"A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3", "D1", "D2", "D3",
-                "E1", "E2", "E3", "F1", "F2", "F3", "G1", "G2", "G3"};
-        String[] groupName1 = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-        int[] numOfAdd = new int[20];
-        int[] numOfGroup1 = new int[20];
-        String[] groupName = batchName.charAt(5) == '1' ? groupName1 : groupName25;
-        ArrayList<Student> students = new ArrayList<>();
-        try {
-            FileInputStream file = new FileInputStream(new File(path));
-
-            //Create Workbook instance holding reference to .xlsx file
-            XSSFWorkbook workbook = new XSSFWorkbook(file);
-
-            //Get first/desired sheet from the workbook
-            XSSFSheet sheet = workbook.getSheetAt(0);
-            int rowNum = sheet.getLastRowNum();
-            //人数多一个的group数
-
-
-            System.out.println("rowNum:" + rowNum);
-            DecimalFormat decimalFormat = new DecimalFormat();
-            Row firstRow = sheet.getRow(0);
-            ArrayList<String> colName = new ArrayList<>();
-            for (Cell cell : firstRow) colName.add(cell.getStringCellValue());
-
-            //Iterate through each rows one by one
-            int groupIndex = 0;
-            for (Row row : sheet) {
-                if (row.getRowNum() == 0) continue;
-                //For each row, iterate through all the columns
-                Iterator<Cell> cellIterator = row.cellIterator();
-                int cell_index = -1;
-                Student student = new Student();
-                student.setBatch_name(batchName);
-                while (cellIterator.hasNext()) {
-                    cell_index++;
-                    Cell cell = cellIterator.next();
-                    String cell_colName = colName.get(cell_index);
-//                    System.out.print(colName + "\t");
-                    //Check the cell type and format accordingly
-
-                    //进入到一个cell，判断string还是numeric
-                    if (cell.getCellType() == CellType.STRING) {
-                        String value = cell.getStringCellValue();
-//                        System.out.print(value + "\t");
-                        setPro(cell_colName, value, student);
-                    } else if (cell.getCellType() == CellType.NUMERIC) {
-                        CellStyle style = cell.getCellStyle();
-                        double value = cell.getNumericCellValue();
-                        DecimalFormat format = new DecimalFormat();
-                        String temp = style.getDataFormatString();
-                        if (temp.equals("General")) {
-                            format.applyPattern("#");
-                        }
-                        String value2 = format.format(value);
-                        setPro(cell_colName, value2, student);
-                    } else if (cell.getCellType() == CellType._NONE)
-                        System.out.print("null" + "\t");
-                }// 一行结束
-                int rowIndex = row.getRowNum();
-                if (rowIndex <= numOfAdd[groupIndex]) {
-                    student.setS_group_id(groupName[groupIndex]);
-                } else {
-
-                    groupIndex++;
-                    student.setS_group_id(groupName[groupIndex]);
-                }
-
-                students.add(student);
-                System.out.println("student index：" + rowIndex + '\t' + "groupid:" + student.getS_group_id());
-            }
-            file.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return students;
-    }
 
     /**
      * for set value to corresponding property(attribute)
@@ -228,8 +158,15 @@ public class ExcelPort {
             case "学院":
                 student.setDepart(value);
                 break;
+            case "密码":
+//                setPass(student,value);
 
 
         }
     }
+//    private static void setPass(Student student,String pwd){
+//        User
+//
+//
+//    }
 }
