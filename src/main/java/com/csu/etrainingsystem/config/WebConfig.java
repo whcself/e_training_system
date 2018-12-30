@@ -1,6 +1,6 @@
-//package com.csu.etrainingsystem.RedisConfig;
+//package com.csu-engineer-train-front.etrainingsystem.RedisConfig;
 //
-//import com.csu.etrainingsystem.security.SecurityInterceptor;
+//import com.csu-engineer-train-front.etrainingsystem.security.SecurityInterceptor;
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.web.servlet.HandlerInterceptor;

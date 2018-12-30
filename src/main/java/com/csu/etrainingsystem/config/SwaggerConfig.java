@@ -1,4 +1,4 @@
-//package com.csu.etrainingsystem.RedisConfig;
+//package com.csu-engineer-train-front.etrainingsystem.RedisConfig;
 //
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,7 @@
 //        return new Docket(DocumentationType.SWAGGER_2)
 //                .apiInfo(apiInfo())
 //                .select()
-//                .apis(RequestHandlerSelectors.basePackage("com.csu.etrainingsystem"))
+//                .apis(RequestHandlerSelectors.basePackage("com.csu-engineer-train-front.etrainingsystem"))
 //                .paths(PathSelectors.any())
 //                .build();
 //    }
