@@ -52,22 +52,22 @@ public class ShiroConfig {
 		filterMap.put("/login", "anon");
 		//授权过滤器
 		//注意：当前授权拦截后，shiro会自动跳转到未授权页面
-		filterMap.put("/admin/**", "perms[user:admin]");
-		filterMap.put("/teacher/**", "perms[user:teacher]");
+		//filterMap.put("/admin/**", "perms[user:admin]");
+		//filterMap.put("/teacher/**", "perms[user:teacher]");
 		//管理员权限 user:admin
 		//教师权限   user:teacher
 		//教师权限中又包括加班权限/物料权限user:material/user:overwork
 		//学生权限 user:student
 		//perms参数可以多个，用逗号隔开
-		filterMap.put("/material/decrMaterialNum", "perms[user:applymaterial]");
-		filterMap.put("/purchase/addPurchase", "perms[user:purchasematerial]");
+		//filterMap.put("/material/decrMaterialNum", "perms[user:applymaterial]");
+		//filterMap.put("/purchase/addPurchase", "perms[user:purchasematerial]");
 		//filterMap.put("/material/*", "perms[user:applymaterial]");
 		//filterMap.put("/purchase/*", "perms[user:purchasematerial]");
 		filterMap.put("/swagger-ui.html", "anon");
 		filterMap.put("/swagger-resources", "anon");
 		filterMap.put("/v2/api-docs", "anon");
 		filterMap.put("/webjars/springfox-swagger-ui/**", "anon");
-		filterMap.put("/**", "authc");
+		//filterMap.put("/**", "authc");
 
 		//修改调整的登录页面
 		shiroFilterFactoryBean.setLoginUrl("/toLogin");
