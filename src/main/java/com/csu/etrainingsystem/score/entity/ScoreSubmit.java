@@ -2,10 +2,7 @@ package com.csu.etrainingsystem.score.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -15,6 +12,8 @@ import java.sql.Timestamp;
 public class ScoreSubmit implements Serializable {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer score_submit_id;
     private String batch_name;
     private String s_group_id;

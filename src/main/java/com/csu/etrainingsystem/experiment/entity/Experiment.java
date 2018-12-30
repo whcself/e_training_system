@@ -15,6 +15,7 @@ public class Experiment implements Serializable {
 
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Integer exp_id ;
     private String batch_name;
     private String template_id;

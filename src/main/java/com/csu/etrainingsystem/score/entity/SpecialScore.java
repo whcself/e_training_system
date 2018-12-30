@@ -2,10 +2,7 @@ package com.csu.etrainingsystem.score.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,6 +13,8 @@ public class SpecialScore  implements Serializable {
 
     @Column
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer sp_scoreid;//无意义,自增长
     private String tid;
     private String sid;
