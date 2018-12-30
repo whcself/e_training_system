@@ -2,6 +2,7 @@
 package com.csu.etrainingsystem.security.shiro;
 
 
+import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.session.mgt.SessionManager;
@@ -50,6 +51,8 @@ public class ShiroConfig {
 		//放行login.html页面
 		filterMap.put("/csu-engineer-train-front/**", "anon");
 		filterMap.put("/login", "anon");
+		filterMap.put("/abc", "anon");
+		filterMap.put("/tlogin", "anon");
 		//授权过滤器
 		//注意：当前授权拦截后，shiro会自动跳转到未授权页面
 		//filterMap.put("/admin/**", "perms[user:admin]");
@@ -67,7 +70,7 @@ public class ShiroConfig {
 		filterMap.put("/swagger-resources", "anon");
 		filterMap.put("/v2/api-docs", "anon");
 		filterMap.put("/webjars/springfox-swagger-ui/**", "anon");
-		//filterMap.put("/**", "authc");
+		filterMap.put("/**", "authc");
 
 		//修改调整的登录页面
 		shiroFilterFactoryBean.setLoginUrl("/toLogin");
@@ -107,10 +110,10 @@ public class ShiroConfig {
 	/**
 	 * 配置ShiroDialect，用于thymeleaf和shiro标签配合使用
 	 */
-//	@Bean
-//	public ShiroDialect getShiroDialect(){
-//		return new ShiroDialect();
-//	}
+	@Bean
+	public ShiroDialect getShiroDialect(){
+		return new ShiroDialect();
+	}
 
 	@Bean("sessionManager")
 	public SessionManager getSessionManager(@Qualifier("sessionDAO") MemorySessionDAO sessionDAO
