@@ -8,6 +8,7 @@ import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
+import com.csu.etrainingsystem.user.entity.UserRole;
 import com.csu.etrainingsystem.user.form.UserPwdForm;
 import com.csu.etrainingsystem.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,43 +32,57 @@ public class UserService {
 
         this.teacherService = teacherService;
     }
+
     @Transactional
     public void changePassword(HttpSession session, String newPassword) {
-        User user = (User) session.getAttribute ("user");
-        user.setPwd (newPassword);
-        userRepository.saveAndFlush (user);
+        User user = (User) session.getAttribute("user");
+        user.setPwd(newPassword);
+        userRepository.saveAndFlush(user);
     }
 
     @Transactional
-    public CommonResponseForm changePwd(UserPwdForm[] forms){
+    public CommonResponseForm cPassword(HttpSession session, String pwd) {
 
-        try{
-            for(UserPwdForm form:forms){
-                User user=userRepository.findUserByAccount(form.getId());
+        User user = UserRole.getUser(session);
+        if (user == null) {
+            return CommonResponseForm.of400("用户未登录");
+        } else {
+            user.setPwd(pwd);
+            return CommonResponseForm.of204("修改成功");
+        }
+
+    }
+
+    @Transactional
+    public CommonResponseForm changePwd(UserPwdForm[] forms) {
+
+        try {
+            for (UserPwdForm form : forms) {
+                User user = userRepository.findUserByAccount(form.getId());
                 user.setPwd(form.getPwd());
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-       return CommonResponseForm.of204("修改成功 共修改："+forms.length+"条");
+        return CommonResponseForm.of204("修改成功 共修改：" + forms.length + "条");
 
     }
 
     @Transactional
     public User getUser(String account) {
 
-        return userRepository.findUserByAccount (account);
+        return userRepository.findUserByAccount(account);
     }
 
     @Transactional
     public void addUser(User user) {
-        this.userRepository.save (user);
+        this.userRepository.save(user);
     }
 
     @Transactional
     public void updateUser(User user) {
-        this.userRepository.saveAndFlush (user);
+        this.userRepository.saveAndFlush(user);
     }
 
     /**
@@ -77,29 +92,29 @@ public class UserService {
      */
     @Transactional
     public void deleteUser(String id) {
-        User user = getUser (id);
+        User user = getUser(id);
         //如果已经删除或者用户不存在就返回
         if (user == null) return;
-        user.setDel_status (true);
-        updateUser (user);
-        if (user.getRole ().equals ("admin")) {
-            Admin admin = this.adminService.getAdminById (id);
+        user.setDel_status(true);
+        updateUser(user);
+        if (user.getRole().equals("admin")) {
+            Admin admin = this.adminService.getAdminById(id);
             if (admin != null) {
-                this.adminService.deleteAdmin (id);
+                this.adminService.deleteAdmin(id);
             }
         }
-        if (user.getRole ().equals ("teacher")) {
-            Teacher teacher = this.teacherService.getTeacher (id);
+        if (user.getRole().equals("teacher")) {
+            Teacher teacher = this.teacherService.getTeacher(id);
             if (teacher != null) {
-                String []ids=new String[1];
-                ids[0]=id;
-                this.teacherService.deleteTeacher (ids);
+                String[] ids = new String[1];
+                ids[0] = id;
+                this.teacherService.deleteTeacher(ids);
             }
         }
-        if (user.getRole ().equals ("student")) {
-            Student student = this.studentService.getStudentById (id);
+        if (user.getRole().equals("student")) {
+            Student student = this.studentService.getStudentById(id);
             if (student != null) {
-                this.studentService.deleteById (id);
+                this.studentService.deleteById(id);
             }
         }
     }
