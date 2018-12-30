@@ -5,6 +5,8 @@ import com.csu.etrainingsystem.student.entity.StudentGroup;
 import com.csu.etrainingsystem.student.entity.StudentGroupId;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
 
+import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.service.UserService;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
@@ -33,9 +35,11 @@ public class ExcelPort {
 
 
     private static StudentGroupService studentGroupService;
+    private static UserService userService;
 
     @Autowired
-    public ExcelPort(StudentGroupService studentGroupService) {
+    public ExcelPort(UserService userService,StudentGroupService studentGroupService) {
+        ExcelPort.userService =userService;
         ExcelPort.studentGroupService = studentGroupService;
     }
 
@@ -154,8 +158,15 @@ public class ExcelPort {
             case "学院":
                 student.setDepart(value);
                 break;
+            case "密码":
+//                setPass(student,value);
 
 
         }
     }
+//    private static void setPass(Student student,String pwd){
+//        User
+//
+//
+//    }
 }
