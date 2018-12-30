@@ -92,11 +92,19 @@ public class LoginController {
 	@RequestMapping("/logout")
 	@ResponseBody
 	public CommonResponseForm loginout(HttpSession session){
+		User user=null;
 		//1.获取Subject 如果不存在就创建并且绑定到当前线程,如果已经存在就从当前线程拿出来就行了
-		Subject subject = SecurityUtils.getSubject();
-		User user= UserRole.getUser (session);
-		subject.logout ();
-		return  CommonResponseForm.of200 ("退出登录成功",user.getAccount ());
+		try {
+			Subject subject = SecurityUtils.getSubject();
+			user= UserRole.getUser (session);
+			subject.logout ();
+		}catch (Exception e){
+			e.printStackTrace ();
+		}finally {
+			return  CommonResponseForm.of204 ("退出登录成功");
+		}
+
+
 	}
 	//tologin
 
