@@ -66,11 +66,12 @@ public class ShiroConfig {
 		//filterMap.put("/purchase/addPurchase", "perms[user:purchasematerial]");
 		//filterMap.put("/material/*", "perms[user:applymaterial]");
 		//filterMap.put("/purchase/*", "perms[user:purchasematerial]");
+		//filterMap.put("/purchase/*", "perms[user:purchasematerial]");
 		filterMap.put("/swagger-ui.html", "anon");
 		filterMap.put("/swagger-resources", "anon");
 		filterMap.put("/v2/api-docs", "anon");
 		filterMap.put("/webjars/springfox-swagger-ui/**", "anon");
-		filterMap.put("/**", "authc");
+		//filterMap.put("/**", "authc");
 
 		//修改调整的登录页面
 		shiroFilterFactoryBean.setLoginUrl("/toLogin");
