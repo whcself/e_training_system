@@ -6,6 +6,7 @@ import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.entity.UserRole;
 import com.csu.etrainingsystem.user.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ConcurrentAccessException;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,14 +89,23 @@ public class LoginController {
 		}
 	}
 	//退出登录
+	@RequestMapping("/logout")
+	@ResponseBody
+	public CommonResponseForm loginout(HttpSession session){
+		//1.获取Subject 如果不存在就创建并且绑定到当前线程,如果已经存在就从当前线程拿出来就行了
+		Subject subject = SecurityUtils.getSubject();
+		User user= UserRole.getUser (session);
+		subject.logout ();
+		return  CommonResponseForm.of200 ("退出登录成功",user);
+	}
 	//tologin
-	//noauth
-	//
+
 	@RequestMapping("/toLogin")
 	@ResponseBody
 	public CommonResponseForm toLogin(){
 		return  CommonResponseForm.of400 ("用户未登录");
 	}
+	//noauth
 	@RequestMapping("/noAuth")
 	@ResponseBody
 	public CommonResponseForm onAuth(){
