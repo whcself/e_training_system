@@ -1,6 +1,12 @@
 package com.csu.etrainingsystem.security;
 
+import com.csu.etrainingsystem.administrator.service.AdminService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.student.service.StudentService;
+import com.csu.etrainingsystem.teacher.entity.Teacher;
+import com.csu.etrainingsystem.teacher.service.TeacherService;
+import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ConcurrentAccessException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -8,6 +14,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +31,14 @@ import java.util.Map;
 
 @Controller
 public class LoginController {
+	@Autowired
+	private UserService  userService;
+	@Autowired
+	private TeacherService teacherService;
+	@Autowired
+	private AdminService adminService;
+	@Autowired
+	private StudentService studentService;
 
 
 	/**
@@ -46,8 +61,22 @@ public class LoginController {
 			subject.login(token);
 
 			//登录成功
+			User user=userService.getUser (name);
+			String realName="";
+			if (user.getRole ().equals ("teacher")){
+				realName=teacherService.getTeacher (name).getTname ();
+			}
+			else if (user.getRole ().equals ("admin")){
+				realName=adminService.getAdminById (name).getAid ();
+			}
+			else if (user.getRole ().equals ("student")){
+				realName=studentService.getStudentById (name).getSname ();
+
+			}
 			Map<String,String> m=new HashMap<String,String>();
 			m.put ("id",name);//name即是id
+			m.put ("身份",user.getRole ());
+			m.put ("姓名",realName);
 			return CommonResponseForm.of200 ("登录成功",m);
 		} catch (UnknownAccountException e) {
 			return CommonResponseForm.of400 ("用户不存在");
