@@ -96,7 +96,7 @@ public class LoginController {
 		Subject subject = SecurityUtils.getSubject();
 		User user= UserRole.getUser (session);
 		subject.logout ();
-		return  CommonResponseForm.of200 ("退出登录成功",user);
+		return  CommonResponseForm.of200 ("退出登录成功",user.getAccount ());
 	}
 	//tologin
 
