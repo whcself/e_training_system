@@ -41,14 +41,17 @@ public class UserService {
     }
 
     @Transactional
-    public CommonResponseForm cPassword(HttpSession session, String pwd) {
+    public CommonResponseForm cPassword(HttpSession session, String old, String pwd) {
 
         User user = UserRole.getUser(session);
         if (user == null) {
             return CommonResponseForm.of400("用户未登录");
-        } else {
+        } else if (old.equals(user.getPwd())) {
             user.setPwd(pwd);
+            userRepository.save(user);
             return CommonResponseForm.of204("修改成功");
+        } else {
+            return CommonResponseForm.of400("旧密码错误");
         }
 
     }
@@ -60,6 +63,7 @@ public class UserService {
             for (UserPwdForm form : forms) {
                 User user = userRepository.findUserByAccount(form.getId());
                 user.setPwd(form.getPwd());
+                userRepository.save(user);
             }
 
         } catch (Exception e) {
