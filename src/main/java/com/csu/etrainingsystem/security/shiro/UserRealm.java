@@ -60,7 +60,8 @@ public class UserRealm extends AuthorizingRealm {
         if (user.getRole ().equals ("admin")) {
 
             info.addStringPermission ("user:admin");
-            info.addStringPermission ("user:material");
+            info.addStringPermission ("user:purchasematerial");
+            info.addStringPermission ("user:applymaterial");
             info.addStringPermission ("user:overwork");
             info.addStringPermission ("user:teacher");
             info.addStringPermission ("user:student");
@@ -71,7 +72,8 @@ public class UserRealm extends AuthorizingRealm {
             Teacher teacher = teacherService.getTeacher (user.getAccount ());
             if (teacher != null) {
                 info.addStringPermission ("user:teacher");
-                if (teacher.getMaterial_privilege () == 1) info.addStringPermission ("user:material");
+                if (teacher.getMaterial_privilege () == 1) info.addStringPermission ("user:applymaterial");
+                else if(teacher.getMaterial_privilege () == 2)info.addStringPermission ("user:purchasematerial");
                 if (teacher.getOvertime_privilege () == 1) info.addStringPermission ("user:overwork");
             }
         }

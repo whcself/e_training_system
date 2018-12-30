@@ -59,10 +59,10 @@ public class ShiroConfig {
 		//教师权限中又包括加班权限/物料权限user:material/user:overwork
 		//学生权限 user:student
 		//perms参数可以多个，用逗号隔开
-		//filterMap.put("/material/decrMaterialNum", "perms[user:material]");
-		//filterMap.put("/purchase/addPurchase", "perms[user:material]");
-		//filterMap.put("/material/*", "perms[user:material]");
-		//filterMap.put("/purchase/*", "perms[user:material]");
+		//filterMap.put("/material/decrMaterialNum", "perms[user:applymaterial]");
+		//filterMap.put("/purchase/addPurchase", "perms[user:purchasematerial]");
+		//filterMap.put("/material/*", "perms[user:applymaterial]");
+		//filterMap.put("/purchase/*", "perms[user:purchasematerial]");
 		filterMap.put("/swagger-ui.html", "anon");
 		filterMap.put("/swagger-resources", "anon");
 		filterMap.put("/v2/api-docs", "anon");

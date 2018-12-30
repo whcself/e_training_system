@@ -25,7 +25,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase,String> {
     Date findMinTime();
     @Query(value="select * from purchase where" +
             " purchase.tname like ?  and purchase.clazz like?"
-            +" and  purchase.pur_time between ? and ? "
+            +" and  purchase.pur_time between ? and ? order by purchase.pur_time desc "
             ,nativeQuery = true)
     Iterable<Purchase> getSelectedPurchase(String tname ,String clazz,String startTime,String endTime);
 
