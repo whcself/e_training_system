@@ -74,5 +74,11 @@ public class UserController {
         return userService.cPassword(session,old,pwd);
     }
 
+    @PostMapping("getInfo")
+    public CommonResponseForm getInfo(HttpSession session){
+        return userService.getInfo(session);
+
+    }
+
 
 }

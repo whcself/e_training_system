@@ -109,4 +109,8 @@ public class TeacherService {
             return teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege);
         }
     }
+
+//    public List<Teacher> findTeachersByGroup(String groupName){
+//        teacherRepository.
+//    }
 }

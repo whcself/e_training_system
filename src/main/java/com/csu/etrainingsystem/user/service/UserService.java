@@ -1,6 +1,7 @@
 package com.csu.etrainingsystem.user.service;
 
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.service.AdminService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.HashMap;
 
 @Service
 public class UserService {
@@ -23,9 +25,11 @@ public class UserService {
     private final AdminService adminService;
     private final StudentService studentService;
     private final TeacherService teacherService;
+    private final TeacherRepository teacherRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, AdminService adminService, StudentService studentService, TeacherService teacherService) {
+    public UserService(TeacherRepository teacherRepository,UserRepository userRepository, AdminService adminService, StudentService studentService, TeacherService teacherService) {
+        this.teacherRepository=teacherRepository;
         this.userRepository = userRepository;
         this.adminService = adminService;
         this.studentService = studentService;
@@ -53,6 +57,24 @@ public class UserService {
         } else {
             return CommonResponseForm.of400("旧密码错误");
         }
+
+    }
+
+    public CommonResponseForm getInfo(HttpSession session){
+        HashMap<String,String> map=new HashMap<>();
+        User user=UserRole.getUser(session);
+        String role=user.getRole();
+        String id=user.getAccount();
+        if(role.equals("教师")){
+            Teacher teacher=teacherRepository.findTeacherByTid(id);
+            int material=teacher.getMaterial_privilege();
+            int overwork=teacher.getOvertime_privilege();
+            String role2=teacher.getRole();
+            map.put("加班权限", String.valueOf(material));
+            map.put("物料权限",String .valueOf(overwork));
+            map.put("角色",role2);
+        }
+        return CommonResponseForm.of200("查询成功",map);
 
     }
 
