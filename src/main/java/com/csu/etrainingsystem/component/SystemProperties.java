@@ -6,10 +6,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemProperties {
     /*
-     * 如果保留{}输出结果为{com.csu.system.name}
+     * 如果保留{}输出结果为{com.csu-engineer-train-front.system.name}
      * @Value的三种写法:"#{}";"${}";""
      */
-    @Value("com.csu.system.name")
+    @Value("com.csu-engineer-train-front.system.name")
     private String name;
 
     public String getName() {
