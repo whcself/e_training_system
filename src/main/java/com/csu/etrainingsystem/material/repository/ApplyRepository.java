@@ -13,7 +13,7 @@ public interface ApplyRepository extends JpaRepository<Apply,Integer> {
 
     @Query(value="select * from material_apply where" +
             " material_apply.sid like ? and material_apply.sname like? and material_apply.clazz like?"
-            +" and  material_apply.apply_time between ? and ? "
+            +" and  material_apply.apply_time between ? and ? order by material_apply.apply_time desc"
             ,nativeQuery = true)
     Iterable<Apply> findAplyBySidAndSnameAndClazzAndTime(String sid,String sname ,String clazz,String startTime,String endTime);
 
