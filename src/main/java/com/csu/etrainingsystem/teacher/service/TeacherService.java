@@ -6,6 +6,8 @@ import com.csu.etrainingsystem.teacher.entity.TeacherAndGroup;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroupId;
 import com.csu.etrainingsystem.teacher.repository.T_Group_ConnRepository;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
+import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +20,13 @@ public class TeacherService {
     private  final TeacherRepository teacherRepository;
     private  final TeacherGroupService teacherGroupService;
     private final T_Group_ConnRepository tGroupConnRepository;
+    private  final UserService userService;
     @Autowired
-    public TeacherService(TeacherRepository teacherRepository, TeacherGroupService teacherGroupService, T_Group_ConnRepository tGroupConnRepository) {
+    public TeacherService(TeacherRepository teacherRepository, TeacherGroupService teacherGroupService, T_Group_ConnRepository tGroupConnRepository, UserService userService) {
         this.teacherRepository = teacherRepository;
         this.teacherGroupService = teacherGroupService;
         this.tGroupConnRepository = tGroupConnRepository;
+        this.userService = userService;
     }
 
     @Transactional
@@ -35,7 +39,13 @@ public class TeacherService {
         teacherGroupId.setTid (teacher.getTid ());
         teacherGroupId.setT_group_id (t_group_id);
         teacherAndGroup.setTeacherGroupId (teacherGroupId);
+        User user=new User();
+        user.setAccount (teacher.getTid ());
+        user.setPwd ("123456");
+        user.setRole ("teacher");
+        this.userService.addUser (user);
         tGroupConnRepository.save (teacherAndGroup);
+
         }
     }
 

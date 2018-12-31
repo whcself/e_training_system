@@ -5,7 +5,6 @@ import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.overwork.service.Overwork_applyService;
-import com.csu.etrainingsystem.procedure.entity.Proced_template;
 import com.csu.etrainingsystem.procedure.repository.ProcedTemplateRepository;
 import com.csu.etrainingsystem.score.entity.SpecialScore;
 import com.csu.etrainingsystem.score.service.ScoreService;
@@ -14,6 +13,8 @@ import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.form.StudentInfoForm;
 import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
+import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.service.UserService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -37,15 +38,17 @@ public class StudentService {
     private final SpStudentRepository spStudentRepository;
     private final ExperimentService experimentService;
     private final ProcedTemplateRepository procedTemplateRepository;
+    private  final UserService userService;
 
     @Autowired
-    public StudentService(ProcedTemplateRepository procedTemplateRepository, StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository, ExperimentService experimentService) {
+    public StudentService(ProcedTemplateRepository procedTemplateRepository, StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository, ExperimentService experimentService, UserService userService) {
         this.procedTemplateRepository = procedTemplateRepository;
         this.studentRepository = studentRepository;
         this.scoreService = scoreService;
         this.overwork_applyService = overwork_applyService;
         this.spStudentRepository = spStudentRepository;
         this.experimentService = experimentService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -55,6 +58,11 @@ public class StudentService {
 
     @Transactional
     public void addStudent(Student student) {
+        User user=new User ();
+        user.setRole ("student");
+        user.setAccount (student.getSid ());
+        user.setPwd ("123456");
+        userService.addUser (user);
         studentRepository.save(student);
     }
 

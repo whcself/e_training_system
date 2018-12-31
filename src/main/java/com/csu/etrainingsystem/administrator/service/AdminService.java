@@ -13,6 +13,8 @@ import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
 import com.csu.etrainingsystem.teacher.entity.Marking;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
+import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.service.UserService;
 import com.csu.etrainingsystem.util.ExcelPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,9 +36,10 @@ public class AdminService {
     private final ProcedureService procedureService;
     private final MarkingService markingService;
     private final StudentService studentService;
+    private final UserService userService;
 private final SemesterRepository semesterRepository;
     @Autowired
-    public AdminService(AdminRepository adminRepository,SemesterRepository semesterRepository, BatchRepository batchRepository, StudentGroupService studentGroupService, ExperimentService experimentService, ProcedureService procedureService, MarkingService markingService, StudentService studentService) {
+    public AdminService(AdminRepository adminRepository, SemesterRepository semesterRepository, BatchRepository batchRepository, StudentGroupService studentGroupService, ExperimentService experimentService, ProcedureService procedureService, MarkingService markingService, StudentService studentService, UserService userService) {
         this.semesterRepository=semesterRepository;
         this.adminRepository = adminRepository;
         this.batchRepository = batchRepository;
@@ -45,6 +48,7 @@ private final SemesterRepository semesterRepository;
         this.procedureService = procedureService;
         this.markingService = markingService;
         this.studentService = studentService;
+        this.userService = userService;
     }
 
     /**
@@ -54,6 +58,11 @@ private final SemesterRepository semesterRepository;
      */
     @Transactional
     public void save(Admin admin) {
+        User user=new User ();
+        user.setRole ("admin");
+        user.setAccount (admin.getAid ());
+        user.setPwd ("123456");
+        userService.addUser (user);
         adminRepository.save(admin);
     }
 
