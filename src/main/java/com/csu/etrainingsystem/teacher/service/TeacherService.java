@@ -58,14 +58,17 @@ public class TeacherService {
         return teacherRepository.findAllTeacher();}
 
     @Transactional
-    public void updateTeacher(Teacher teacher){teacherRepository.saveAndFlush(teacher);}
+    public void updateTeacher(Teacher teacher,String t_group_id){
+        tGroupConnRepository.modifyTeacherGroupByTidSQL (t_group_id,teacher.getTid ());
+        teacherRepository.saveAndFlush(teacher);
+    }
 
     @Transactional
     public void deleteTeacher(String[] tids){
         for (String tid : tids) {
             Teacher teacher=getTeacher(tid);
             teacher.setDel_status(true);
-            updateTeacher(teacher);
+            updateTeacher(teacher,null);
             //删除这个老师在teachergroup中的记录
             this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
         }
