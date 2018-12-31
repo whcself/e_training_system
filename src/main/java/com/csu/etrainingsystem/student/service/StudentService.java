@@ -14,6 +14,7 @@ import com.csu.etrainingsystem.student.form.StudentInfoForm;
 import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
 import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.repository.UserRepository;
 import com.csu.etrainingsystem.user.service.UserService;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -38,17 +39,17 @@ public class StudentService {
     private final SpStudentRepository spStudentRepository;
     private final ExperimentService experimentService;
     private final ProcedTemplateRepository procedTemplateRepository;
-    private  final UserService userService;
+    private  final UserRepository userRepository;
 
     @Autowired
-    public StudentService(ProcedTemplateRepository procedTemplateRepository, StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository, ExperimentService experimentService, UserService userService) {
+    public StudentService(ProcedTemplateRepository procedTemplateRepository, StudentRepository studentRepository, ScoreService scoreService, Overwork_applyService overwork_applyService, SpStudentRepository spStudentRepository, ExperimentService experimentService, UserRepository userRepository) {
         this.procedTemplateRepository = procedTemplateRepository;
         this.studentRepository = studentRepository;
         this.scoreService = scoreService;
         this.overwork_applyService = overwork_applyService;
         this.spStudentRepository = spStudentRepository;
         this.experimentService = experimentService;
-        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -62,7 +63,7 @@ public class StudentService {
         user.setRole ("student");
         user.setAccount (student.getSid ());
         user.setPwd ("123456");
-        userService.addUser (user);
+        userRepository.save (user);
         studentRepository.save(student);
     }
 
