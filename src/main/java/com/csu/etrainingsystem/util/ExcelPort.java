@@ -102,7 +102,7 @@ public class ExcelPort {
                     //进入到一个cell，判断string还是numeric
                     if (cell.getCellType() == CellType.STRING) {
                         String value = cell.getStringCellValue();
-//                        System.out.print(value + "\t");
+                        System.out.print(value + "&&&&");
                         setPro(cell_colName, value, student);
                     } else if (cell.getCellType() == CellType.NUMERIC) {
                         CellStyle style = cell.getCellStyle();

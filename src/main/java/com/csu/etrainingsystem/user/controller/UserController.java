@@ -64,16 +64,30 @@ public class UserController {
         return CommonResponseForm.of204("修改密码成功");
     }
 
+    /**
+     * @apiNote 根据ids，重置密码
+     * @param forms 包括id和密码
+     */
     @PostMapping("/changePwd")
     public CommonResponseForm changePwd(@RequestBody UserPwdForm[] forms){
         return userService.changePwd(forms);
     }
 
+    /**
+     * @apiNote 修改密码
+     * @param session session
+     * @param old 旧密码
+     * @param pwd 新密码
+     */
     @PostMapping("/changePwd2")
     public CommonResponseForm changePwd2(HttpSession session,String old,String pwd){
         return userService.cPassword(session,old,pwd);
     }
 
+    /**
+     * @apiNote 我的信息
+     * @param session session
+     */
     @PostMapping("getInfo")
     public CommonResponseForm getInfo(HttpSession session){
         return userService.getInfo(session);
