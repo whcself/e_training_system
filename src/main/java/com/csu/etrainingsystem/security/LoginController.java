@@ -1,5 +1,6 @@
 package com.csu.etrainingsystem.security;
 
+import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.service.AdminService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.student.service.StudentService;
@@ -62,15 +63,30 @@ public class LoginController {
 		//3.执行登录方法
 		try {
 			subject.login(token);
+			System.out.println (subject.getSession ().getAttribute ("applymaterial"));
 
 			//登录成功
 			User user=userService.getUser (name);
 			String realName="";
 			if (user.getRole ().equals ("teacher")){
-				realName=teacherService.getTeacher (name).getTname ();
+				Teacher teacher= teacherService.getTeacher (name);
+				realName=teacher.getTname ();
+				if (teacher.getMaterial_privilege () == 1){
+					subject.getSession ().setAttribute ("material","1");
+				}
+				else if(teacher.getMaterial_privilege () == 2)
+				{
+					subject.getSession ().setAttribute ("material","2");
+				}
+				if (teacher.getOvertime_privilege () == 1){
+					subject.getSession ().setAttribute ("overwork","1");
+				}
 			}
 			else if (user.getRole ().equals ("admin")){
-				realName=adminService.getAdminById (name).getAid ();
+				Admin admin =adminService.getAdminById (name);
+				subject.getSession ().setAttribute ("material","2");
+				subject.getSession ().setAttribute ("overwork","1");
+				realName=admin.getAid ();
 			}
 			else if (user.getRole ().equals ("student")){
 				realName=studentService.getStudentById (name).getSname ();
@@ -80,6 +96,7 @@ public class LoginController {
 			m.put ("id",name);//name即是id
 			m.put ("身份",user.getRole ());
 			m.put ("姓名",realName);
+			subject.getSession ().setAttribute ("name",realName);
 			return CommonResponseForm.of200 ("登录成功",m);
 		} catch (UnknownAccountException e) {
 			return CommonResponseForm.of400 ("用户不存在");
@@ -110,9 +127,8 @@ public class LoginController {
 	//tologin
 
 	@RequestMapping("/toLogin")
-	@ResponseBody
-	public CommonResponseForm toLogin(){
-		return  CommonResponseForm.of400 ("用户未登录");
+	public String toLogin(){
+		return  "redirect:/csu-engineer-train-front/login.html";
 	}
 	//noauth
 	@RequestMapping("/noAuth")

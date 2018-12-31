@@ -1,219 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8">
-    <title>教师端界面</title>
-    <!-- jquery -->
-    <script type="text/javascript" src="../js/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/logout.js"></script>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-    <script type="text/javascript" src="../js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="../manager/css/aside.css">
-    <link rel="stylesheet" type="text/css" href="../manager/css/header.css">
-    <link rel="stylesheet" type="text/css" href="../manager/css/materal.css">
-    <link rel="stylesheet" href="../css/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="shortcut icon" href="../img/fav.png" />
-    <!-- 日期时间插件 flatpickr.js -->
-    <link href="https://cdn.bootcss.com/flatpickr/4.5.0/flatpickr.min.css" rel="stylesheet">
-    <script src="https://cdn.bootcss.com/flatpickr/4.5.0/flatpickr.min.js"></script>
-    <!-- 日期时间插件 flatpickr.js 结束 -->
-    <!-- sweetalert2 -->
-    <link rel="stylesheet" type="text/css" href="../css/sweetalert2.css">
-    <script async type="text/javascript" src="../js/sweetalert2.js"></script>
-    <!-- sweetalert2结束 -->
+<meta charset="UTF-8">
+<title>测试Thymeleaf的使用</title>
+    <style>
+        .web_show {
+            color: red;
+        }
+    </style>
 </head>
 <body>
-<header>
-    <!-- <iframe src="./header.html" width="100%" height="120px;" frameborder="no"></iframe> -->
-    <nav>
-        <div id="nav-left">
-            <a href=""><img src="../img/logo.svg" alt="图标" id="main-icon"></a>
-            <span id="nav-name">中南大学工程训练中心教学管理系统--教师端</span>
-        </div>
-        <a class="btn btn-default get-out" onclick="logout()"><img src="../manager/img/out.svg" class="out-icon">退  出</a>
-    </nav>
-</header>
-<!-- 面包屑导航 -->
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">教师端</a></li>
-        <li class="breadcrumb-item"><a href="#">物料管理</a></li>
-        <li class="breadcrumb-item active">物料申购</li>
-    </ol>
-</nav>
-<!-- 面包屑导航结束 -->
-<!-- 主体部分 -->
-<div class="mainbody row">
-    <aside class="col-xs-2 col-sm-2">
-        <!-- <iframe src="./aside.html" width="100%" height="700px;" frameborder="no"></iframe> -->
-        <div id="aside">
-            <ul class="list-group">
-                <li class="list-group-item"><img class="icon" src="../manager/img/paike.svg"> 实习课程
-                    <ul>
-                        <li><a href="./teach-schedule.html">教学安排</a></li>
-                    </ul>
-                </li>
-                <li class="list-group-item"><img class="icon" src="../manager/img/score.svg"> 成绩管理
-                    <ul>
-                        <li><a href="./operate-score.html">操作评分</a></li>
-                    </ul>
-                </li>
-                <li class="list-group-item"><img class="icon" src="../manager/img/extra-work.svg"> 开放情况
-                    <ul>
-                        <li><a href="./extra-record.html">开放记录</a></li>
-                    </ul>
-                </li>
-                <li class="list-group-item"><img class="icon" src="../manager/img/materal-manage.svg"> 物料管理
-                    <ul>
-                        <li><a href="./materal-record.html">物料登记</a></li>
-                        <li class="left-active"><a href="./materal-buy.html">物料申购</a></li>
-                    </ul>
-                </li>
-                <li class="list-group-item"><img class="icon" src="./img/setup.svg"> 个人设置
-                    <ul>
-                        <li><a href="./setup.html">密码修改</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </aside>
-    <div class="right col-xs-10 col-sm-10">
+<!--<h3 th:text="${name}"></h3>-->
 
-        <!-- 物料申购 -->
-        <div class="card" shiro:hasPermission="user:purchasematerial">
-            <div class="card-header">
-                <h5>物料申购</h5>
-            </div>
-            <div class="card-body" shiro:hasPermission="user:purchasematerial">
-                <h3 class="text-center" shiro:hasPermission="user:purchasematerial">库存</h3>
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>物料种类&emsp;<a class="fa fa-plus-square-o" data-toggle="modal" data-target="#add_meterialModel"></th>
-
-                        <!-- 添加物料 Modal -->
-                        <div class="modal fade" id="add_meterialModel" tabindex="-1" role="dialog" aria-labelledby="add_meterialModelTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="add_meterialModelTitle">添加物料种类</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form>
-                                            <div class="form-group row">
-                                                <label class="col-sm-3 col-form-label" for="new_semester">新物料名：</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" placeholder="新物料名" id="new_semester">
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                                        <button type="button" class="btn btn-primary" onclick="addOneMateral()" data-dismiss="modal">确定</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.modal -->
-
-                        <th>存量</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody id="materal_buy_list">
-                    <!-- <tr>
-                        <td>铝棒(根x2m)</td>
-                        <td>20</td>
-                    </tr>
-                    <tr>
-                        <td>轴承23(个)</td>
-                        <td>2</td>
-                    </tr> -->
-                    </tbody>
-                </table>
-                <hr>
-
-                <div class="row fill-in">
-
-                    <select class="form-control custom-select col-xs-2 col-sm-2" id="select_meterial">
-                        <!-- <option>选择物料种类</option>
-                        <option>铝棒(根x2m)</option>
-                        <option>轴承23(个)</option> -->
-                    </select>
-                    <span class="col-xs-1 col-sm-1"></span>
-                    <label class="my-1 mr-2">申购数：</label>
-                    <input type="text" name="" class="form-control col-xs-2 col-sm-2" placeholder="单行输入" id="meteral_buy_num">
-                </div>
-                <div class="row fill-check float-right">
-                    <input type="button" class="btn btn-outline-success" onclick="addPurchase()" value="确&emsp;认">
-                </div>
-            </div>
-        </div>
-        <!-- 物料申购结束 -->
-
-        <!-- 申购记录 -->
-        <div class="card">
-            <div class="card-header">
-                <h5>申购记录</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <input class="flatpickr mycalendar form-control col-xs-2 col-sm-2 left-flatpickr" name="start-time" placeholder="开始日期" id="star_time">
-                    <span class="form-control col-xs-1 col-sm-1 time-last">至</span>
-                    <input class="flatpickr mycalendar form-control col-xs-2 col-sm-2" name="end-time" placeholder="结束时间" id="end_time">
-                    <select class="form-control custom-select col-xs-2 col-sm-2 select-person" id="buy_history_selset_meterail">
-                        <!-- <option>物料种类</option>
-                        <option>铝棒(根x2m)</option>
-                        <option>轴承23(个)</option> -->
-                    </select>
-                    <select class="form-control custom-select col-xs-2 col-sm-2 select-person" id="buy_history_selset_person">
-                        <option>申购人</option>
-                        <!-- <option>张三</option>
-                        <option>李四</option>
-                        <option>王五</option> -->
-                    </select>
-                    <input type="button" name=""class="btn btn-success float-right" value="查询" onclick="getSelectedPurchase()">
-                </div>
-
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>申购时间</th>
-                        <th>申购人</th>
-                        <th>物料种类</th>
-                        <th>物料数量</th>
-                    </tr>
-                    </thead>
-                    <tbody id="buy_history_body">
-                    <!-- <tr>
-                        <td>2018-10-05 12:12</td>
-                        <td>张三</td>
-                        <td>铝棒(根x2m)</td>
-                        <td>200</td>
-                    </tr>
-                    <tr>
-                        <td>2018-10-08 10:23</td>
-                        <td>王五</td>
-                        <td>轴承23(个)</td>
-                        <td>18</td>
-                    </tr> -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- 申购记录结束 -->
-
-    </div>
+<hr/>
+<div class="web_show" shiro:hasPermission="user:admin">
+申购物料： <a href="add">添加物料</a><br/>
 </div>
-<!-- 主体部分结束 -->
-<script type="text/javascript">
-    $(".mycalendar").flatpickr();
-</script>
-<script type="text/javascript" src="./js/meteral-buy.js"></script>
+<div shiro:hasPermission="user:teacher">
+登记物料： <a href="update">登记物料</a><br/>
+</div>
+<a href="toLogin">登录</a>
 </body>
 </html>
