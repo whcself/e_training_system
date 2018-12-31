@@ -100,6 +100,9 @@ public class MaterialController {
                     tid = admin.getAid ();
             }
         }
+        System.out.println ("权限是:"+session.getAttribute ("material"));
+        System.out.println ("姓名是:"+session.getAttribute ("name"));
+
         apply.setTid (tid);
         materialService.addAply (apply);
         return CommonResponseForm.of204 ("派出物料成功");
