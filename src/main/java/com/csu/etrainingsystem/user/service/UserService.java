@@ -65,7 +65,7 @@ public class UserService {
         User user=UserRole.getUser(session);
         String role=user.getRole();
         String id=user.getAccount();
-        if(role.equals("教师")){
+        if(role.equals("teacher")){
             Teacher teacher=teacherRepository.findTeacherByTid(id);
             int material=teacher.getMaterial_privilege();
             int overwork=teacher.getOvertime_privilege();
@@ -73,6 +73,7 @@ public class UserService {
             map.put("加班权限", String.valueOf(material));
             map.put("物料权限",String .valueOf(overwork));
             map.put("角色",role2);
+            map.put("id",id);
         }
         return CommonResponseForm.of200("查询成功",map);
 
