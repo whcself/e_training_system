@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface GroupRepository extends JpaRepository<TeacherGroup,String> {
 
@@ -22,4 +24,7 @@ public interface GroupRepository extends JpaRepository<TeacherGroup,String> {
 
     @Query(value = "select pro_name from proced where del_status=0 and t_group_id=?1 and batch_name=\"conn\"",nativeQuery = true)
     Iterable<String>getProcedByGroup(String groupName);
+
+    @Query(value = "select distinct t_group_id from t_group_conn where tid = ?1 and del_status=0" , nativeQuery = true)
+    List<String> getAllGroupByTId(String tid);
 }

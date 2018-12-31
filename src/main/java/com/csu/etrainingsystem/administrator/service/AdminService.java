@@ -13,6 +13,8 @@ import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
 import com.csu.etrainingsystem.teacher.entity.Marking;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
+import com.csu.etrainingsystem.user.entity.User;
+import com.csu.etrainingsystem.user.repository.UserRepository;
 import com.csu.etrainingsystem.util.ExcelPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,10 +36,13 @@ public class AdminService {
     private final ProcedureService procedureService;
     private final MarkingService markingService;
     private final StudentService studentService;
-private final SemesterRepository semesterRepository;
+    private final SemesterRepository semesterRepository;
+    private final UserRepository userRepository;
+
     @Autowired
-    public AdminService(AdminRepository adminRepository,SemesterRepository semesterRepository, BatchRepository batchRepository, StudentGroupService studentGroupService, ExperimentService experimentService, ProcedureService procedureService, MarkingService markingService, StudentService studentService) {
-        this.semesterRepository=semesterRepository;
+    public AdminService(UserRepository userRepository,AdminRepository adminRepository, SemesterRepository semesterRepository, BatchRepository batchRepository, StudentGroupService studentGroupService, ExperimentService experimentService, ProcedureService procedureService, MarkingService markingService, StudentService studentService) {
+        this.userRepository=userRepository;
+        this.semesterRepository = semesterRepository;
         this.adminRepository = adminRepository;
         this.batchRepository = batchRepository;
         this.studentGroupService = studentGroupService;
@@ -89,7 +94,7 @@ private final SemesterRepository semesterRepository;
 
     @Transactional
     public void addBatch(Batch batch) {
-        String semesterName=batch.getSemester_name();
+        String semesterName = batch.getSemester_name();
         semesterRepository.save(new Semester(semesterName));
 
         batchRepository.save(batch);
@@ -173,18 +178,26 @@ private final SemesterRepository semesterRepository;
      */
     public ArrayList<Student> importStudent(MultipartFile file, String batchName) {
         ArrayList<Student> students = ExcelPort.readExcel(file, batchName);
-        for (Student student : students) studentService.addStudent(student);
+        for (Student student : students) {
+            studentService.addStudent(student);
+            User user=new User();
+            user.setAccount(student.getSid());
+            user.setRole("student");
+            user.setPwd("e10adc3949ba59abbe56e057f20f883e");
+            userRepository.save(user);
+        }
+
         return students;
     }
 
 
-    public void downloadTemplate(HttpServletRequest request, HttpServletResponse response,int way) throws IOException {
+    public void downloadTemplate(HttpServletRequest request, HttpServletResponse response, int way) throws IOException {
         OutputStream out = new BufferedOutputStream(response.getOutputStream());
         response.setHeader("Content-Disposition", "fileName=template.xlsx");
         response.setContentType("application/octet-stream;charset=UTF-8");
         String filePath;
-        if(way==1)
-             filePath = "C:\\doing\\template.xlsx";
+        if (way == 1)
+            filePath = "C:\\doing\\template.xlsx";
         else
             filePath = "C:\\doing\\ScoreTemplate.xlsx";
 //        InputStream in = new FileInputStream()

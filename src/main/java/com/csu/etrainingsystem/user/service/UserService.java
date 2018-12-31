@@ -1,6 +1,7 @@
 package com.csu.etrainingsystem.user.service;
 
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.teacher.repository.GroupRepository;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.administrator.entity.Admin;
@@ -12,12 +13,14 @@ import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.entity.UserRole;
 import com.csu.etrainingsystem.user.form.UserPwdForm;
 import com.csu.etrainingsystem.user.repository.UserRepository;
+import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -26,9 +29,12 @@ public class UserService {
     private final StudentService studentService;
     private final TeacherService teacherService;
     private final TeacherRepository teacherRepository;
+    private final GroupRepository groupRepository;
+
 
     @Autowired
-    public UserService(TeacherRepository teacherRepository,UserRepository userRepository, AdminService adminService, StudentService studentService, TeacherService teacherService) {
+    public UserService(GroupRepository groupRepository,TeacherRepository teacherRepository,UserRepository userRepository, AdminService adminService, StudentService studentService, TeacherService teacherService) {
+        this.groupRepository=groupRepository;
         this.teacherRepository=teacherRepository;
         this.userRepository = userRepository;
         this.adminService = adminService;
@@ -65,15 +71,26 @@ public class UserService {
         User user=UserRole.getUser(session);
         String role=user.getRole();
         String id=user.getAccount();
-        if(role.equals("teacher")){
+        map.put("id",id);
+
+        if(role.equals("teacher")||role.equals("admin")){
             Teacher teacher=teacherRepository.findTeacherByTid(id);
+            List<String> tGroups=groupRepository.getAllGroupByTId(id);
+            String StrGroups=StringUtils.join(tGroups, ',');
             int material=teacher.getMaterial_privilege();
             int overwork=teacher.getOvertime_privilege();
             String role2=teacher.getRole();
             map.put("加班权限", String.valueOf(material));
             map.put("物料权限",String .valueOf(overwork));
             map.put("角色",role2);
-            map.put("id",id);
+            map.put("姓名",teacher.getTname());
+            map.put("教师组",StrGroups);
+        }else if(role.equals("student")){
+            Student student=studentService.getStudentById(id);
+            map.put("班级",student.getClazz());
+            map.put("姓名",student.getSname());
+            map.put("组号",student.getS_group_id());
+            map.put("批次",student.getBatch_name());
         }
         return CommonResponseForm.of200("查询成功",map);
 
