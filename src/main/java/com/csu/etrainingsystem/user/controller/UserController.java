@@ -70,8 +70,14 @@ public class UserController {
     }
 
     @PostMapping("/changePwd2")
-    public CommonResponseForm changePwd2(HttpSession session,String pwd){
-        return userService.cPassword(session,pwd);
+    public CommonResponseForm changePwd2(HttpSession session,String old,String pwd){
+        return userService.cPassword(session,old,pwd);
+    }
+
+    @PostMapping("getInfo")
+    public CommonResponseForm getInfo(HttpSession session){
+        return userService.getInfo(session);
+
     }
 
 
