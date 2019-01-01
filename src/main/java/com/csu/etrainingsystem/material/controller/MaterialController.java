@@ -72,6 +72,7 @@ public class MaterialController {
 
         //派出物料,也就是减少物料数量
         Material material= this.materialService.getMaterial (clazz);
+       // System.out.println ("数量是"+num);
         if(material.getNum ()-num<0)return CommonResponseForm.of400 ("物料数量不足");
        material.setNum (material.getNum ()-num);
        this.materialService.updateMaterial (material);

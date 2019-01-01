@@ -9,6 +9,7 @@ import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.repository.UserRepository;
 import com.csu.etrainingsystem.user.service.UserService;
+import com.csu.etrainingsystem.util.EncryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,7 @@ public class TeacherService {
         teacherAndGroup.setTeacherGroupId (teacherGroupId);
         User user=new User();
         user.setAccount (teacher.getTid ());
-        user.setPwd ("123456");
+        user.setPwd ("e10adc3949ba59abbe56e057f20f883e");
         user.setRole ("teacher");
        this.userRepository.save (user);
         tGroupConnRepository.save (teacherAndGroup);
@@ -58,16 +59,25 @@ public class TeacherService {
         return teacherRepository.findAllTeacher();}
 
     @Transactional
-    public void updateTeacher(Teacher teacher){teacherRepository.saveAndFlush(teacher);}
+    public void updateTeacher(Teacher teacher,String t_group_id){
+       // tGroupConnRepository.modifyTeacherGroupByTidSQL (t_group_id,teacher.getTid ());
+        TeacherAndGroup tad=new TeacherAndGroup ();
+        TeacherGroupId teacherGroupId=new TeacherGroupId ();
+        teacherGroupId.setTid (teacher.getTid ());
+        teacherGroupId.setT_group_id (t_group_id);
+        tad.setTeacherGroupId (teacherGroupId);
+        tGroupConnRepository.saveAndFlush (tad);
+        teacherRepository.saveAndFlush(teacher);
+    }
 
     @Transactional
     public void deleteTeacher(String[] tids){
         for (String tid : tids) {
             Teacher teacher=getTeacher(tid);
             teacher.setDel_status(true);
-            updateTeacher(teacher);
-            //删除这个老师在teachergroup中的记录
+            this.teacherRepository.saveAndFlush (teacher);
             this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
+
         }
 
       /*

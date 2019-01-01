@@ -16,6 +16,7 @@ import com.csu.etrainingsystem.student.repository.StudentRepository;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.repository.UserRepository;
 import com.csu.etrainingsystem.user.service.UserService;
+import com.csu.etrainingsystem.util.EncryptUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -62,7 +63,7 @@ public class StudentService {
         User user=new User ();
         user.setRole ("student");
         user.setAccount (student.getSid ());
-        user.setPwd ("123456");
+        user.setPwd ("e10adc3949ba59abbe56e057f20f883e");
         userRepository.save (user);
         studentRepository.save(student);
     }
