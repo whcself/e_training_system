@@ -63,7 +63,7 @@ public class StudentService {
         User user=new User ();
         user.setRole ("student");
         user.setAccount (student.getSid ());
-        user.setPwd (EncryptUtil.encrypt ("123456"));
+        user.setPwd ("e10adc3949ba59abbe56e057f20f883e");
         userRepository.save (user);
         studentRepository.save(student);
     }

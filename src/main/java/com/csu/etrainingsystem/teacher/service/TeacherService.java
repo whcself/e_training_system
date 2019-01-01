@@ -43,7 +43,7 @@ public class TeacherService {
         teacherAndGroup.setTeacherGroupId (teacherGroupId);
         User user=new User();
         user.setAccount (teacher.getTid ());
-        user.setPwd (EncryptUtil.encrypt ("123456"));
+        user.setPwd ("e10adc3949ba59abbe56e057f20f883e");
         user.setRole ("teacher");
        this.userRepository.save (user);
         tGroupConnRepository.save (teacherAndGroup);

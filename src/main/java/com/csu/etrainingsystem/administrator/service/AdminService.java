@@ -61,7 +61,7 @@ public class AdminService {
     @Transactional
     public void save(Admin admin) {
         User user=new User ();
-        user.setPwd (EncryptUtil.encrypt ("123456"));
+        user.setPwd ("e10adc3949ba59abbe56e057f20f883e");
         user.setAccount (admin.getAid ());
         user.setRole ("admin");
         userRepository.save (user);
