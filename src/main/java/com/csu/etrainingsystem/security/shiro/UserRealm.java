@@ -78,6 +78,7 @@ public class UserRealm extends AuthorizingRealm {
                 else if(teacher.getMaterial_privilege () == 2)
                 {
                     info.addStringPermission ("user:purchasematerial");
+                    info.addStringPermission ("user:applymaterial");
                 }
                 if (teacher.getOvertime_privilege () == 1){
                     info.addStringPermission ("user:overwork");
