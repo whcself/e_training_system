@@ -69,9 +69,8 @@ public class TeacherService {
         for (String tid : tids) {
             Teacher teacher=getTeacher(tid);
             teacher.setDel_status(true);
-            updateTeacher(teacher,"");
-            //删除这个老师在teachergroup中的记录
-          //  this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
+            this.teacherRepository.saveAndFlush (teacher);
+            this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
         }
 
       /*
