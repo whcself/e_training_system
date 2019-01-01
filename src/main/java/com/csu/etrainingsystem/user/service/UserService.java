@@ -80,8 +80,8 @@ public class UserService {
             int material=teacher.getMaterial_privilege();
             int overwork=teacher.getOvertime_privilege();
             String role2=teacher.getRole();
-            map.put("加班权限", String.valueOf(material));
-            map.put("物料权限",String .valueOf(overwork));
+            map.put("加班权限", String.valueOf(overwork));
+            map.put("物料权限",String .valueOf(material));
             map.put("角色",role2);
             map.put("姓名",teacher.getTname());
             map.put("教师组",StrGroups);
