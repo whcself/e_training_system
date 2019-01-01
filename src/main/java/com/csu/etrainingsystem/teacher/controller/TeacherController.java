@@ -50,6 +50,7 @@ public class TeacherController {
     }
     @RequestMapping("/updateTeacher")
     public CommonResponseForm updateTeacher(Teacher teacher,@RequestParam(required = false) String t_group_id){
+        System.out.println (teacher.toString ()+"新的教師組是："+t_group_id);
         if (t_group_id.equals ("0"))return CommonResponseForm.of400("请选择教师组");
         teacherService.updateTeacher(teacher,t_group_id);
         return CommonResponseForm.of204("更新教师成功");
