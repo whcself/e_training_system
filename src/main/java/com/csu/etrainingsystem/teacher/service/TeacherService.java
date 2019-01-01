@@ -9,6 +9,7 @@ import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.repository.UserRepository;
 import com.csu.etrainingsystem.user.service.UserService;
+import com.csu.etrainingsystem.util.EncryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,7 @@ public class TeacherService {
         teacherAndGroup.setTeacherGroupId (teacherGroupId);
         User user=new User();
         user.setAccount (teacher.getTid ());
-        user.setPwd ("123456");
+        user.setPwd (EncryptUtil.encrypt ("123456"));
         user.setRole ("teacher");
        this.userRepository.save (user);
         tGroupConnRepository.save (teacherAndGroup);

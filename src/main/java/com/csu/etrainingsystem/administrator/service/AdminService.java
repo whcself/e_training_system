@@ -15,6 +15,7 @@ import com.csu.etrainingsystem.teacher.entity.Marking;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.repository.UserRepository;
+import com.csu.etrainingsystem.util.EncryptUtil;
 import com.csu.etrainingsystem.util.ExcelPort;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,6 +60,11 @@ public class AdminService {
      */
     @Transactional
     public void save(Admin admin) {
+        User user=new User ();
+        user.setPwd (EncryptUtil.encrypt ("123456"));
+        user.setAccount (admin.getAid ());
+        user.setRole ("admin");
+        userRepository.save (user);
         adminRepository.save(admin);
     }
 
