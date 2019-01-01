@@ -1,27 +1,20 @@
 package com.csu.etrainingsystem.administrator.controller;
 
 import com.csu.etrainingsystem.administrator.entity.Admin;
-import com.csu.etrainingsystem.administrator.entity.Batch;
 import com.csu.etrainingsystem.administrator.service.AdminService;
-import com.csu.etrainingsystem.authority.TeacherAuthority;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.teacher.entity.Marking;
-import com.csu.etrainingsystem.teacher.entity.Teacher;
-import com.csu.etrainingsystem.teacher.form.TeacherForm;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import com.csu.etrainingsystem.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Table;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -41,12 +34,14 @@ public class AdminController {
     private final AdminService adminService;
     private final TeacherService teacherService;
     private final MarkingService markingService;
+    private final UserService userService;
 
     @Autowired
-    public AdminController(AdminService adminService, TeacherService teacherService,MarkingService markingService) {
+    public AdminController(AdminService adminService, TeacherService teacherService, MarkingService markingService, UserService userService) {
         this.adminService = adminService;
         this.teacherService = teacherService;
         this.markingService = markingService;
+        this.userService = userService;
     }
 
     @PostMapping(value = "/addAdmin")
@@ -77,6 +72,7 @@ public class AdminController {
     public @ResponseBody
     CommonResponseForm deleteAdmin(@PathVariable("id") String id) {
         adminService.deleteAdmin(id);
+        userService.deleteUser (id);
         return CommonResponseForm.of204("删除管理员成功");
     }
 

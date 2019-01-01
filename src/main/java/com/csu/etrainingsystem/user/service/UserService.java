@@ -1,15 +1,12 @@
 package com.csu.etrainingsystem.user.service;
 
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.student.repository.StudentRepository;
 import com.csu.etrainingsystem.teacher.repository.GroupRepository;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import com.csu.etrainingsystem.user.entity.User;
-import com.csu.etrainingsystem.administrator.entity.Admin;
-import com.csu.etrainingsystem.administrator.service.AdminService;
 import com.csu.etrainingsystem.student.entity.Student;
-import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
-import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.entity.UserRole;
 import com.csu.etrainingsystem.user.form.UserPwdForm;
 import com.csu.etrainingsystem.user.repository.UserRepository;
@@ -25,22 +22,17 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final AdminService adminService;
-    private final StudentService studentService;
-    private final TeacherService teacherService;
+    private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
     private final GroupRepository groupRepository;
 
 
     @Autowired
-    public UserService(GroupRepository groupRepository,TeacherRepository teacherRepository,UserRepository userRepository, AdminService adminService, StudentService studentService, TeacherService teacherService) {
+    public UserService(GroupRepository groupRepository, TeacherRepository teacherRepository, UserRepository userRepository, StudentRepository studentRepository) {
         this.groupRepository=groupRepository;
         this.teacherRepository=teacherRepository;
         this.userRepository = userRepository;
-        this.adminService = adminService;
-        this.studentService = studentService;
-
-        this.teacherService = teacherService;
+        this.studentRepository = studentRepository;
     }
 
     @Transactional
@@ -86,7 +78,7 @@ public class UserService {
             map.put("姓名",teacher.getTname());
             map.put("教师组",StrGroups);
         }else if(role.equals("student")){
-            Student student=studentService.getStudentById(id);
+            Student student=studentRepository.findStudentBySid (id).get ();
             map.put("班级",student.getClazz());
             map.put("姓名",student.getSname());
             map.put("组号",student.getS_group_id());
@@ -141,25 +133,25 @@ public class UserService {
         if (user == null) return;
         user.setDel_status(true);
         updateUser(user);
-        if (user.getRole().equals("admin")) {
-            Admin admin = this.adminService.getAdminById(id);
-            if (admin != null) {
-                this.adminService.deleteAdmin(id);
-            }
-        }
-        if (user.getRole().equals("teacher")) {
-            Teacher teacher = this.teacherService.getTeacher(id);
-            if (teacher != null) {
-                String[] ids = new String[1];
-                ids[0] = id;
-                this.teacherService.deleteTeacher(ids);
-            }
-        }
-        if (user.getRole().equals("student")) {
-            Student student = this.studentService.getStudentById(id);
-            if (student != null) {
-                this.studentService.deleteById(id);
-            }
-        }
+//        if (user.getRole().equals("admin")) {
+//            Admin admin = this.adminService.getAdminById(id);
+//            if (admin != null) {
+//                this.adminService.deleteAdmin(id);
+//            }
+//        }
+//        if (user.getRole().equals("teacher")) {
+//            Teacher teacher = this.teacherService.getTeacher(id);
+//            if (teacher != null) {
+//                String[] ids = new String[1];
+//                ids[0] = id;
+//                this.teacherService.deleteTeacher(ids);
+//            }
+//        }
+//        if (user.getRole().equals("student")) {
+//            Student student = this.studentService.getStudentById(id);
+//            if (student != null) {
+//                this.studentService.deleteById(id);
+//            }
+//        }
     }
 }

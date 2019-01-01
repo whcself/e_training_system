@@ -60,7 +60,13 @@ public class TeacherService {
 
     @Transactional
     public void updateTeacher(Teacher teacher,String t_group_id){
-        tGroupConnRepository.modifyTeacherGroupByTidSQL (t_group_id,teacher.getTid ());
+       // tGroupConnRepository.modifyTeacherGroupByTidSQL (t_group_id,teacher.getTid ());
+        TeacherAndGroup tad=new TeacherAndGroup ();
+        TeacherGroupId teacherGroupId=new TeacherGroupId ();
+        teacherGroupId.setTid (teacher.getTid ());
+        teacherGroupId.setT_group_id (t_group_id);
+        tad.setTeacherGroupId (teacherGroupId);
+        tGroupConnRepository.saveAndFlush (tad);
         teacherRepository.saveAndFlush(teacher);
     }
 
@@ -71,6 +77,7 @@ public class TeacherService {
             teacher.setDel_status(true);
             this.teacherRepository.saveAndFlush (teacher);
             this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
+
         }
 
       /*

@@ -2,13 +2,13 @@ package com.csu.etrainingsystem.student.controller;
 
 
 import com.csu.etrainingsystem.form.CommonResponseForm;
-import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.form.SpStudentInfoForm;
 import com.csu.etrainingsystem.student.form.StudentInfoForm;
 import com.csu.etrainingsystem.student.service.StudentService;
+import com.csu.etrainingsystem.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
 //import org.nutz.mvc.adaptor.WhaleAdaptor;
 //import org.nutz.mvc.annotation.AdaptBy;
@@ -16,14 +16,10 @@ import io.swagger.annotations.ApiOperation;
 //import org.nutz.mvc.annotation.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,11 +29,13 @@ public class StudentController {
 
     private final StudentService studentService;
     private final ScoreService scoreService;
+    private final UserService userService;
 
     @Autowired
-    public StudentController(StudentService studentService, ScoreService scoreService) {
+    public StudentController(StudentService studentService, ScoreService scoreService, UserService userService) {
         this.studentService = studentService;
         this.scoreService = scoreService;
+        this.userService = userService;
     }
 
     /**
@@ -131,10 +129,8 @@ public class StudentController {
     @RequestMapping(value = "/deleteStudent")
     public CommonResponseForm deleteStudentById(@RequestBody String[] ids) {
         for (String id : ids) {
-            System.out.println(id);
-        }
-        for (String id : ids) {
-            this.studentService.deleteById(id);
+            this.userService.deleteUser (id);
+            this.studentService.deleteById (id);
         }
         return CommonResponseForm.of204("删除学生成功");
     }
@@ -144,6 +140,7 @@ public class StudentController {
     public CommonResponseForm deleteSpStudentById(@RequestBody String[] ids) {
         for (String id : ids) {
             this.studentService.deleteSpStudentById(id);
+            this.studentService.deleteById (id);
         }
         return CommonResponseForm.of204("删除特殊学生成功");
     }
