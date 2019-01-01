@@ -66,12 +66,10 @@ public class OverWorkController {
                                                @RequestParam(required = false) String reason,
                                                HttpSession session){
         User user=UserRole.getUser(session);
-//        if(!UserRole.hasRole(user,UserRole.STUDENT)){
-//            return CommonResponseForm.of401("没有权限");
-//        }
-        boolean isOk= overworkApplyService.addOverworkApply(begin,pro_name,duration,reason,user);
-//        if(!isOk)return CommonResponseForm.of400("提交失败");
-        return CommonResponseForm.of204("提交成功");
+        if(!UserRole.hasRole(user,UserRole.STUDENT)){
+            return CommonResponseForm.of401("没有权限");
+        }
+        return overworkApplyService.addOverworkApply(begin,pro_name,duration,reason,user);
     }
 
     /**
