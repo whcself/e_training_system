@@ -49,7 +49,7 @@ public class TeacherController {
         return CommonResponseForm.of204("删除教师成功");
     }
     @RequestMapping("/updateTeacher")
-    public CommonResponseForm updateTeacher(@RequestBody Teacher teacher,@RequestBody String t_group_id){
+    public CommonResponseForm updateTeacher(Teacher teacher,@RequestParam(required = false) String t_group_id){
         if (t_group_id.equals ("0"))return CommonResponseForm.of400("请选择教师组");
         teacherService.updateTeacher(teacher,t_group_id);
         return CommonResponseForm.of204("更新教师成功");
