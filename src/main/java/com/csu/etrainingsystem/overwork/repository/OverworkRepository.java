@@ -16,7 +16,7 @@ public interface OverworkRepository extends JpaRepository<Overwork,Integer> {
     @Query(value="select * from overwork where overwork.del_status=0",nativeQuery = true)
     Iterable<Overwork> findAllOverwork();
 
-    @Query(value = "select * from overwork where overwork_time>?1 and overwork_time<?2 and pro_name like ?3 and del_status=0",nativeQuery = true)
+    @Query(value = "select * from overwork where overwork_time>?1 and overwork_time<?2 and pro_name like ?3 and del_status=0 order by overwork_time desc",nativeQuery = true)
     List<Overwork>findOverworkByTimeOrProName(String begin,String end,String proName);
 
 }

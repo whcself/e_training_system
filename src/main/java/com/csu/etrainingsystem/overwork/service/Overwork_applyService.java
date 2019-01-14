@@ -1,5 +1,6 @@
 package com.csu.etrainingsystem.overwork.service;
 
+import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.overwork.entity.Overwork_apply;
 import com.csu.etrainingsystem.overwork.repository.Overwork_applyRepository;
 import com.csu.etrainingsystem.user.entity.User;
@@ -91,7 +92,7 @@ public class Overwork_applyService {
      * @param timeLen   时长
      * @return bool
      */
-    public boolean addOverworkApply(String beginTime, String proName, String timeLen,
+    public CommonResponseForm addOverworkApply(String beginTime, String proName, String timeLen,
                                     String reason, User user) {
 
         String sId = user.getAccount();
@@ -107,9 +108,13 @@ public class Overwork_applyService {
         overworkApply.setOverwork_time_end(end);
         overworkApply.setReason(reason);
         System.out.println(overworkApply.getApply_time() + "$$$$");
-        overwork_applyRepository.save(overworkApply);
+        try {
+            overwork_applyRepository.save(overworkApply);
+        }catch (Exception e){
+            return CommonResponseForm.of400("新增失败，可能是工序组名不对");
+        }
 
-        return true;
+        return CommonResponseForm.of204("新增成功");
     }
 
     /**
