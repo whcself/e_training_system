@@ -31,7 +31,11 @@ public interface ExperimentRepository extends JpaRepository<Experiment, Integer>
     @Query(value = "select * from experiment where experiment.calss_time=? and experiment.del_status=0", nativeQuery = true)
     Iterable<Experiment> findExperimentByClass_time(String class_time);
 
-    @Query(value = "select template_id from experiment where experiment.template_id is not null and experiment.del_status=0", nativeQuery = true)
+    /**
+     * 获取不同的模板id
+     * @return
+     */
+    @Query(value = "select distinct template_id from experiment where experiment.template_id is not null and experiment.del_status=0", nativeQuery = true)
     Iterable<String> findAllTemplate();
 
 

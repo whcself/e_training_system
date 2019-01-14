@@ -9,6 +9,7 @@ import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.entity.UserRole;
 import com.csu.etrainingsystem.user.service.UserService;
+import com.sun.deploy.net.cookie.CookieUnavailableException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.ConcurrentAccessException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -50,7 +51,8 @@ public class LoginController {
 	 */
 	@PostMapping("/login")
 	@ResponseBody
-	public CommonResponseForm login(String name, String password){
+	public CommonResponseForm login(String name, String password,HttpServletResponse response,HttpServletRequest request){
+
 		System.out.println("name="+name);
 		/**
 		 * 使用Shiro编写认证操作

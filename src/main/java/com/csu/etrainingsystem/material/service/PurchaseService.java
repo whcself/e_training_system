@@ -59,6 +59,10 @@ public class PurchaseService {
     public void  updatePurchase(Purchase Purchase) {
         this.purchaseRepository.saveAndFlush(Purchase);
     }
+    @Transactional
+    public void  deletePurchase(Purchase purchase) {
+        this.purchaseRepository.delete (purchase);
+    }
 
 
 
