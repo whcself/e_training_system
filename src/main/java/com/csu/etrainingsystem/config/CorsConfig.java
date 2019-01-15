@@ -16,7 +16,7 @@ public class CorsConfig {
         CorsConfiguration RedisConfig = new CorsConfiguration();
         RedisConfig.setAllowCredentials(true);
         // 设置你要允许的网站域名，如果全允许则设为 *
-        RedisConfig.addAllowedOrigin("localhost:8080");
+        RedisConfig.addAllowedOrigin("*");
         // 如果要限制 HEADER 或 METHOD 请自行更改
         RedisConfig.addAllowedHeader("*");
         RedisConfig.addAllowedMethod("*");
