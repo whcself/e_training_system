@@ -50,11 +50,11 @@ public class ShiroConfig {
 		Map<String,String> filterMap = new LinkedHashMap<String,String>();
 		//放行login.html页面
 		filterMap.put("/csu-engineer-train-front/login.html", "anon");
-		
-		filterMap.put("/csu-engineer-train-front/manager/*", "authc");
-		filterMap.put("/csu-engineer-train-front/teacher/*", "authc");
-		filterMap.put("/csu-engineer-train-front/student/*", "authc");
-		filterMap.put("/csu-engineer-train-front/**", "anon");
+
+	//	filterMap.put("/csu-engineer-train-front/manager/*", "authc");
+	//	filterMap.put("/csu-engineer-train-front/teacher/*", "authc");
+	//s	filterMap.put("/csu-engineer-train-front/student/*", "authc");
+	//	filterMap.put("/csu-engineer-train-front/**", "anon");
 		filterMap.put("/login", "anon");
 		filterMap.put("/abc", "anon");
 		filterMap.put("/tlogin", "anon");
@@ -67,16 +67,20 @@ public class ShiroConfig {
 		//教师权限中又包括加班权限/物料权限user:material/user:overwork
 		//学生权限 user:student
 		//perms参数可以多个，用逗号隔开
-		filterMap.put("/material/decrMaterialNum", "perms[user:applymaterial]");
-		filterMap.put("/purchase/addPurchase", "perms[user:purchasematerial]");
+	//	filterMap.put("/material/decrMaterialNum", "perms[user:applymaterial]");
+	//	filterMap.put("/purchase/addPurchase", "perms[user:purchasematerial]");
 		//filterMap.put("/material/*", "perms[user:applymaterial]");
 		//filterMap.put("/purchase/*", "perms[user:purchasematerial]");
 		//filterMap.put("/purchase/*", "perms[user:purchasematerial]");
+//		filterMap.put("/swagger-ui.html", "anon");
+//		filterMap.put("/swagger-resources", "anon");
+//		filterMap.put("/v2/api-docs", "anon");
+//		filterMap.put("/webjars/springfox-swagger-ui/**", "anon");
 		filterMap.put("/swagger-ui.html", "anon");
-		filterMap.put("/swagger-resources", "anon");
-		filterMap.put("/v2/api-docs", "anon");
-		filterMap.put("/webjars/springfox-swagger-ui/**", "anon");
-	//	filterMap.put("/**", "authc");
+		filterMap.put("/swagger-resources/**", "anon");
+		filterMap.put("/v2/**", "anon");
+		filterMap.put("/webjars/**", "anon");
+		//filterMap.put("/**", "authc");
 
 		//修改调整的登录页面
 		shiroFilterFactoryBean.setLoginUrl("/toLogin");
