@@ -69,7 +69,7 @@ public class PurchaseController {
                 tname = admin.getAid ();
         }
         Purchase purchase=new Purchase();
-        purchase.setTname (tname);
+        purchase.setApply_tname (tname);
         //申购时间
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
         String time= format.format (new Date ());
@@ -93,6 +93,13 @@ public class PurchaseController {
 
         return CommonResponseForm.of204 ("补充物料成功");
     }
+    @ApiOperation(value = "审核购买记录")
+    @RequestMapping(value ="/vertifyPurchase")
+    public CommonResponseForm vertifyPurchase(HttpSession session,Purchase purchase){
+        purchase.setVert_status (true);
+        this.purchaseService.updatePurchase (purchase);
+        return CommonResponseForm.of204 ("审核成功");
+  }
     @ApiOperation(value = "根据时间段查询购买记录")
     @RequestMapping(value ="/getPurchaseByTime")
     public CommonResponseForm getPurchaseByTime(@RequestParam(required = false)String start_time,@RequestParam(required = false) String end_time){

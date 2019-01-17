@@ -50,7 +50,8 @@ public class LoginController {
 	 */
 	@PostMapping("/login")
 	@ResponseBody
-	public CommonResponseForm login(String name, String password){
+	public CommonResponseForm login(String name, String password,HttpServletResponse response,HttpServletRequest request){
+
 		System.out.println("name="+name);
 		/**
 		 * 使用Shiro编写认证操作

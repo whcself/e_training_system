@@ -19,6 +19,8 @@ import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -112,12 +114,17 @@ public class MaterialController {
 
     @ApiOperation (value = "获取申请记录")
     @RequestMapping(value ="/getApplys")
+    //localhost:8084/getapplys
+    //localhost:8084/getmaterial
     public CommonResponseForm getApplys(@RequestParam(required = false) String clazz,
                                         @RequestParam(required = false)String sid,
                                         @RequestParam(required = false)String sname ,
                                         @RequestParam(required = false)String startTime,//起始时间
                                         @RequestParam(required = false)String endTime//截止时间
-                                        ){
+    ,HttpServletResponse response
+    ){
+        Cookie cookie=new Cookie ("token","123456");
+        response.addCookie (cookie);
         return CommonResponseForm.of200("查询记录成功",materialService.getAplyBySidAndSnameAndClazzAndTime (sid,sname,clazz,startTime,endTime));
     }
 
