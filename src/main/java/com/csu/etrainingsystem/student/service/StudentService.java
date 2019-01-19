@@ -74,6 +74,10 @@ public class StudentService {
         return op.get();
     }
 
+    public List<Student> getStudentByName(String name){
+        return (List<Student>) studentRepository.findStudentBySName(name);
+    }
+
     @Transactional
     public Iterable<Student> getAllStudent() {
         return studentRepository.findAllStudent();

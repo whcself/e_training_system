@@ -2,6 +2,7 @@ package com.csu.etrainingsystem.score.service;
 
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.repository.ExperimentRepository;
+import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.entity.ScoreSubmit;
 import com.csu.etrainingsystem.score.entity.ScoreUpdate;
@@ -70,8 +71,11 @@ public class ScoreService {
 
 
     @Transactional
-    public void executeScore(String batch_name) {
-        scoreRepository.executeScore(batch_name);
+    public CommonResponseForm executeScore(String batch_name) {
+        if (scoreRepository.checkBand(batch_name) != 0) {
+            scoreRepository.executeScore(batch_name);
+            return CommonResponseForm.of204("计算成功");
+        } else return CommonResponseForm.of400("该批次未绑定权重模板，无法计算");
     }
 
     @Transactional

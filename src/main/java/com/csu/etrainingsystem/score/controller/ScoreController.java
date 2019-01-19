@@ -204,8 +204,7 @@ public class ScoreController {
      */
     @PostMapping("/executeScore")
     public CommonResponseForm executeScore(@RequestParam String batch_name) {
-        scoreService.executeScore(batch_name);
-        return CommonResponseForm.of204("计算成功");
+        return scoreService.executeScore(batch_name);
 
     }
 

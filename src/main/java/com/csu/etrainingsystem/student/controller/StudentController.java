@@ -174,18 +174,25 @@ public class StudentController {
 
     /**
      * @apiNote 我的信息
+     * 根据session中的id得到自己的信息，也可通过id，name来查得信息，用于成绩列表先获取到单个学生的batch_name
      * -ScJn
      */
     @RequestMapping("/getMyInfo")
-    public CommonResponseForm getMyInfo(@RequestParam(required = false) String sid, HttpSession session) {
+    public CommonResponseForm getMyInfo(@RequestParam(required = false) String sid,
+                                        @RequestParam(required = false) String name,
+                                        HttpSession session) {
 
-        if (sid == null) {
+        if (sid != null) {
+            return CommonResponseForm.of200("查询成功", studentService.getStudentById(sid));
+        }else if(name!=null){
+            return CommonResponseForm.of200("查询成功",studentService.getStudentByName(name));
+        }
+        else  {
             String sid2 = (String) session.getAttribute("sid");
             return CommonResponseForm.of200("查询成功", studentService.getStudentById(sid2));
 
-        } else {
-            return CommonResponseForm.of200("查询成功", studentService.getStudentById(sid));
         }
+
     }
 
     /**
