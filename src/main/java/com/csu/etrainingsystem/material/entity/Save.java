@@ -2,10 +2,7 @@ package com.csu.etrainingsystem.material.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -13,6 +10,8 @@ import javax.persistence.Table;
 public class Save {
     @Id
     @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Integer id;//id自增长
     private String clazz ;//名称+型号
     private String purchase_id;//申购编号
