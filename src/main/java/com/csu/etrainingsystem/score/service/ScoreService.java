@@ -148,10 +148,12 @@ public class ScoreService {
             student.ifPresent(students::add);
         } else if (!sName.equals("all")) {
             students = (List<Student>) studentRepository.findStudentBySName(sName);
+        }else{
+            if (sGroup.equals("all")) sGroup = "%";
+            if (batchName.equals("all")) batchName = "%";
+            students = (List<Student>) studentRepository.findStudentByS_group_idAndBatch(sGroup, batchName);
+
         }
-        if (sGroup.equals("all")) sGroup = "%";
-        if (batchName.equals("all")) batchName = "%";
-        students = (List<Student>) studentRepository.findStudentByS_group_idAndBatch(sGroup, batchName);
 
         for (Student student : students) {
             ArrayList<Score> scores = new ArrayList<>();
