@@ -59,6 +59,10 @@ public class TeacherService {
         return teacherRepository.findAllTeacher();}
 
     @Transactional
+    public Iterable<String>getTeacherByAuth(int type){
+        return teacherRepository.getTeacherByAuth(type);}
+
+    @Transactional
     public void updateTeacher(Teacher teacher,String t_group_id){
        // tGroupConnRepository.modifyTeacherGroupByTidSQL (t_group_id,teacher.getTid ());
         TeacherAndGroup tad=new TeacherAndGroup ();

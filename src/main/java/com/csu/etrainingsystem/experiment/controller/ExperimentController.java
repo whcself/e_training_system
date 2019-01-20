@@ -144,7 +144,7 @@ public class ExperimentController {
         for (Experiment experiment : experiments) {
             //然后将实验号码设置为空,batch_nam设置为本批次,模板设置为空
             //设置为空,脱离模板
-            //     experiment.setExp_id (null);
+            //experiment.setExp_id (null);
             //添加到批次
             exp.setBatch_name (batch_name);
             exp.setDel_status (experiment.isDel_status ());

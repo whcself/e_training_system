@@ -49,6 +49,8 @@ public interface TeacherRepository extends JpaRepository<Teacher, String> {
     @Query(value = "select * from teacher where teacher.tid=? and teacher.del_status=0", nativeQuery = true)
     Teacher findTeacherByTid(String tid);
 
+    @Query(value = "select tname from teacher where  material_privilege=? and teacher.del_status=0", nativeQuery = true)
+    Iterable<String> getTeacherByAuth(int type1);
 
     @Query(value = "select * from teacher where teacher.del_status=0", nativeQuery = true)
     Iterable<Teacher> findAllTeacher();

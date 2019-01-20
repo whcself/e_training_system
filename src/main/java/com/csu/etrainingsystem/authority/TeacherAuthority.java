@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 public class TeacherAuthority {
     public static final String MATERIAL_NULL = "0";
     public static final String MATERIAL_REGISTER = "1";
-    public static final String MATERIAL_BUY = "2";
+    public static final String MATERIAL_BUY = "2";//这里应该是申请,的权限级别
+    public static final String MATERIAL_PURCHASE = "3";
     public static final String OVERWORK_NULL = "0";
     public static final String OVERWORK_MANAGE = "1";
     public static final String ALL = "%";
