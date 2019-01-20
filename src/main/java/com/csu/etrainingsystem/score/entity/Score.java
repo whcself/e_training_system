@@ -18,6 +18,7 @@ public class Score implements Serializable {
     private String sid;
     private String pro_name;
     private Float pro_score;
+    private String tid;  //提交老师
     private boolean del_status;
 
 

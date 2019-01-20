@@ -40,46 +40,46 @@ public class InsertUtil {
     private static void insertScore(int begin,int end) {
         for (int i = begin; i < end; i++) {
             String[] sqls = {
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('1" + i + "', '铸造', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('1" + i + "', '数控线切割', '88');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('1" + i + "', '焊接', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('1" + i + "', '逆向工程快速原型', '77');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('1" + i + "', '锻压', '77');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('1" + i + "', '铣削', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('1" + i + "', '磨削', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('1" + i + "', '车削', '48');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('1" + i + "', '钳工', '48');",
-                    //2
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '铸造', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '数控线切割', '88');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', 'Cimatron', '88');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '激光切割', '88');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '加工中心', '88');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '焊接', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '逆向工程快速原型', '77');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '热处理', '77');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '车削', '48');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '锻造', '90');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '铣削', '48');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '磨削', '48');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('2" + i + "', '钳工', '89');",
-                    // 5
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '铸造', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '数控线切割', '88');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', 'Cimatron', '88');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '激光切割', '88');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '加工中心', '88');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '焊接', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '激光焊接', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '逆向工程快速原型', '77');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '热处理', '77');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '车削', '48');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '锻造', '90');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '铣削', '48');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '磨削', '48');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '钳工', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '数控车', '89');",
-                    "INSERT INTO `etc2`.`score` (`sid`, `pro_name`, `pro_score`) VALUES ('3" + i + "', '数控车仿真', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','1" + i + "', '铸造', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','1" + i + "', '数控线切割', '88');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','1" + i + "', '焊接', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','1" + i + "', '逆向工程快速原型', '77');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','1" + i + "', '锻压', '77');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','1" + i + "', '铣削', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','1" + i + "', '磨削', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','1" + i + "', '车削', '48');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','1" + i + "', '钳工', '48');",
+                    //2`
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '铸造', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '数控线切割', '88');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', 'Cimatron', '88');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '激光切割', '88');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '加工中心', '88');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '焊接', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '逆向工程快速原型', '77');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '热处理', '77');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '车削', '48');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '锻造', '90');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '铣削', '48');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '磨削', '48');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','2" + i + "', '钳工', '89');",
+                    // 5`
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '铸造', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '数控线切割', '88');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', 'Cimatron', '88');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '激光切割', '88');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '加工中心', '88');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '焊接', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '激光焊接', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '逆向工程快速原型', '77');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '热处理', '77');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '车削', '48');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '锻造', '90');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '铣削', '48');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '磨削', '48');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '钳工', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '数控车', '89');",
+                    "INSERT INTO `etc2`.`score` (`tid`,`sid`, `pro_name`, `pro_score`) VALUES ('111111','3" + i + "', '数控车仿真', '89');",
 
             };
 
@@ -120,7 +120,7 @@ public class InsertUtil {
         jdbcTemplate = new JdbcTemplate(dataSource);
 //        insertStudent(1,40);
 
-        insertScore(1,40);
+        insertScore(50,70);
 
     }
 

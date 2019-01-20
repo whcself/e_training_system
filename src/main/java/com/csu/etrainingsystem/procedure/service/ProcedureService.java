@@ -174,6 +174,7 @@ public class ProcedureService {
         List<Proced_template> templates = (List<Proced_template>) procedTemplateRepository.findByTemplateName(templateName);
         for (Proced_template template : templates) {
             Proced proced = new Proced();
+            proced.setDel_status(false);
             proced.setWeight(template.getWeight());
             String tGroupName = procedureRepository.getTGroupByProName(template.getProcedTemplateId().getPro_name());
             proced.setT_group_id(tGroupName);
