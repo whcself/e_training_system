@@ -50,6 +50,11 @@ public class ApplicationTest1 {
             System.out.println(overwork.getOverwork_time()+" "+overwork.getOverwork_time_end());
         }
     }
+
+    @Test
+    public void testSystem(){
+        System.out.println(System.currentTimeMillis());
+    }
     @Test
     public void testurl(){
         String domainName = null;

@@ -48,7 +48,7 @@ public class ExcelPort {
 //        System.out.println(readExcel(new File("test.xlsx"), "2"));
 //    }
 
-    /**
+     /**
      * -ScJn 2018.10.26
      *
      * @param inFile   he path of the excel file
@@ -64,12 +64,6 @@ public class ExcelPort {
             //scjn need learn
             String fileName=inFile.getOriginalFilename();
             System.out.println("fileName:"+fileName);
-//            File convFile = new File( inFile.getOriginalFilename());
-//            inFile.transferTo(convFile);
-
-//            FileInputStream file = new FileInputStream(convFile);
-
-            //Create Workbook instance holding reference to .xlsx file
             XSSFWorkbook workbook = new XSSFWorkbook(inFile.getInputStream());
 
             //Get first/desired sheet from the workbook
