@@ -1,20 +1,16 @@
 package com.csu.etrainingsystem.material.entity;
 
-
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "purchase")
-public class Purchase implements Serializable {
-
+@Table(name="reimbursement")
+public class Reimbursement {
 
     @Id
     @Column
@@ -22,11 +18,11 @@ public class Purchase implements Serializable {
     private String clazz ;//名称+型号
     private String purchase_id;//申购编号
     private String pur_tname;//采购老师
-    private String pur_time ;//采购时间
-    private String pur_remark ;//采购备注
-    private Integer    pur_num;//采购数量
+    private String remib_time;//报账时间
+    private String remib_remark;//报账备注
+    private String remib_vert_time;//报账审核时间
+    private String remib_vert_tname;//报账审核老师
+    private Integer    remib_num;//报账总数
+    private Boolean remib_vertify;//审核状态
     private boolean del_status;
-    /**后面写sql语句会用到,先马起来
-
-     */
 }

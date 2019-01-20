@@ -7,7 +7,7 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.Apply;
 import com.csu.etrainingsystem.material.entity.Material;
 import com.csu.etrainingsystem.material.service.MaterialService;
-import com.csu.etrainingsystem.material.service.PurchaseService;
+import com.csu.etrainingsystem.material.service.ApplyForPurchaseService;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.entity.User;
@@ -30,13 +30,13 @@ import java.util.Date;
 public class MaterialController {
     private final MaterialService materialService;
     private final TeacherService teacherService;
-    private  final PurchaseService purchaseService;
+    private  final ApplyForPurchaseService applyForPurchaseService;
     private final AdminService adminService;
     @Autowired
-    public MaterialController(MaterialService materialService, TeacherService teacherService, PurchaseService purchaseService, AdminService adminService) {
+    public MaterialController(MaterialService materialService, TeacherService teacherService, ApplyForPurchaseService applyForPurchaseService, AdminService adminService) {
         this.materialService = materialService;
         this.teacherService = teacherService;
-        this.purchaseService = purchaseService;
+        this.applyForPurchaseService = applyForPurchaseService;
         this.adminService = adminService;
     }
 
