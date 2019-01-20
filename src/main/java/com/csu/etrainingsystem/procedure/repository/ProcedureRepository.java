@@ -82,4 +82,8 @@ public interface ProcedureRepository extends JpaRepository<Proced,ProcedId> {
     @Modifying
     @Query(value = "update proced set del_status=1 where t_group_id=?1 and pro_name=?2",nativeQuery = true)
     void deleteProcedFromGroup(String groupName,String proName);
+
+    @Modifying
+    @Query(value = "update proced set del_status=1 where batch_name=?1 ",nativeQuery = true)
+    void deleteProced(String batchName);
 }

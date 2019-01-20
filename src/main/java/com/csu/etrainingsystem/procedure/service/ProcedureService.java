@@ -23,18 +23,19 @@ public class ProcedureService {
     private final ProcedTemplateRepository procedTemplateRepository;
     private final ScoreService scoreService;
     private final ExperimentService experimentService;
-    String 胡俊贤="123";
+    String 胡俊贤 = "123";
 
     @Autowired
-    public ProcedureService(ProcedTemplateRepository procedTemplateRepository,ProcedureRepository procedureRepository, ScoreService scoreService, ExperimentService experimentService) {
+    public ProcedureService(ProcedTemplateRepository procedTemplateRepository, ProcedureRepository procedureRepository, ScoreService scoreService, ExperimentService experimentService) {
         this.procedureRepository = procedureRepository;
-        this.procedTemplateRepository=procedTemplateRepository;
+        this.procedTemplateRepository = procedTemplateRepository;
         this.scoreService = scoreService;
         this.experimentService = experimentService;
     }
 
     /**
      * 复合主键,添加方法见studentgroup表或者teachergroup表
+     *
      * @param procedure
      */
     @Transactional
@@ -43,40 +44,43 @@ public class ProcedureService {
     }
 
     @Transactional
-    public  Iterable<Proced> getBatchProcedure(String batch_name) {
+    public Iterable<Proced> getBatchProcedure(String batch_name) {
 
         return procedureRepository.findProcedByBatch_name(batch_name);
     }
+
     @Transactional
-    public  Proced getProcedure(ProcedId procedId) {
-        return procedureRepository.findProcedByNameAndBatch (procedId.getPro_name (),procedId.getBatch_name ()).get ();
+    public Proced getProcedure(ProcedId procedId) {
+        return procedureRepository.findProcedByNameAndBatch(procedId.getPro_name(), procedId.getBatch_name()).get();
     }
+
     @Transactional
     public Iterable<String> getAllProcedure() {
         return this.procedureRepository.findAllProced2();
     }
 
     @Transactional
-    public void  updateProcedure(Proced Procedure) {
+    public void updateProcedure(Proced Procedure) {
         this.procedureRepository.saveAndFlush(Procedure);
     }
-    public void deleteProcedByBatch(String batch_name){
-     Iterable<Proced> proceds= this.procedureRepository.findProcedByBatch_name(batch_name);
-       if(proceds!=null){
-           for (Proced proced : proceds) {
-               proced.setDel_status(true);
-               updateProcedure(proced);
-           }
-       }
+
+    public void deleteProcedByBatch(String batch_name) {
+        Iterable<Proced> proceds = this.procedureRepository.findProcedByBatch_name(batch_name);
+        if (proceds != null) {
+            for (Proced proced : proceds) {
+                proced.setDel_status(true);
+                updateProcedure(proced);
+            }
+        }
 
     }
 
     @Transactional
-    public void  deleteProcedure(String pro_name,String batch_name) {
+    public void deleteProcedure(String pro_name, String batch_name) {
 
-        ProcedId  procedId=new ProcedId (pro_name,batch_name);
-        Proced  procedure=getProcedure(procedId);
-        if(procedure!=null){
+        ProcedId procedId = new ProcedId(pro_name, batch_name);
+        Proced procedure = getProcedure(procedId);
+        if (procedure != null) {
             procedure.setDel_status(true);
             //删除这个工序在成绩表里面的记录
             this.scoreService.deleteScoreByPro(pro_name);
@@ -91,44 +95,45 @@ public class ProcedureService {
 
 
     @Transactional
-    public void addProcedToGroup(String groupName,String proName) {
+    public void addProcedToGroup(String groupName, String proName) {
         Proced proced = new Proced();
         proced.setT_group_id(groupName);
-        proced.setProid(new ProcedId(proName,"conn"));
+        proced.setProid(new ProcedId(proName, "conn"));
         procedureRepository.save(proced);
     }
 
     @Transactional
-    public void updateProcedFromGroup(String groupName,String old,String newName){
-        procedureRepository.updateProcedFromGroup(groupName,old,newName);
+    public void updateProcedFromGroup(String groupName, String old, String newName) {
+        procedureRepository.updateProcedFromGroup(groupName, old, newName);
     }
+
     @Transactional
-    public void deleteProcedFromGroup(String groupName,String proName){
-        procedureRepository.deleteProcedFromGroup(groupName,proName);
+    public void deleteProcedFromGroup(String groupName, String proName) {
+        procedureRepository.deleteProcedFromGroup(groupName, proName);
     }
 
     /**
-     *
      * @param batch_name 批次名
-     * @param pro_name 工序名
-     * @param weight 权重值
-     * update必须要@Transactional， 要不然报错
+     * @param pro_name   工序名
+     * @param weight     权重值
+     *                   update必须要@Transactional， 要不然报错
      */
     @Transactional
-    public void setWeight(String batch_name,String pro_name,Float weight){
-        procedureRepository.setWeightByBatchNameAndProName(batch_name,pro_name,weight);
+    public void setWeight(String batch_name, String pro_name, Float weight) {
+        procedureRepository.setWeightByBatchNameAndProName(batch_name, pro_name, weight);
     }
 
     /**
      * 管理员端-增加权重模板
+     *
      * @param form template
      */
     @Transactional
-    public void addTemplate(String templateName,Map<String,Float> form) {
-        for(String proName:form.keySet()){
+    public void addTemplate(String templateName, Map<String, Float> form) {
+        for (String proName : form.keySet()) {
 
-            Proced_template template=new Proced_template();
-            template.setProcedTemplateId(new ProcedTemplateId(templateName,proName));
+            Proced_template template = new Proced_template();
+            template.setProcedTemplateId(new ProcedTemplateId(templateName, proName));
             template.setWeight(form.get(proName));
             template.setDel_status(false);
             procedTemplateRepository.save(template);
@@ -137,29 +142,42 @@ public class ProcedureService {
     }
 
     @Transactional
-    public Iterable<String>findAllTemplateName(){
+    public Iterable<String> findAllTemplateName() {
         return procedureRepository.findAllTemplateName();
     }
 
     @Transactional
-    public List<Map<String,Float>>findTemplateItemByName(String name){
+    public List<Map<String, Float>> findTemplateItemByName(String name) {
         return procedureRepository.findTemplateItemByName(name);
     }
 
     @Transactional
-    public CommonResponseForm deleteTemplate(String name){
+    public CommonResponseForm deleteTemplate(String name) {
         procedureRepository.deleteTemplate(name);
         return CommonResponseForm.of204("删除成功");
     }
+
+    /**
+     * 绑定权重模板前需要将之前的绑定进行一个清除
+     *
+     * @param batchName
+     * @param templateName
+     */
     @Transactional
-    public void band(String batchName,String templateName){
-        List<Proced_template>templates= (List<Proced_template>) procedTemplateRepository.findByTemplateName(templateName);
-        for(Proced_template template:templates){
-            Proced proced=new Proced();
+    public void band(String batchName, String templateName) {
+
+        List<Proced> proceds = (List<Proced>) procedureRepository.findProcedByBatch_name(batchName);
+
+        procedureRepository.deleteProced(batchName);
+
+
+        List<Proced_template> templates = (List<Proced_template>) procedTemplateRepository.findByTemplateName(templateName);
+        for (Proced_template template : templates) {
+            Proced proced = new Proced();
             proced.setWeight(template.getWeight());
-            String tGroupName=procedureRepository.getTGroupByProName(template.getProcedTemplateId().getPro_name());
+            String tGroupName = procedureRepository.getTGroupByProName(template.getProcedTemplateId().getPro_name());
             proced.setT_group_id(tGroupName);
-            proced.setProid(new ProcedId(template.getProcedTemplateId().getPro_name(),batchName));
+            proced.setProid(new ProcedId(template.getProcedTemplateId().getPro_name(), batchName));
             procedureRepository.save(proced);
         }
 

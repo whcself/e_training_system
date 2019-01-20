@@ -25,6 +25,10 @@ public interface ScoreRepository extends JpaRepository<Score, Integer> {
             "WHERE newscore.batch_name = p.batch_name AND newscore.pro_name = p.pro_name  and newscore.batch_name=? GROUP BY newscore.sid  ) total " +
             "ON student.sid = total.sid  SET student.total_score = total.total_score",nativeQuery = true)
     void executeScore(String batchName);
+
+    @Query(value = "select count(*) from proced where batch_name=? and del_status=0",nativeQuery = true)
+    int checkBand(String batchName);
+
     //查找该同学所有工序的成绩
     @Query(value = "select * from score where score.sid=? and score.del_status=0", nativeQuery = true)
     Iterable<Score> findScoreBySid(String sid);
