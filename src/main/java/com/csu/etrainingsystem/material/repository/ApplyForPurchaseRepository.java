@@ -45,12 +45,13 @@ public interface ApplyForPurchaseRepository extends JpaRepository<ApplyForPurcha
      * @param applyEndTime
      * @return
      */
-    @Query(value="SELECT * FROM apply_for_purchase WHERE" +
-            "apply_tname LIKE ?  AND " +
-            "clazz LIKE ? AND " +
-            "pur_tname LIKE ? AND purchase_id LIKE ?" +
-            "AND apply_time " +
-            "BETWEEN ? AND ? ORDER BY apply_time DESC  "
-            ,nativeQuery = true)
+    @Query(value="SELECT * FROM apply_for_purchase" +
+            " WHERE apply_tname LIKE ? " +
+            "AND clazz LIKE ? "
+      //      +"AND pur_tname LIKE ?" //+
+  //          " AND apply_for_purchase.purchase_id LIKE ?"// +
+//            "AND apply_for_purchase.apply_time" +
+//            "BETWEEN ? AND ? ORDER BY apply_for_purchase.apply_time DESC  "
+           ,nativeQuery = true)
     Iterable<ApplyForPurchase> getSelectedApplyFPchse(String apply_tname , String clazz, String pur_tname, String purchase_id, String applyStartTime, String applyEndTime);
 }

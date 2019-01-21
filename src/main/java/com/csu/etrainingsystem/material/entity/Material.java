@@ -30,5 +30,8 @@ public class Material implements Serializable {
         this.num = num;
         this.del_status = del_status;
     }
+    public Material() {
+    }
+
 
 }
