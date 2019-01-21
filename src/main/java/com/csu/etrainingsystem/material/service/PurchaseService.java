@@ -1,7 +1,9 @@
 package com.csu.etrainingsystem.material.service;
 
+import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.ApplyForPurchase;
 import com.csu.etrainingsystem.material.entity.Purchase;
+import com.csu.etrainingsystem.material.repository.ApplyForPurchaseRepository;
 import com.csu.etrainingsystem.material.repository.PurchaseRepository;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
-
+    private final ApplyForPurchaseRepository applyForPurchaseRepository;
     @Autowired
-    public PurchaseService(PurchaseRepository purchaseRepository) {
+    public PurchaseService(ApplyForPurchaseRepository applyForPurchaseRepository,PurchaseRepository purchaseRepository) {
+        this.applyForPurchaseRepository=applyForPurchaseRepository;
         this.purchaseRepository = purchaseRepository;
     }
 
@@ -28,14 +30,25 @@ public class PurchaseService {
                                       String begin,
                                       String end) {
 
-        return  purchaseRepository.findPurchasesBy4Desc(purchase_id, clazz, pur_name, begin, end);
+        return purchaseRepository.findPurchasesBy4Desc(purchase_id, clazz, pur_name, begin, end);
 
     }
 
-    public void addPurchase(Purchase purchase){
-        int num=purchase.getPur_num();
+    public CommonResponseForm addPurchase(Purchase purchase) {
+        String pid = purchase.getPurchase_id();
+        ApplyForPurchase infoMap = applyForPurchaseRepository.getPurchaseInfo(pid);
+        purchase.setDel_status(false);
+        purchase.setPur_tname(infoMap.getPur_tname());  // set the teacher name
+        purchase.setClazz(infoMap.getClazz());
+        int num = purchaseRepository.getAllPurNum(pid);  //judge the purchase total number
+        if (!infoMap.getApply_verify()) {
+            return CommonResponseForm.of400("该申购未被审核");
+        } else if (purchase.getPur_num() + num > infoMap.getApply_num()) {
+            return CommonResponseForm.of400("采购总量超出申购数量");
+        }
 
         purchaseRepository.saveAndFlush(purchase);
+        return CommonResponseForm.of204("增加成功");
     }
 
     public void downloadPurchase(HttpServletResponse response,
@@ -74,11 +87,11 @@ public class PurchaseService {
             r.createCell(2).setCellValue(purchases.get(i - 1).getPur_tname());
             r.createCell(3).setCellValue(purchases.get(i - 1).getClazz());
             r.createCell(4).setCellValue(purchases.get(i - 1).getPur_num());
-            r.createCell(5).setCellValue(purchases.get(i - 1).getPur_remFark());
+            r.createCell(5).setCellValue(purchases.get(i - 1).getPur_remark());
         }
 //);
         response.setContentType("application/octet-stream");
-        response.setHeader("Content-disposition", "attachment;filename=" +fileName);
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
         response.flushBuffer();
         workbook.write(response.getOutputStream());
     }

@@ -53,4 +53,7 @@ public interface ApplyForPurchaseRepository extends JpaRepository<ApplyForPurcha
             "BETWEEN ? AND ? ORDER BY apply_time DESC  "
             ,nativeQuery = true)
     Iterable<ApplyForPurchase> getSelectedApplyFPchse(String apply_tname , String clazz, String pur_tname, String purchase_id, String applyStartTime, String applyEndTime);
+
+    @Query(value = "select * from apply_for_purchase where purchase_id=?1 and del_status=0",nativeQuery = true)
+    ApplyForPurchase getPurchaseInfo(String pid);
 }

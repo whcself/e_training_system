@@ -22,7 +22,7 @@ public class Purchase implements Serializable {
     private String purchase_id;//申购编号
     private String pur_tname;//采购老师
     private String pur_time;//采购时间
-    private String pur_remFark;//采购备注
+    private String pur_remark;//采购备注
     private Integer pur_num;//采购数量
     private boolean del_status;
     /**后面写sql语句会用到,先马起来

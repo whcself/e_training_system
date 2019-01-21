@@ -4,7 +4,6 @@ import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.service.AdminService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.ApplyForPurchase;
-import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.material.service.MaterialService;
 import com.csu.etrainingsystem.material.service.ApplyForPurchaseService;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
@@ -127,10 +126,10 @@ public class ApplyPurchaseController {
 
 
         ApplyForPurchase applyForPurchase= this.applyForPurchaseService.getApplyFPchse (purchase_id);
-        if (applyForPurchase.getApply_vertify ())return CommonResponseForm.of400 ("该申购已经审核");
+        if (applyForPurchase.getApply_verify())return CommonResponseForm.of400 ("该申购已经审核");
         applyForPurchase.setApply_num (apply_num);
         applyForPurchase.setPur_tname (purchase_tname);
-        applyForPurchase.setApply_vertify (true);
+        applyForPurchase.setApply_verify(true);
         User user= UserUtils.getHttpSessionUser (session);
         if (user.getRole ().equals ("admin"))applyForPurchase.setApply_vert_tname (user.getAccount ());
         else applyForPurchase.setApply_vert_tname (teacherService.getTeacher (user.getAccount ()).getTname ());
