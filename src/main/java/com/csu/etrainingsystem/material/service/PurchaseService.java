@@ -3,7 +3,6 @@ package com.csu.etrainingsystem.material.service;
 import com.csu.etrainingsystem.material.entity.ApplyForPurchase;
 import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.material.repository.PurchaseRepository;
-import com.sun.deploy.net.HttpResponse;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +30,12 @@ public class PurchaseService {
 
         return  purchaseRepository.findPurchasesBy4Desc(purchase_id, clazz, pur_name, begin, end);
 
+    }
+
+    public void addPurchase(Purchase purchase){
+        int num=purchase.getPur_num();
+
+        purchaseRepository.saveAndFlush(purchase);
     }
 
     public void downloadPurchase(HttpServletResponse response,

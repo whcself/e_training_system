@@ -21,4 +21,10 @@ public interface PurchaseRepository extends JpaRepository<Purchase, String> {
     @Query(value = "select * from purchase where id like ?1 and del_status=0 order by pur_time desc ",nativeQuery = true)
     Purchase findByPId(String pid);
 
+
+    @Query(value = "select pru_num from purchase where purchase_id = ? ",nativeQuery = true)
+    int findApplyNumByPId(String pId);
+
+    @Query(value = "select sum(pru_num) from purchase where purchase_id=?",nativeQuery = true)
+    int getAllPurNum(String pid);
 }

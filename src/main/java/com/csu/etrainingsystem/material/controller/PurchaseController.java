@@ -53,5 +53,10 @@ public class PurchaseController {
                                   @RequestBody  String[] purchaseIds) throws IOException {
         purchaseService.downloadPurchase(response,purchaseIds);
     }
-//    @RequestParam(value = "purchaseIds[]")
+
+    @PostMapping("/add")
+    public CommonResponseForm addPurchase(Purchase purchase){
+        purchaseService.addPurchase(purchase);
+        return CommonResponseForm.of204("增加成功");
+    }
 }
