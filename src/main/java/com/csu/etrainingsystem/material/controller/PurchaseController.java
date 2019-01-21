@@ -63,4 +63,10 @@ public class PurchaseController {
     public CommonResponseForm addPurchase(Purchase purchase){
         return purchaseService.addPurchase(purchase);
     }
+
+    @PostMapping("/clazz")
+    public CommonResponseForm getClazzByTName(@RequestParam String tName){
+        System.out.println(tName);
+        return CommonResponseForm.of200("查询成功",purchaseService.getClazzByTName(tName));
+    }
 }

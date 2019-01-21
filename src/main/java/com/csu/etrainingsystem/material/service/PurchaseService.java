@@ -95,4 +95,8 @@ public class PurchaseService {
         response.flushBuffer();
         workbook.write(response.getOutputStream());
     }
+
+    public List<String> getClazzByTName(String tName){
+        return purchaseRepository.getClazzByTName(tName);
+    }
 }

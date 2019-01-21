@@ -40,8 +40,13 @@ public interface PurchaseRepository extends JpaRepository<Purchase, String> {
     @Query(value = "select apply_verify from apply_for_purchase where purchase_id=?1 and del_status=0",nativeQuery = true)
     boolean getApplyVerify(String pid);
 
-    @Query(value = "select distinct pur_tname from purchase where purchase_id='02190103' and del_status=0",nativeQuery = true)
-    String getPurTNameByPId(String pid);
+    @Query(value = "select distinct pur_tname from purchase where purchase_id=?1 and del_status=0", nativeQuery = true)
+    default String getPurTNameByPId(String pid) {
+        return null;
+    }
+
+    @Query(value = "select distinct clazz from purchase where pur_tname=?1 and del_status=0", nativeQuery = true)
+    List<String> getClazzByTName(String tName);
 
 
 }
