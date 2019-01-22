@@ -104,14 +104,7 @@ public class ApplyPurchaseController {
     public CommonResponseForm getAllApplyFPchse(){
         List<ApplyFPchseForm> form=new ArrayList<> ();
        Iterable<ApplyForPurchase>purchases= this.applyForPurchaseService.getAllApplyFPchse ();
-       for (ApplyForPurchase purchase : purchases) {
-            ApplyFPchseForm afpf=new ApplyFPchseForm (purchase);
-            afpf.setPur_num (this.purchaseService.getAllPerNumByPId (purchase.getPurchase_id ()));
-            afpf.setRemib_num (this.reimbursementService.getAllReimbNumByPId (purchase.getPurchase_id ()));
-            afpf.setSave_num (this.saveService.getAllSaveNum (purchase.getPurchase_id ()));
-            form.add (afpf);
-        }
-        return CommonResponseForm.of200 ("获取所有物料申购记录成功",form);
+        return CommonResponseForm.of200 ("获取所有物料申购记录成功",ApplyFPchseForm.wrapForm (purchases,this.purchaseService,this.reimbursementService,this.saveService));
     }
 
     /**
@@ -134,16 +127,7 @@ public class ApplyPurchaseController {
                                                  )
     {
        Iterable<ApplyForPurchase> purchases= applyForPurchaseService.getSelectedApplyFPchse (apply_tname,clazz,startTime,endTime,pur_tname,purchase_id);
-       List<ApplyFPchseForm> form=new ArrayList<> ();
-        for (ApplyForPurchase purchase : purchases) {
-            ApplyFPchseForm afpf=new ApplyFPchseForm (purchase);//设置一个构造器
-            afpf.setPur_num (this.purchaseService.getAllPerNumByPId (purchase.getPurchase_id ()));
-            afpf.setRemib_num (this.reimbursementService.getAllReimbNumByPId (purchase.getPurchase_id ()));
-            afpf.setSave_num (this.saveService.getAllSaveNum (purchase.getPurchase_id ()));
-        form.add (afpf);
-        }
-
-       return CommonResponseForm.of200("查询记录成功",form);
+       return CommonResponseForm.of200("查询记录成功",ApplyFPchseForm.wrapForm (purchases,this.purchaseService,this.reimbursementService,this.saveService));
     }
 
     @ApiOperation ("获取所有具有相应物料权限用户的名字(管理员返回id)")
@@ -216,6 +200,54 @@ public class ApplyPurchaseController {
             r.createCell (4).setCellValue (applyFPchses.get (i-1).getApply_remark ());
             r.createCell (5).setCellValue (applyFPchses.get (i-1).getApply_vert_tname ());
 //            rows.add (r);
+        }
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+        response.flushBuffer();
+        workbook.write(response.getOutputStream());
+    }
+
+    @RequestMapping(value = "/ExcelDownloads01")
+    public void ExcelDownloads02(HttpServletResponse response,
+                                 @RequestBody List<String>purchase_ids) throws IOException {
+        List<ApplyForPurchase>applyFPchses=this.applyForPurchaseService.getExcelInfos (purchase_ids);
+        System.out.println (applyFPchses);
+        List<ApplyFPchseForm>forms=ApplyFPchseForm.wrapForm (applyFPchses,this.purchaseService,this.reimbursementService,this.saveService);
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("信息表");
+        List<String> headers=new ArrayList<> ();
+        headers.add ("申购编号");headers.add ("申购日期");headers.add ("申购人");
+        headers.add ("物料种类");headers.add ("申购数量");headers.add ("申购备注");
+        headers.add ("审核状态");headers.add ("审核人");headers.add ("采购总数");
+        headers.add ("报账总数");headers.add ("采购人");headers.add ("入库总数");
+        String fileName = "工序排课"  + ".xls";//设置要导出的文件的名字
+        //新增数据行，并且设置单元格数据
+        HSSFRow row = sheet.createRow(0);
+        //在excel表中添加表头
+        for(int i=0;i<headers.size ();i++){
+            HSSFCell cell = row.createCell(i);
+            HSSFRichTextString text = new HSSFRichTextString(headers.get (i));
+            cell.setCellValue(text);
+        }
+        int rowNum=forms.size ();
+        System.out.println (rowNum);
+//        List<HSSFRow> rows=new ArrayList<> ();
+        for (int i=1;i<=rowNum;i++){
+            HSSFRow r = sheet.createRow(i);
+            r.createCell (0).setCellValue (forms.get (i-1).getPurchase_id ());
+            r.createCell (1).setCellValue (forms.get (i-1).getApply_time ());
+            r.createCell (2).setCellValue (forms.get (i-1).getApply_tname ());
+            r.createCell (3).setCellValue (forms.get (i-1).getClazz ());
+            r.createCell (4).setCellValue (forms.get (i-1).getApply_num ());
+            r.createCell (5).setCellValue (forms.get (i-1).getApply_remark ());
+            r.createCell (6).setCellValue (forms.get (i-1).getApply_vertify ());
+            r.createCell (7).setCellValue (forms.get (i-1).getApply_vert_tname ());
+            r.createCell (8).setCellValue (forms.get (i-1).getPur_num ());
+            r.createCell (9).setCellValue (forms.get (i-1).getRemib_num ());
+            r.createCell (10).setCellValue (forms.get (i-1).getPur_tname ());
+            r.createCell (11).setCellValue (forms.get (i-1).getSave_num ());
+
         }
 
         response.setContentType("application/octet-stream");

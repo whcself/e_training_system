@@ -1,7 +1,13 @@
 package com.csu.etrainingsystem.material.form;
 
 import com.csu.etrainingsystem.material.entity.ApplyForPurchase;
+import com.csu.etrainingsystem.material.service.PurchaseService;
+import com.csu.etrainingsystem.material.service.ReimbursementService;
+import com.csu.etrainingsystem.material.service.SaveService;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class ApplyFPchseForm {
@@ -31,5 +37,27 @@ public class ApplyFPchseForm {
         this.apply_num=applyForPurchase.getApply_num ();
         this.apply_vertify=applyForPurchase.getApply_verify ();
         this.pur_tname=applyForPurchase.getPur_tname ();
+    }
+
+    public static List<ApplyFPchseForm> wrapForm(Iterable<ApplyForPurchase> purchases,
+                                                 PurchaseService purchaseService,
+                                                 ReimbursementService reimbursementService,
+                                                 SaveService saveService){
+        List<ApplyFPchseForm> form=new ArrayList<> ();
+       for (ApplyForPurchase purchase : purchases) {
+           if (purchase==null)continue;
+            ApplyFPchseForm afpf=new ApplyFPchseForm (purchase);
+            Integer puNum=purchaseService.getAllPerNumByPId (purchase.getPurchase_id ());
+            if (puNum!=null)afpf.setPur_num (puNum);
+            else afpf.setPur_num(0);
+           Integer rimbNum=reimbursementService.getAllReimbNumByPId (purchase.getPurchase_id ());
+           if (rimbNum!=null)afpf.setRemib_num (rimbNum);
+           else afpf.setRemib_num(0);
+           Integer saveNum=saveService.getAllSaveNum (purchase.getPurchase_id ());
+           if (saveNum!=null)afpf.setSave_num (saveNum);
+           else afpf.setSave_num(0);
+            form.add (afpf);
+        }
+        return form;
     }
 }
