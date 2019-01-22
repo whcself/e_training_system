@@ -79,7 +79,7 @@ public class ApplyPurchaseController {
         applyForPurchase.setApply_time (time);
         applyForPurchase.setApply_num (num);
         applyForPurchase.setClazz (clazz);
-        applyForPurchase.setClazz (apply_remark);
+        applyForPurchase.setApply_remark (apply_remark);
         applyForPurchase.setPurchase_id (this.applyForPurchaseService.GeneratePurchaseId ());
         this.applyForPurchaseService.addApplyFPchse (applyForPurchase);
         //判断需要申购的物料是否存在,如果不存在,也买进来
@@ -102,8 +102,16 @@ public class ApplyPurchaseController {
     @ApiOperation(value = "查询所有申购记录,默认显示所有")
     @RequestMapping(value ="/getAllApplyFPchse")
     public CommonResponseForm getAllApplyFPchse(){
-
-        return CommonResponseForm.of200 ("获取所有物料申购记录成功",this.applyForPurchaseService.getAllApplyFPchse ());
+        List<ApplyFPchseForm> form=new ArrayList<> ();
+       Iterable<ApplyForPurchase>purchases= this.applyForPurchaseService.getAllApplyFPchse ();
+       for (ApplyForPurchase purchase : purchases) {
+            ApplyFPchseForm afpf=new ApplyFPchseForm (purchase);
+            afpf.setPur_num (this.purchaseService.getAllPerNumByPId (purchase.getPurchase_id ()));
+            afpf.setRemib_num (this.reimbursementService.getAllReimbNumByPId (purchase.getPurchase_id ()));
+            afpf.setSave_num (this.saveService.getAllSaveNum (purchase.getPurchase_id ()));
+            form.add (afpf);
+        }
+        return CommonResponseForm.of200 ("获取所有物料申购记录成功",form);
     }
 
     /**
