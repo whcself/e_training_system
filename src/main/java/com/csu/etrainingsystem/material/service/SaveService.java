@@ -69,5 +69,7 @@ public class SaveService {
         return CommonResponseForm.of204("入库成功");
     }
 
-
+    public Integer getAllSaveNum(String pid){
+        return   saveRepository.getAllSaveNum (pid);
+    }
 }

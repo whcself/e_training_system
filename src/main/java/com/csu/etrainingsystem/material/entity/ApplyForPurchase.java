@@ -24,4 +24,21 @@ public class ApplyForPurchase {
     private Boolean apply_verify;//申购审核状态
     private String pur_tname;//采购老师
     private boolean del_status;
+
+    public ApplyForPurchase() {
+    }
+
+    public ApplyForPurchase(String purchase_id, String clazz, String apply_tname, String apply_vert_tname, String apply_vert_time, String apply_time, String apply_remark, Integer apply_num, Boolean apply_vertify, String pur_tname, boolean del_status) {
+        this.purchase_id = purchase_id;
+        this.clazz = clazz;
+        this.apply_tname = apply_tname;
+        this.apply_vert_tname = apply_vert_tname;
+        this.apply_vert_time = apply_vert_time;
+        this.apply_time = apply_time;
+        this.apply_remark = apply_remark;
+        this.apply_num = apply_num;
+        this.apply_verify = apply_vertify;
+        this.pur_tname = pur_tname;
+        this.del_status = del_status;
+    }
 }

@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final ApplyForPurchaseRepository applyForPurchaseRepository;
@@ -36,7 +38,8 @@ public class PurchaseService {
 
     public CommonResponseForm addPurchase(Purchase purchase) {
         String pid = purchase.getPurchase_id();
-        ApplyForPurchase infoMap = applyForPurchaseRepository.getPurchaseInfo(pid);
+        ApplyForPurchase infoMap = applyForPurchaseRepository.
+                getPurchaseInfo(pid);
         purchase.setDel_status(false);
         purchase.setPur_tname(infoMap.getPur_tname());  // set the teacher name
         purchase.setClazz(infoMap.getClazz());
@@ -50,7 +53,9 @@ public class PurchaseService {
         purchaseRepository.saveAndFlush(purchase);
         return CommonResponseForm.of204("增加成功");
     }
-
+    public Integer getAllPerNumByPId(String pid){
+      return   purchaseRepository.getAllPurNum (pid);
+    }
     public void downloadPurchase(HttpServletResponse response,
                                  String[] purchaseIds) throws IOException {
         List<Purchase> purchases = new ArrayList<>();

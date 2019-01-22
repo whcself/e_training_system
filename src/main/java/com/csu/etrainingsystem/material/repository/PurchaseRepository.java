@@ -1,6 +1,5 @@
 package com.csu.etrainingsystem.material.repository;
 
-import com.csu.etrainingsystem.material.entity.ApplyForPurchase;
 import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.material.form.PurchaseInfoForm;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,11 +25,11 @@ public interface PurchaseRepository extends JpaRepository<Purchase, String> {
     Purchase findByPId(String pid);
 
 
-    @Query(value = "select pur_num from purchase where purchase_id = ? ",nativeQuery = true)
+    @Query(value = "select pru_num from purchase where purchase_id = ? ",nativeQuery = true)
     int findApplyNumByPId(String pId);
 
     @Query(value = "select sum(pur_num) from purchase where purchase_id=? and del_status=0 group by purchase_id", nativeQuery = true)
-    int getAllPurNum(String pid);
+    Integer getAllPurNum(String pid);
 
     @Query(value = "select apply_num from apply_for_purchase where purchase_id=? and del_status=0",nativeQuery = true)
     int getApplyNumByPid(String pid);

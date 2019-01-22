@@ -2,6 +2,7 @@ package com.csu.etrainingsystem.material.repository;
 
 import com.csu.etrainingsystem.material.entity.Save;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,8 @@ import java.util.List;
 @Repository
 public interface SaveRepository extends JpaRepository<Save,Integer> {
 
+    @Query(value = "select sum(save_num) from save where purchase_id=?",nativeQuery = true)
+    Integer getAllSaveNum(String pid);
     @Query(value = "select * from save where save_time between ?1 and ?2 and clazz like ?3 \n" +
             "and save_tname like ?4 and purchase_id like ?5 and del_status=0 order by save_time desc ;",nativeQuery = true)
     List<Save>findBy5(String begin,

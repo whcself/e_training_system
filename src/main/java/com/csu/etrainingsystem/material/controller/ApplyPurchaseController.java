@@ -4,8 +4,8 @@ import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.service.AdminService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.ApplyForPurchase;
-import com.csu.etrainingsystem.material.service.MaterialService;
-import com.csu.etrainingsystem.material.service.ApplyForPurchaseService;
+import com.csu.etrainingsystem.material.form.ApplyFPchseForm;
+import com.csu.etrainingsystem.material.service.*;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.entity.User;
@@ -29,12 +29,18 @@ public class ApplyPurchaseController {
     private final ApplyForPurchaseService applyForPurchaseService;
     private final TeacherService teacherService;
     private  final MaterialService materialService;
+    private final PurchaseService  purchaseService;
+    private final ReimbursementService reimbursementService;
+    private final SaveService saveService;
     private final AdminService adminService;
     @Autowired
-    public ApplyPurchaseController(ApplyForPurchaseService applyForPurchaseService, TeacherService teacherService, MaterialService materialService, AdminService adminService) {
+    public ApplyPurchaseController(ApplyForPurchaseService applyForPurchaseService, TeacherService teacherService, MaterialService materialService, PurchaseService purchaseService, ReimbursementService reimbursementService, SaveService saveService, AdminService adminService) {
         this.applyForPurchaseService = applyForPurchaseService;
         this.teacherService = teacherService;
         this.materialService = materialService;
+        this.purchaseService = purchaseService;
+        this.reimbursementService = reimbursementService;
+        this.saveService = saveService;
         this.adminService = adminService;
     }
 
@@ -50,6 +56,7 @@ public class ApplyPurchaseController {
     @RequestMapping(value ="/addApplyFPchse")
     public CommonResponseForm addApplyFPchse(@RequestParam(required = false) int num,
                                                @RequestParam String clazz,
+                                             @RequestParam String apply_remark,
                                                HttpSession session){
         User user=UserUtils.getHttpSessionUser (session);
         String tname="";
@@ -72,12 +79,19 @@ public class ApplyPurchaseController {
         applyForPurchase.setApply_time (time);
         applyForPurchase.setApply_num (num);
         applyForPurchase.setClazz (clazz);
+        applyForPurchase.setApply_remark (apply_remark);
         applyForPurchase.setPurchase_id (this.applyForPurchaseService.GeneratePurchaseId ());
         this.applyForPurchaseService.addApplyFPchse (applyForPurchase);
         //判断需要申购的物料是否存在,如果不存在,也买进来
         //todo:在购买部分需要到采购部分完成
         return CommonResponseForm.of204 ("物料申购成功");
 
+    }
+    @ApiOperation(value = "删除申购记录")
+    @RequestMapping(value ="/deleteApplyFPchse")
+    public CommonResponseForm deleteApplyFPchse(String purchase_id){
+        this.applyForPurchaseService.deleteApplyFPchseById (purchase_id);
+        return CommonResponseForm.of204 ("删除申购记录成功");
     }
     @ApiOperation(value = "根据时间段查询申购记录")
     @RequestMapping(value ="/getApplyFPchseByTime")
@@ -88,8 +102,16 @@ public class ApplyPurchaseController {
     @ApiOperation(value = "查询所有申购记录,默认显示所有")
     @RequestMapping(value ="/getAllApplyFPchse")
     public CommonResponseForm getAllApplyFPchse(){
-
-        return CommonResponseForm.of200 ("获取所有物料申购记录成功",this.applyForPurchaseService.getAllApplyFPchse ());
+        List<ApplyFPchseForm> form=new ArrayList<> ();
+       Iterable<ApplyForPurchase>purchases= this.applyForPurchaseService.getAllApplyFPchse ();
+       for (ApplyForPurchase purchase : purchases) {
+            ApplyFPchseForm afpf=new ApplyFPchseForm (purchase);
+            afpf.setPur_num (this.purchaseService.getAllPerNumByPId (purchase.getPurchase_id ()));
+            afpf.setRemib_num (this.reimbursementService.getAllReimbNumByPId (purchase.getPurchase_id ()));
+            afpf.setSave_num (this.saveService.getAllSaveNum (purchase.getPurchase_id ()));
+            form.add (afpf);
+        }
+        return CommonResponseForm.of200 ("获取所有物料申购记录成功",form);
     }
 
     /**
@@ -112,7 +134,16 @@ public class ApplyPurchaseController {
                                                  )
     {
        Iterable<ApplyForPurchase> purchases= applyForPurchaseService.getSelectedApplyFPchse (apply_tname,clazz,startTime,endTime,pur_tname,purchase_id);
-       return CommonResponseForm.of200("查询记录成功",purchases);
+       List<ApplyFPchseForm> form=new ArrayList<> ();
+        for (ApplyForPurchase purchase : purchases) {
+            ApplyFPchseForm afpf=new ApplyFPchseForm (purchase);//设置一个构造器
+            afpf.setPur_num (this.purchaseService.getAllPerNumByPId (purchase.getPurchase_id ()));
+            afpf.setRemib_num (this.reimbursementService.getAllReimbNumByPId (purchase.getPurchase_id ()));
+            afpf.setSave_num (this.saveService.getAllSaveNum (purchase.getPurchase_id ()));
+        form.add (afpf);
+        }
+
+       return CommonResponseForm.of200("查询记录成功",form);
     }
 
     @ApiOperation ("获取所有具有相应物料权限用户的名字(管理员返回id)")

@@ -124,4 +124,7 @@ public class ReimbursementService {
         reimbursementRepository.verifyReim(TimeUtil.getNowDate(),name,id);
     }
 
+    public Integer getAllReimbNumByPId(String pid){
+        return   reimbursementRepository.getAllReimbNum (pid);
+    }
 }

@@ -3,6 +3,7 @@ package com.csu.etrainingsystem.material.repository;
 import com.csu.etrainingsystem.material.entity.Reimbursement;
 import com.csu.etrainingsystem.material.form.ReimAddForm;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -13,6 +14,8 @@ import java.util.List;
 @Repository
 public interface ReimbursementRepository extends JpaRepository<Reimbursement,Integer> {
 
+    @Query(value = "select sum(remib_num) from reimbursement where purchase_id=?1 and del_status=0 ",nativeQuery = true)
+    Integer getAllReimbNum(String pid);
 
     @Query(value = "select * from reimbursement where remib_time between ?1 and " +
             "  ?2 and pur_tname like ?3 and clazz like ?4 and remib_vertify like ?5 " +

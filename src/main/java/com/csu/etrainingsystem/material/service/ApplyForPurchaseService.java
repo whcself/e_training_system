@@ -95,6 +95,10 @@ public class ApplyForPurchaseService {
     public void  deleteApplyFPchse(ApplyForPurchase applyForPurchase) {
         this.applyForPurchaseRepository.delete (applyForPurchase);
     }
+    @Transactional
+    public void  deleteApplyFPchseById(String purchase_id) {
+        this.applyForPurchaseRepository.deleteById (purchase_id);
+    }
 
 
     /**
@@ -121,7 +125,7 @@ public class ApplyForPurchaseService {
         if (apply_tname == null || apply_tname.equals ("") || apply_tname.equals ("申购人")) apply_tname = "%";
         if (pur_tname == null || pur_tname.equals ("") || pur_tname.equals ("采购人")) pur_tname = "%";
         System.out.println ("修正参数是:" + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
-        System.out.println (applyForPurchaseRepository.getSelectedApplyFPchse (apply_tname, clazz, startTime, endTime, pur_tname, purchase_id).toString ());
+       // System.out.println (applyForPurchaseRepository.getSelectedApplyFPchse (apply_tname, clazz, startTime, endTime, pur_tname, purchase_id).toString ());
         return this.applyForPurchaseRepository.getSelectedApplyFPchse (apply_tname, clazz, pur_tname, purchase_id, startTime, endTime);
     }
     /**
