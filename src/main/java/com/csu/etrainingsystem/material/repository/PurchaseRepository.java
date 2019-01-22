@@ -30,9 +30,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, String> {
     int findApplyNumByPId(String pId);
 
     @Query(value = "select sum(pur_num) from purchase where purchase_id=? and del_status=0 group by purchase_id", nativeQuery = true)
-    default int getAllPurNum(String pid) {
-        return 0;
-    }
+    int getAllPurNum(String pid);
 
     @Query(value = "select apply_num from apply_for_purchase where purchase_id=? and del_status=0",nativeQuery = true)
     int getApplyNumByPid(String pid);
@@ -41,12 +39,13 @@ public interface PurchaseRepository extends JpaRepository<Purchase, String> {
     boolean getApplyVerify(String pid);
 
     @Query(value = "select distinct pur_tname from purchase where purchase_id=?1 and del_status=0", nativeQuery = true)
-    default String getPurTNameByPId(String pid) {
-        return null;
-    }
+    String getPurTNameByPId(String pid);
 
     @Query(value = "select distinct clazz from purchase where pur_tname=?1 and del_status=0", nativeQuery = true)
     List<String> getClazzByTName(String tName);
+
+    @Query(value = "select distinct clazz from purchase where purchase_id=?1 and del_status=0",nativeQuery = true)
+    String getClazzByPId(String pid);
 
 
 }
