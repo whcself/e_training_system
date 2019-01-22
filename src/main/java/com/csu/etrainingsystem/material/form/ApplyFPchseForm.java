@@ -1,5 +1,6 @@
 package com.csu.etrainingsystem.material.form;
 
+import com.csu.etrainingsystem.material.entity.ApplyForPurchase;
 import lombok.Data;
 
 @Data
@@ -17,6 +18,18 @@ public class ApplyFPchseForm {
     private Boolean apply_vertify;//申购审核状态
     private String pur_tname;//采购老师
     private Integer pur_num;//采购数量
-    private Integer    save_num;//入库数量
+    private Integer  save_num;//入库数量
     private Integer    remib_num;//报账总数
+
+    public ApplyFPchseForm(ApplyForPurchase applyForPurchase) {
+        this.purchase_id=applyForPurchase.getPurchase_id ();
+        this.clazz=applyForPurchase.getClazz ();
+        this.apply_tname=applyForPurchase.getApply_tname ();
+        this.apply_vert_tname=applyForPurchase.getApply_vert_tname ();
+        this.apply_time=applyForPurchase.getApply_time ();
+        this.apply_remark=applyForPurchase.getApply_remark ();
+        this.apply_num=applyForPurchase.getApply_num ();
+        this.apply_vertify=applyForPurchase.getApply_verify ();
+        this.pur_tname=applyForPurchase.getPur_tname ();
+    }
 }

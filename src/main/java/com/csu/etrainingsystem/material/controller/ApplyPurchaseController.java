@@ -128,12 +128,14 @@ public class ApplyPurchaseController {
        Iterable<ApplyForPurchase> purchases= applyForPurchaseService.getSelectedApplyFPchse (apply_tname,clazz,startTime,endTime,pur_tname,purchase_id);
        List<ApplyFPchseForm> form=new ArrayList<> ();
         for (ApplyForPurchase purchase : purchases) {
-            ApplyFPchseForm afpf=new ApplyFPchseForm ();
-             this.purchaseService.getAllPerNumByPId (purchase.getPurchase_id ());
-
+            ApplyFPchseForm afpf=new ApplyFPchseForm (purchase);//设置一个构造器
+            afpf.setPur_num (this.purchaseService.getAllPerNumByPId (purchase.getPurchase_id ()));
+            afpf.setRemib_num (this.reimbursementService.getAllReimbNumByPId (purchase.getPurchase_id ()));
+            afpf.setSave_num (this.saveService.getAllSaveNum (purchase.getPurchase_id ()));
+        form.add (afpf);
         }
 
-       return CommonResponseForm.of200("查询记录成功",purchases);
+       return CommonResponseForm.of200("查询记录成功",form);
     }
 
     @ApiOperation ("获取所有具有相应物料权限用户的名字(管理员返回id)")
@@ -147,10 +149,10 @@ public class ApplyPurchaseController {
 
 
         ApplyForPurchase applyForPurchase= this.applyForPurchaseService.getApplyFPchse (purchase_id);
-        if (applyForPurchase.getApply_vertify ())return CommonResponseForm.of400 ("该申购已经审核");
+        if (applyForPurchase.getApply_verify())return CommonResponseForm.of400 ("该申购已经审核");
         applyForPurchase.setApply_num (apply_num);
         applyForPurchase.setPur_tname (purchase_tname);
-        applyForPurchase.setApply_vertify (true);
+        applyForPurchase.setApply_verify(true);
         User user= UserUtils.getHttpSessionUser (session);
         if (user.getRole ().equals ("admin"))applyForPurchase.setApply_vert_tname (user.getAccount ());
         else applyForPurchase.setApply_vert_tname (teacherService.getTeacher (user.getAccount ()).getTname ());

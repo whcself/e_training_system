@@ -54,9 +54,19 @@ public class PurchaseController {
         purchaseService.downloadPurchase(response,purchaseIds);
     }
 
+    /**
+     * -ScJn
+     * @apiNote 新增采购记录，判断对应申购是否被审批，采购数量是否超出。
+     * @param purchase purchase 实体
+     */
     @PostMapping("/add")
     public CommonResponseForm addPurchase(Purchase purchase){
-        purchaseService.addPurchase(purchase);
-        return CommonResponseForm.of204("增加成功");
+        return purchaseService.addPurchase(purchase);
+    }
+
+    @PostMapping("/clazz")
+    public CommonResponseForm getClazzByTName(@RequestParam String tName){
+        System.out.println(tName);
+        return CommonResponseForm.of200("查询成功",purchaseService.getClazzByTName(tName));
     }
 }

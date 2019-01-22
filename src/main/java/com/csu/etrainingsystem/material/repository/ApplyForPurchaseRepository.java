@@ -3,7 +3,6 @@ package com.csu.etrainingsystem.material.repository;
 import com.csu.etrainingsystem.material.entity.ApplyForPurchase;
 import com.csu.etrainingsystem.material.entity.Purchase;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -52,11 +51,7 @@ public interface ApplyForPurchaseRepository extends JpaRepository<ApplyForPurcha
            ,nativeQuery = true)
     Iterable<ApplyForPurchase> getSelectedApplyFPchse(String apply_tname , String clazz, String pur_tname, String purchase_id, String applyStartTime, String applyEndTime);
 
-    @Query(value="update  apply_for_purchase set apply_for_purchase.del_status=1 where purchase_id=?",nativeQuery = true)
-    @Modifying
-    void deleteById(String purchase_id);
-    @Query(value=
-            "select ",nativeQuery = true)
-    void getexcelInfo(String purchase_id);
 
+    @Query(value = "select * from apply_for_purchase where purchase_id=?1 and del_status=0",nativeQuery = true)
+    ApplyForPurchase getPurchaseInfo(String pid);
 }

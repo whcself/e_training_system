@@ -21,7 +21,7 @@ public class ApplyForPurchase {
     private String apply_time ;//申购时间
     private String apply_remark ;//申购备注
     private Integer    apply_num;//申购数量
-    private Boolean apply_vertify;//申购审核状态
+    private Boolean apply_verify;//申购审核状态
     private String pur_tname;//采购老师
     private boolean del_status;
 
@@ -37,7 +37,7 @@ public class ApplyForPurchase {
         this.apply_time = apply_time;
         this.apply_remark = apply_remark;
         this.apply_num = apply_num;
-        this.apply_vertify = apply_vertify;
+        this.apply_verify = apply_vertify;
         this.pur_tname = pur_tname;
         this.del_status = del_status;
     }
