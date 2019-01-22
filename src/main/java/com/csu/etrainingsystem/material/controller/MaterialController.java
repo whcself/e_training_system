@@ -49,7 +49,7 @@ public class MaterialController {
     @RequestMapping(value ="/addMaterial")
     public CommonResponseForm addMaterial(Material material){
         this.materialService.addMaterial (material);
-        return CommonResponseForm.of204 ("天加物料成功") ;
+        return CommonResponseForm.of204 ("添加物料成功") ;
     }
     @ApiOperation (value = "删除物料")
     @RequestMapping(value ="/deleteMaterial")
