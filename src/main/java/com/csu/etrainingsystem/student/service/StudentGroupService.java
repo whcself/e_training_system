@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +91,7 @@ public class StudentGroupService {
 
     /**
      * -ScJn
-     *
+     * <p>
      * 在学生分组的时候会将对应的学生组实体建立
      *
      * @param batchName batch
@@ -103,19 +105,35 @@ public class StudentGroupService {
         groupNum = groups.size();
         students = (List<Student>) studentRepository.findStudentByBatch_name(batchName);
         studentNum = students.size();
-        if(groupNum == 0||studentNum==0)
+        if (groupNum == 0 || studentNum == 0)
             return CommonResponseForm.of400("出错了，请检查批次名是否有问题,批次是否已经绑定好了模板");
 
-        for(String groupId : groups){
-            StudentGroupId groupId1=new StudentGroupId(groupId,batchName);
-            studentGroupRepository.save(new StudentGroup(groupId1,30,false));
+        for (String groupId : groups) {
+            StudentGroupId groupId1 = new StudentGroupId(groupId, batchName);
+            studentGroupRepository.save(new StudentGroup(groupId1, 30, false));
         }
+
+        //分组
+        ArrayList<Integer> groupStuNum = new ArrayList<>();
+        int numOfEachGroup = studentNum / groupNum;
+        int numOfBigGroup = studentNum % groupNum;
+        for (int i = 1; i <= groupNum; i++) {
+            groupStuNum.add(i <= numOfBigGroup ? numOfEachGroup + 1 : numOfEachGroup);
+            if(i>=2){
+                groupStuNum.set(i-1,groupStuNum.get(i-2)+groupStuNum.get(i-1)); // 累加每组人数，超过group.get(i)的学生下标就是i+1组
+            }
+        }
+
+        int groupIndex=0;
         for (int i = 0; i < studentNum; i++) {
             Student student = students.get(i);
-            student.setS_group_id(groups.get(i % groupNum));
+            if(i+1>groupStuNum.get(groupIndex)){
+                groupIndex++;
+            }
+            student.setS_group_id(groups.get(groupIndex));
             try {
                 studentRepository.save(student);
-            }catch (Exception e){
+            } catch (Exception e) {
                 return CommonResponseForm.of400("分组失败");
             }
         }

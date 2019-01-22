@@ -8,7 +8,6 @@ import com.csu.etrainingsystem.material.repository.PurchaseRepository;
 import com.csu.etrainingsystem.material.repository.SaveRepository;
 import com.csu.etrainingsystem.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

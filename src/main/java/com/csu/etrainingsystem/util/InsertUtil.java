@@ -97,9 +97,9 @@ public class InsertUtil {
         System.out.println(begin + " " + end);
         for (int i = begin; i < end; i++) {
             String[] sqls = {
-                    "INSERT INTO `etc2`.`student` (`sid`, `batch_name`, `sname`, `clazz`) VALUES ('1" + i + "', '2018S101', '张一" + i + "', '自动化1601');",
-                    "INSERT INTO `etc2`.`student` (`sid`, `batch_name`, `sname`, `clazz`) VALUES ('2" + i + "', '2018S201', '张二" + i + "', '自动化1601');",
-                    "INSERT INTO `etc2`.`student` (`sid`, `batch_name`, `sname`, `clazz`) VALUES ('3" + i + "', '2018S501', '张五" + i + "', '自动化1601');",
+                    "INSERT INTO `etc2`.`student` (`sid`, `batch_name`, `sname`, `clazz`) VALUES ('0101" + i + "', '2019S101', '刘一" + i + "', '自动化1601');",
+                    "INSERT INTO `etc2`.`student` (`sid`, `batch_name`, `sname`, `clazz`) VALUES ('0102" + i + "', '2019S201', '刘二" + i + "', '自动化1601');",
+                    "INSERT INTO `etc2`.`student` (`sid`, `batch_name`, `sname`, `clazz`) VALUES ('0103" + i + "', '2019S501', '刘五" + i + "', '自动化1601');",
 
             };
 
@@ -139,15 +139,14 @@ public class InsertUtil {
 
     public static void main(String[] args) {
 
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//        dataSource.setUrl("jdbc:mysql://134.175.152.210:3306/etc2?characterEncoding=utf-8&useSSL=false");
-//        dataSource.setUsername("scjn");
-//        dataSource.setPassword("123456");
-//        jdbcTemplate = new JdbcTemplate(dataSource);
-//        insertProcedConn();
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://134.175.152.210:3306/etc2?characterEncoding=utf-8&useSSL=false");
+        dataSource.setUsername("scjn");
+        dataSource.setPassword("123456");
+        jdbcTemplate = new JdbcTemplate(dataSource);
+        insertStudent(1,34);
 
-        System.out.println(System.currentTimeMillis());
 
 
     }

@@ -380,14 +380,24 @@ public class ScoreService {
             System.out.println("*******" + sid + " " + student.getSname());
             for (String itemName : scoreForm.keySet()) {
                 System.out.println("****" + itemName);
-                if (itemName.equals("sid")) continue;
-                if (itemName.equals("degree")) student.setDegree(scoreForm.get(itemName));
-                if (itemName.equals("total_score")) student.setTotal_score(Float.parseFloat(scoreForm.get(itemName)));
-                else updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)));
+                switch (itemName) {
+                    case "sid":
+                    case "reason":
+                        continue;
+                    case "degree":
+                        student.setDegree(scoreForm.get(itemName));
+                        break;
+                    case "total_score":
+                        student.setTotal_score(Float.parseFloat(scoreForm.get(itemName)));
+                        break;
+                    default:
+                        updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)));
+                        break;
+                }
             }
         }
 
-        String reason = scoreForm.get("原因");
+        String reason = scoreForm.get("reason");
         ScoreUpdate update = new ScoreUpdate();
         update.setReason(reason);
         update.setSid(sid);
