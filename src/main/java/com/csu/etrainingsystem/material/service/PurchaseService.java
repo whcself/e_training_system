@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Service
+@Transactional
 public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
 
@@ -37,7 +39,9 @@ public class PurchaseService {
 
         purchaseRepository.saveAndFlush(purchase);
     }
-
+    public int getAllPerNumByPId(String pid){
+      return   purchaseRepository.getAllPurNum (pid);
+    }
     public void downloadPurchase(HttpServletResponse response,
                                  String[] purchaseIds) throws IOException {
         List<Purchase> purchases = new ArrayList<>();
