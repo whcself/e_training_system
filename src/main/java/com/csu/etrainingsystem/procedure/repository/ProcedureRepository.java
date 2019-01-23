@@ -66,7 +66,7 @@ public interface ProcedureRepository extends JpaRepository<Proced,ProcedId> {
      * @param proName pro
      * @return t_group_id
      */
-    @Query(value="select distinct t_group_id from proced where pro_name=?1 and del_status=0",nativeQuery = true)
+    @Query(value="select distinct t_group_id from proced where pro_name=?1 and batch_name='conn' and del_status=0",nativeQuery = true)
     String getTGroupByProName(String proName);
 
     @Query(value = "select * from proced where template_name=?1 and del_status=0",nativeQuery = true)

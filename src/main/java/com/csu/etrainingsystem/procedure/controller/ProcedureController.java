@@ -134,11 +134,11 @@ public class ProcedureController {
      */
     @PostMapping("/band")
     public CommonResponseForm band(@RequestParam String batch_name, @RequestParam String template_name) {
-        try {
+//        try {
             procedureService.band(batch_name, template_name);
-        } catch (Exception e) {
-            return CommonResponseForm.of400("绑定失败");
-        }
+//        } catch (Exception e) {
+//            return CommonResponseForm.of400("绑定失败");
+//        }
         return CommonResponseForm.of204("绑定成功");
     }
 
