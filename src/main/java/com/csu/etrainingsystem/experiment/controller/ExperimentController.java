@@ -231,6 +231,36 @@ public void ExcelDownloads01(HttpServletResponse response,String batch_name) thr
     response.flushBuffer();
     workbook.write(response.getOutputStream());
 }
+
+    /**
+     * 获取工序排课表
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping(value = "/ExcelDownload")
+    public void ExcelDownloads02(HttpServletResponse response,@RequestBody String[][] datum) throws IOException {
+        int rowLength=0;
+        int colLength=0;
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("信息表");
+        String fileName = "信息"  + ".xls";
+        if (datum!=null){
+            rowLength=datum.length;//多少行
+            colLength=datum[0].length;//多少列
+        }
+        if (rowLength==0||colLength==0)return ;
+        for (int i=0;i<rowLength;i++){
+            HSSFRow r = sheet.createRow(i);
+            for (int j=0;j<colLength;j++){
+                r.createCell (j).setCellValue (datum[i][j]);
+                 }
+              }
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+        response.flushBuffer();
+        workbook.write(response.getOutputStream());
+    }
+
 /**ok
  * 添加新模板:需要异步判断是否模板名已经存在
  * 同理:其他板块也需要
