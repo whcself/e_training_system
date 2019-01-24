@@ -166,8 +166,7 @@ public class ScoreController {
     public CommonResponseForm setDegree(@RequestParam(required = false) String way,
                                         @RequestBody DegreeForm degreeForm) {
 
-        scoreService.setDegree(way, degreeForm);
-        return CommonResponseForm.of204("设置等级成功");
+        return scoreService.setDegree(way, degreeForm);
     }
 
     /**
@@ -191,7 +190,7 @@ public class ScoreController {
     public CommonResponseForm importScore(@RequestParam MultipartFile file, String batch_name, @RequestParam String pro_name) throws IOException {
         int flag = scoreService.importScore(file, batch_name, pro_name);
         if (flag == 1) {
-            return CommonResponseForm.of204("导入成绩成功，部分导入失败，不属于该批次");
+            return CommonResponseForm.of204("导入成绩成功，部分学生不属于该批次所以未导入");
         } else if (flag == 2) {
             return CommonResponseForm.of204("部分导入失败，id不正确");
         }
