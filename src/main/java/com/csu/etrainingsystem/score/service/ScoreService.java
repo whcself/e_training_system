@@ -532,8 +532,10 @@ public class ScoreService {
         for (Row row : sheet) {
             if (row.getRowNum() == 0) continue;
             Cell idCell = row.getCell(0);
-            Cell scoreCell = row.getCell(3);
+            Cell scoreCell = row.getCell(2);
             String id = null;
+            String value =null;
+
             if (idCell == null || scoreCell == null) {
                 continue;
             }
@@ -542,8 +544,14 @@ public class ScoreService {
             } else if (idCell.getCellType() == CellType.NUMERIC) {
                 id = new DecimalFormat("#").format(idCell.getNumericCellValue()); // significant code
             }
+            if (scoreCell.getCellType() == CellType.STRING) {
+                value = scoreCell.getStringCellValue();
+            } else if (idCell.getCellType() == CellType.NUMERIC) {
+                value = new DecimalFormat("#").format(idCell.getNumericCellValue()); // significant code
+            }
 
-            float value = (float) scoreCell.getNumericCellValue();
+
+
             Optional<Student> optionalStudent = studentRepository.findStudentBySid(id);
             if (optionalStudent.isPresent()) {
 
@@ -554,7 +562,7 @@ public class ScoreService {
                 }
                 Score newScore = new Score();
                 newScore.setPro_name(proName);
-                newScore.setPro_score(value);
+                newScore.setPro_score(Float.valueOf(value));
                 newScore.setSid(id);
                 scoreRepository.save(newScore);
             } else {

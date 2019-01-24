@@ -32,6 +32,7 @@ public interface StudentRepository extends JpaRepository<Student,String> {
      * @param s_group_id 学生组
      * @param batch_name 批次名
      * @return 获得指定批次，小组的所有学生
+     * bug1: 没有组号就查不出来
      */
     @Query(value="select * from student where student.s_group_id like ?1 and student.batch_name like ?2 and student.del_status=0",nativeQuery = true)
     Iterable<Student> findStudentByS_group_idAndBatch(String s_group_id,String batch_name);
