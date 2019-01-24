@@ -350,7 +350,7 @@ public class ScoreService {
             for (Student student : students) {
                 Float score = student.getTotal_score();
                 if(score==null){
-                    return CommonResponseForm.of400("评定错误，有总成绩尚未评分");
+                    score=0.0F;
                 }
                 if (score >= great) {
                     student.setDegree("优");
