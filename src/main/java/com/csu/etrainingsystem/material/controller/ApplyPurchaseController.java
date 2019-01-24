@@ -102,7 +102,6 @@ public class ApplyPurchaseController {
     @ApiOperation(value = "查询所有申购记录,默认显示所有")
     @RequestMapping(value ="/getAllApplyFPchse")
     public CommonResponseForm getAllApplyFPchse(){
-        List<ApplyFPchseForm> form=new ArrayList<> ();
        Iterable<ApplyForPurchase>purchases= this.applyForPurchaseService.getAllApplyFPchse ();
         return CommonResponseForm.of200 ("获取所有物料申购记录成功",ApplyFPchseForm.wrapForm (purchases,this.purchaseService,this.reimbursementService,this.saveService));
     }
@@ -123,10 +122,12 @@ public class ApplyPurchaseController {
                                         @RequestParam(required = false)String startTime,//起始时间
                                         @RequestParam(required = false)String endTime,//截止时间
                                         @RequestParam(required = false)String pur_tname,//采购人
-                                        @RequestParam(required = false)String purchase_id//申购编号
+                                        @RequestParam(required = false)String purchase_id,//申购编号
+                                        @RequestParam(required = false)Boolean apply_verify
+                                        //申购审核状态
                                                  )
     {
-       Iterable<ApplyForPurchase> purchases= applyForPurchaseService.getSelectedApplyFPchse (apply_tname,clazz,startTime,endTime,pur_tname,purchase_id);
+       Iterable<ApplyForPurchase> purchases= applyForPurchaseService.getSelectedApplyFPchse (apply_verify,apply_tname,clazz,startTime,endTime,pur_tname,purchase_id);
        return CommonResponseForm.of200("查询记录成功",ApplyFPchseForm.wrapForm (purchases,this.purchaseService,this.reimbursementService,this.saveService));
     }
 
@@ -179,7 +180,7 @@ public class ApplyPurchaseController {
         List<String> headers=new ArrayList<> ();
         headers.add ("申购日期");headers.add ("申购人");headers.add ("物料种类");
         headers.add ("申购数量");headers.add ("申购备注");headers.add ("审核人");
-        String fileName = "工序排课"  + ".xls";//设置要导出的文件的名字
+        String fileName = "申购单"  + ".xls";//设置要导出的文件的名字
         //新增数据行，并且设置单元格数据
         HSSFRow row = sheet.createRow(0);
         //在excel表中添加表头

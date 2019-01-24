@@ -112,13 +112,17 @@ public class ApplyForPurchaseService {
      * @return
      */
     @Transactional
-    public Iterable<ApplyForPurchase> getSelectedApplyFPchse( String apply_tname , String clazz,
+    public Iterable<ApplyForPurchase> getSelectedApplyFPchse(Boolean apply_verify ,String apply_tname , String clazz,
                                                    String startTime, String endTime,
                                                    String pur_tname,String purchase_id) {
         SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
         System.out.println ("输入参数是:" + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
         if (startTime == null || startTime.equals (""))
             startTime = format.format (applyForPurchaseRepository.findMinTime ());
+        String status="";
+        if(apply_verify==null)status="%";
+        else if (apply_verify)status="1";
+        else status="0";
         if (endTime == null || endTime.equals ("")) endTime = format.format (applyForPurchaseRepository.findMaxTime ());
         if (clazz == null || clazz.equals ("")) clazz = "%";
         if (purchase_id == null || purchase_id.equals ("")) purchase_id = "%";
@@ -126,7 +130,7 @@ public class ApplyForPurchaseService {
         if (pur_tname == null || pur_tname.equals ("") || pur_tname.equals ("采购人")) pur_tname = "%";
         System.out.println ("修正参数是:" + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
        // System.out.println (applyForPurchaseRepository.getSelectedApplyFPchse (apply_tname, clazz, startTime, endTime, pur_tname, purchase_id).toString ());
-        return this.applyForPurchaseRepository.getSelectedApplyFPchse (apply_tname, clazz, pur_tname, purchase_id, startTime, endTime);
+        return this.applyForPurchaseRepository.getSelectedApplyFPchse (status,apply_tname, clazz, pur_tname, purchase_id, startTime, endTime);
     }
     /**
      * 根据权限级别获取每个老师的姓名,如果是管理员,返回其id;
