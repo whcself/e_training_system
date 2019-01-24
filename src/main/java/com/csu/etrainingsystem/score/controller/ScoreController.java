@@ -166,8 +166,7 @@ public class ScoreController {
     public CommonResponseForm setDegree(@RequestParam(required = false) String way,
                                         @RequestBody DegreeForm degreeForm) {
 
-        scoreService.setDegree(way, degreeForm);
-        return CommonResponseForm.of204("设置等级成功");
+        return scoreService.setDegree(way, degreeForm);
     }
 
     /**

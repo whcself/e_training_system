@@ -325,7 +325,8 @@ public class ScoreService {
     /**
      * 等级
      */
-    public void setDegree(String way, DegreeForm degreeForm) {
+    @Transactional
+    public CommonResponseForm setDegree(String way, DegreeForm degreeForm) {
         float great = Float.parseFloat(degreeForm.getGreat());
         float good = Float.parseFloat(degreeForm.getGood());
         float middle = Float.parseFloat(degreeForm.getMiddle());
@@ -347,7 +348,10 @@ public class ScoreService {
             }
         } else if (way.equals("score")) {
             for (Student student : students) {
-                float score = student.getTotal_score();
+                Float score = student.getTotal_score();
+                if(score==null){
+                    return CommonResponseForm.of400("评定错误，有总成绩尚未评分");
+                }
                 if (score >= great) {
                     student.setDegree("优");
                 } else if (score >= good) {
@@ -364,6 +368,8 @@ public class ScoreService {
             }
 
         }
+        return CommonResponseForm.of204("评定成功");
+
     }
 
     /**
