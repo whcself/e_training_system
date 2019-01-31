@@ -180,7 +180,7 @@ public class StudentService {
     @Transactional
     public void addSpStudent(Student student, String template_name) {
         SpecialStudent specialStudent = new SpecialStudent(student.getSid(), student.getSname(), student.getClazz(), template_name, student.getSdept(), student.getDepart(), student.getTotal_score(), student.isDel_status(), student.isScore_lock(), student.getDegree());
-
+        spStudentRepository.save(specialStudent);
         Iterable<Experiment> experiments = experimentService.getStudentExperiment(student.getS_group_id(), student.getBatch_name());
         Iterable<SpecialScore> specialScores = new ArrayList<SpecialScore>();
         if (experiments != null) {
@@ -190,10 +190,11 @@ public class StudentService {
                 s.setPro_name(experiment.getPro_name());
                 s.setTime_quant(experiment.getTime_quant());
                 s.setClass_time(experiment.getClass_time());
+                s.setTid (experiment.getTid ());
                 scoreService.addSpScore(s);
             }
         }
-        spStudentRepository.save(specialStudent);
+
     }
 
     @Transactional

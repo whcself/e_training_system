@@ -60,8 +60,8 @@ public class StudentController {
         Student student = studentService.getStudentById(sid);
         if (student == null) return CommonResponseForm.of400("特殊学生添加失败,不存在该学生");
         System.out.println(student + template_name);
-        studentService.deleteById(student.getSid());
         studentService.addSpStudent(student, template_name);
+        studentService.deleteById(student.getSid());
         //Score score = new Score();需要一个特殊成绩表来实现
         //todo:在service层添加特殊学生的同时需要添加他对应的成绩表;已经安排
         //this.scoreService.addScore(score);
