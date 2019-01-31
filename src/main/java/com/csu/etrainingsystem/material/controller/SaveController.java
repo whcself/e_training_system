@@ -23,11 +23,21 @@ public class SaveController {
         this.saveService = saveService;
     }
 
+    /**
+     * 新增入库记录
+     * @param form
+     * @return
+     */
     @PostMapping("/add")
     public CommonResponseForm add(@RequestBody SaveAddForm form){
-        return saveService.addSave(form.getPid(),form.getNum(),form.getTname(),form.getRemark());
+        return saveService.addSave(form.getPid(),form.getNum(),form.getTname(),form.getRemark(),form.getTime());
     }
 
+    /**
+     * 查询入库记录
+     * @param form
+     * @return
+     */
     @PostMapping("/getSaveBy5")
     public CommonResponseForm getSaveBy5(@RequestBody SaveQueryForm form){
         List<Save> saveList=saveService.getSaveBy5(form.getBegin(),form.getEnd(),form.getClazz(),form.getTname(),form.getPid());

@@ -40,7 +40,8 @@ public class SaveService {
     public CommonResponseForm addSave(String pid,
                                       String num,
                                       String tname,
-                                      String remark) {
+                                      String remark,
+                                      String time) {
         Integer remain=saveRepository.remainSave(pid);
         remain=remain==null?0:remain;
         if (remain + Integer.valueOf(num) > purchaseRepository.getAllPurNum(pid)) {
@@ -52,8 +53,9 @@ public class SaveService {
         save.setSave_num(Integer.valueOf(num));
         save.setSave_tname(tname);
         save.setSave_remark(remark);
+        save.setSave_time(time);
         save.setClazz(clazz);
-        save.setSave_time(TimeUtil.getNowDate());
+//        save.setSave_time(TimeUtil.getNowDate());
         save.setDel_status(false);
         saveRepository.save(save);
 
