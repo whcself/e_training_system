@@ -176,10 +176,22 @@ public class ScoreController {
      */
     @PostMapping("/updateScore")
     public CommonResponseForm updateScore(@RequestBody Map<String, String> scoreForm) {
-        if (scoreService.updateScore2(scoreForm))
+        scoreService.updateScore2(scoreForm,true);
+        return CommonResponseForm.of400("成绩已发布，无法修改");
+    }
+
+    /**
+     * @apiNote 教师端-修改成绩
+     * @param scoreForm
+     * @return
+     */
+    @PostMapping("/updateScore2")
+    public CommonResponseForm updateScore2(@RequestBody Map<String, String> scoreForm) {
+        if (scoreService.updateScore2(scoreForm,false))
             return CommonResponseForm.of204("修改成功");
         return CommonResponseForm.of400("成绩已发布，无法修改");
     }
+
 
     /**
      * @param pro_name 工序
