@@ -54,9 +54,9 @@ public class ApplyPurchaseController {
      */
     @ApiOperation(value = "添加一个申购记录")
     @RequestMapping(value ="/addApplyFPchse")
-    public CommonResponseForm addApplyFPchse(@RequestParam(required = false) int num,
-                                               @RequestParam String clazz,
-                                             @RequestParam String apply_remark,
+    public CommonResponseForm addApplyFPchse(@RequestParam(required = false) Integer num,
+                                               @RequestParam(required = false) String clazz,
+                                             @RequestParam(required = false) String apply_remark,
                                                HttpSession session){
         User user=UserUtils.getHttpSessionUser (session);
         String tname="";

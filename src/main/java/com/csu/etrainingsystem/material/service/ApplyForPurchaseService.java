@@ -128,9 +128,8 @@ public class ApplyForPurchaseService {
         if (purchase_id == null || purchase_id.equals ("")) purchase_id = "%";
         if (apply_tname == null || apply_tname.equals ("") || apply_tname.equals ("申购人")) apply_tname = "%";
         if (pur_tname == null || pur_tname.equals ("") || pur_tname.equals ("采购人")) pur_tname = "%";
-        System.out.println ("修正参数是:" + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
-       // System.out.println (applyForPurchaseRepository.getSelectedApplyFPchse (apply_tname, clazz, startTime, endTime, pur_tname, purchase_id).toString ());
-        return this.applyForPurchaseRepository.getSelectedApplyFPchse (status,apply_tname, clazz, pur_tname, purchase_id, startTime, endTime);
+        System.out.println ("修正参数是:"+status + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
+         return this.applyForPurchaseRepository.getSelectedApplyFPchse (status,apply_tname, clazz, pur_tname, purchase_id, startTime, endTime);
     }
     /**
      * 根据权限级别获取每个老师的姓名,如果是管理员,返回其id;
@@ -171,10 +170,15 @@ public class ApplyForPurchaseService {
         String thisMonth= format.format (new Date ());
         System.out.println (thisMonth);
         String maxId=applyForPurchaseRepository.findMaxPurchaseId (thisMonth+"%");
-        Integer val=Integer.parseInt (maxId);
-        System.out.println (val);
-        String id=val+1+"";
-        System.out.println (id);
+        //如果本月还没有任何申请,这就需要手动创建第一个
+        Integer val=null;
+        String id="";
+        if(maxId!=null){
+         val=Integer.parseInt (maxId);
+          id=val+1+"";
+        }else {
+          id=thisMonth+"01";
+        }
         return id;
     }
 }
