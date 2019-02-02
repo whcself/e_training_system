@@ -60,6 +60,7 @@ public class ApplyPurchaseController {
                                                HttpSession session){
         System.out.println ("//////////////////////////////////////////////////");
         User user=UserUtils.getHttpSessionUser (session);
+        System.out.println ("//////////////////////////////////////////////////");
         String tname="";
        // System.out.println (user.getRole ());
         if(user.getRole ().equals ("teacher")) {
