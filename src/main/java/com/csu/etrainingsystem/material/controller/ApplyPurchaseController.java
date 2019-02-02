@@ -58,6 +58,7 @@ public class ApplyPurchaseController {
                                                @RequestParam(required = false) String clazz,
                                              @RequestParam(required = false) String apply_remark,
                                                HttpSession session){
+        System.out.println ("//////////////////////////////////////////////////");
         User user=UserUtils.getHttpSessionUser (session);
         String tname="";
        // System.out.println (user.getRole ());
