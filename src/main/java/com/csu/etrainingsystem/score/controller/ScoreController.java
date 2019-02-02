@@ -177,7 +177,7 @@ public class ScoreController {
     @PostMapping("/updateScore")
     public CommonResponseForm updateScore(@RequestBody Map<String, String> scoreForm) {
         scoreService.updateScore2(scoreForm,true);
-        return CommonResponseForm.of400("成绩已发布，无法修改");
+        return CommonResponseForm.of204("修改成功");
     }
 
     /**
