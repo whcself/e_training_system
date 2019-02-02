@@ -56,25 +56,28 @@ public class ApplyPurchaseController {
     @RequestMapping(value ="/addApplyFPchse")
     public CommonResponseForm addApplyFPchse(@RequestParam(required = false) Integer num,
                                                @RequestParam(required = false) String clazz,
-                                             @RequestParam(required = false) String apply_remark,
-                                               HttpSession session){
+                                             @RequestParam(required = false) String apply_remark
+    //                                           ,HttpSession session
+    ){
         System.out.println ("//////////////////////////////////////////////////");
-        User user=UserUtils.getHttpSessionUser (session);
+        //User user=UserUtils.getHttpSessionUser (session);
         System.out.println ("//////////////////////////////////////////////////");
         String tname="";
        // System.out.println (user.getRole ());
-        if(user.getRole ().equals ("teacher")) {
-            Teacher teacher = teacherService.getTeacher (user.getAccount ());
-            if (teacher != null)
-                tname = teacher.getTname ();
-        }
-        else if(user.getRole ().equals ("admin")) {
-            Admin admin = adminService.getAdminById (user.getAccount ());
-            if (admin != null)
-                tname = admin.getAid ();
-        }
+//        if(user.getRole ().equals ("teacher")) {
+//            Teacher teacher = teacherService.getTeacher (user.getAccount ());
+//            if (teacher != null)
+//                tname = teacher.getTname ();
+//        }
+//        else if(user.getRole ().equals ("admin")) {
+//            Admin admin = adminService.getAdminById (user.getAccount ());
+//            if (admin != null)
+//                tname = admin.getAid ();
+//        }
         ApplyForPurchase applyForPurchase=new ApplyForPurchase();
-        applyForPurchase.setApply_tname (tname);
+      //  applyForPurchase.setApply_tname (tname);
+        applyForPurchase.setApply_tname ("111111");
+
         //申购时间
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String time= format.format (new Date ());
