@@ -180,6 +180,7 @@ public class StudentService {
     @Transactional
     public void addSpStudent(Student student, String template_name) {
         SpecialStudent specialStudent = new SpecialStudent(student.getSid(), student.getSname(), student.getClazz(), template_name, student.getSdept(), student.getDepart(), student.getTotal_score(), student.isDel_status(), student.isScore_lock(), student.getDegree());
+        //添加特殊学生
         spStudentRepository.save(specialStudent);
         Iterable<Experiment> experiments = experimentService.getStudentExperiment(student.getS_group_id(), student.getBatch_name());
         Iterable<SpecialScore> specialScores = new ArrayList<SpecialScore>();

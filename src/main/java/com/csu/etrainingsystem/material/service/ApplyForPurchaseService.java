@@ -171,10 +171,15 @@ public class ApplyForPurchaseService {
         String thisMonth= format.format (new Date ());
         System.out.println (thisMonth);
         String maxId=applyForPurchaseRepository.findMaxPurchaseId (thisMonth+"%");
-        Integer val=Integer.parseInt (maxId);
-        System.out.println (val);
-        String id=val+1+"";
-        System.out.println (id);
+        //如果本月还没有任何申请,这就需要手动创建第一个
+        Integer val=null;
+        String id="";
+        if(maxId!=null){
+         val=Integer.parseInt (maxId);
+          id=val+1+"";
+        }else {
+          id=thisMonth+"01";
+        }
         return id;
     }
 }
