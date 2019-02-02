@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public interface PurchaseRepository extends JpaRepository<Purchase, String> {
+public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
 
     @Query(value = "select * from purchase where purchase_id like ?1 and clazz like ?2 and pur_tname like" +
             " ?3 and pur_time between ?4 and ?5 and del_status=0 order by pur_time DESC ",nativeQuery = true)
@@ -51,4 +51,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, String> {
     @Query(value = "update purchase set del_status=1 where id=?1",nativeQuery = true)
     void delete2(String id);
 
+    @Modifying
+    @Query(value = "update purchase set pur_num=?2 where id=?1",nativeQuery = true)
+    void updateNum(Integer id,Integer num);
 }

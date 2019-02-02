@@ -4,6 +4,7 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.Reimbursement;
 import com.csu.etrainingsystem.material.form.ReimAddForm;
 import com.csu.etrainingsystem.material.form.ReimQueryForm;
+import com.csu.etrainingsystem.material.form.UpdateForm;
 import com.csu.etrainingsystem.material.service.ReimbursementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -88,4 +89,5 @@ public class ReimbursementController {
         return CommonResponseForm.of204("删除成功");
 
     }
+
 }

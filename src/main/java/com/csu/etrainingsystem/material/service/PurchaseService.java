@@ -3,6 +3,7 @@ package com.csu.etrainingsystem.material.service;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.ApplyForPurchase;
 import com.csu.etrainingsystem.material.entity.Purchase;
+import com.csu.etrainingsystem.material.form.UpdateForm;
 import com.csu.etrainingsystem.material.repository.ApplyForPurchaseRepository;
 import com.csu.etrainingsystem.material.repository.PurchaseRepository;
 import org.apache.poi.hssf.usermodel.*;
@@ -14,6 +15,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -66,7 +68,6 @@ public class PurchaseService {
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("采购表");
         String[] headers = {
-                "申购编号",
                 "采购日期",
                 "采购人",
                 "物料种类",
@@ -87,12 +88,11 @@ public class PurchaseService {
         }
         for (int i = 1; i <= rowNum; i++) {
             HSSFRow r = sheet.createRow(i);
-            r.createCell(0).setCellValue(purchases.get(i - 1).getPurchase_id());
-            r.createCell(1).setCellValue(purchases.get(i - 1).getPur_time());
-            r.createCell(2).setCellValue(purchases.get(i - 1).getPur_tname());
-            r.createCell(3).setCellValue(purchases.get(i - 1).getClazz());
-            r.createCell(4).setCellValue(purchases.get(i - 1).getPur_num());
-            r.createCell(5).setCellValue(purchases.get(i - 1).getPur_remark());
+            r.createCell(0).setCellValue(purchases.get(i - 1).getPur_time());
+            r.createCell(1).setCellValue(purchases.get(i - 1).getPur_tname());
+            r.createCell(2).setCellValue(purchases.get(i - 1).getClazz());
+            r.createCell(3).setCellValue(purchases.get(i - 1).getPur_num());
+            r.createCell(4).setCellValue(purchases.get(i - 1).getPur_remark());
         }
 //);
         response.setContentType("application/octet-stream");
@@ -110,5 +110,24 @@ public class PurchaseService {
         for(String id:ids){
             purchaseRepository.delete2(id);
         }
+    }
+
+
+    @Transactional
+    public CommonResponseForm updateNum(UpdateForm form){
+        Integer id=form.getId();
+        Integer num=form.getNum();
+        if(isExist(id)){
+            purchaseRepository.updateNum(id,num);
+            return CommonResponseForm.of204("修改成功");
+        }else{
+            return CommonResponseForm.of400("不存在该采购项");
+        }
+
+    }
+
+    private boolean isExist(Integer id){
+        Optional<Purchase> optionalPurchase=purchaseRepository.findById(id);
+        return optionalPurchase.isPresent();
     }
 }

@@ -2,6 +2,7 @@ package com.csu.etrainingsystem.material.controller;
 
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.Purchase;
+import com.csu.etrainingsystem.material.form.UpdateForm;
 import com.csu.etrainingsystem.material.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -70,9 +71,20 @@ public class PurchaseController {
         return CommonResponseForm.of200("查询成功",purchaseService.getClazzByTName(tName));
     }
 
+    /**
+     * -ScJn
+     * @apiNote 删除采购记录
+     * @param ids 采购ids
+     */
     @PostMapping("/delete")
     public CommonResponseForm delete(@RequestBody String[] ids){
         purchaseService.delete2(ids);
         return CommonResponseForm.of204("删除成功");
+    }
+
+
+    @PostMapping("/updateNum")
+    public CommonResponseForm updateNum(@RequestBody UpdateForm updateForm){
+        return purchaseService.updateNum(updateForm);
     }
 }
