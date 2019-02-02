@@ -4,6 +4,7 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.material.entity.Reimbursement;
 import com.csu.etrainingsystem.material.form.ReimAddForm;
+import com.csu.etrainingsystem.material.form.UpdateForm;
 import com.csu.etrainingsystem.material.repository.PurchaseRepository;
 import com.csu.etrainingsystem.material.repository.ReimbursementRepository;
 import com.csu.etrainingsystem.util.TimeUtil;
@@ -127,4 +128,13 @@ public class ReimbursementService {
     public Integer getAllReimbNumByPId(String pid){
         return   reimbursementRepository.getAllReimbNum (pid);
     }
+
+    @Transactional
+    public void delete(String[] ids){
+        for(String id:ids){
+            reimbursementRepository.delete2(id);
+        }
+    }
+
+
 }

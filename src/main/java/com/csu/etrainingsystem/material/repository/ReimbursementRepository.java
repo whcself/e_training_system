@@ -45,4 +45,8 @@ public interface ReimbursementRepository extends JpaRepository<Reimbursement,Int
                     String tname,
                     String id);
 
+    @Modifying
+    @Query(value = "update reimbursement set del_status=1 where id=?1",nativeQuery = true)
+    void delete2(String id);
+
 }

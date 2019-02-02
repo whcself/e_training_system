@@ -15,7 +15,7 @@ public interface SaveRepository extends JpaRepository<Save,Integer> {
     @Query(value = "select sum(save_num) from save where purchase_id=?",nativeQuery = true)
     Integer getAllSaveNum(String pid);
     @Query(value = "select * from save where save_time between ?1 and ?2 and clazz like ?3 \n" +
-            "and save_tname like ?4 and purchase_id like ?5 and del_status=0 order by save_time desc ;",nativeQuery = true)
+            "and isnull(save_tname) like ?4 and purchase_id like ?5 and del_status=0 order by save_time desc ;",nativeQuery = true)
     List<Save>findBy5(String begin,
                       String end,
                       String clazz,

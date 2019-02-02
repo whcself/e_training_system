@@ -4,6 +4,7 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.Reimbursement;
 import com.csu.etrainingsystem.material.form.ReimAddForm;
 import com.csu.etrainingsystem.material.form.ReimQueryForm;
+import com.csu.etrainingsystem.material.form.UpdateForm;
 import com.csu.etrainingsystem.material.service.ReimbursementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +76,18 @@ public class ReimbursementController {
                                      @RequestParam String tname){
         reimbursementService.verifyReim(id,tname);
         return CommonResponseForm.of204("审核完成");
+    }
+
+    /**
+     * -ScJn
+     * @apiNote 删除报账记录
+     * @param ids 报账ids
+     */
+    @PostMapping("/delete")
+    public CommonResponseForm delete(@RequestBody String[] ids){
+        reimbursementService.delete(ids);
+        return CommonResponseForm.of204("删除成功");
+
     }
 
 }
