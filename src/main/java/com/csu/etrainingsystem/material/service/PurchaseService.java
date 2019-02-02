@@ -104,4 +104,11 @@ public class PurchaseService {
     public List<String> getClazzByTName(String tName){
         return purchaseRepository.getClazzByTName(tName);
     }
+
+    @Transactional
+    public void delete2(String[] ids){
+        for(String id:ids){
+            purchaseRepository.delete2(id);
+        }
+    }
 }

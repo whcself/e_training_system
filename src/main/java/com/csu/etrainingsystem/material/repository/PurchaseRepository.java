@@ -3,6 +3,7 @@ package com.csu.etrainingsystem.material.repository;
 import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.material.form.PurchaseInfoForm;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -46,5 +47,8 @@ public interface PurchaseRepository extends JpaRepository<Purchase, String> {
     @Query(value = "select distinct clazz from purchase where purchase_id=?1 and del_status=0",nativeQuery = true)
     String getClazzByPId(String pid);
 
+    @Modifying
+    @Query(value = "update purchase set del_status=1 where id=?1",nativeQuery = true)
+    void delete2(String id);
 
 }

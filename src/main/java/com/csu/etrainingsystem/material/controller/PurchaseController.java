@@ -69,4 +69,10 @@ public class PurchaseController {
         System.out.println(tName);
         return CommonResponseForm.of200("查询成功",purchaseService.getClazzByTName(tName));
     }
+
+    @PostMapping("/delete")
+    public CommonResponseForm delete(@RequestBody String[] ids){
+        purchaseService.delete2(ids);
+        return CommonResponseForm.of204("删除成功");
+    }
 }
