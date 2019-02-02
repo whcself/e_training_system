@@ -377,12 +377,12 @@ public class ScoreService {
      * 2中类别的分数，分开来执行，一个用studentRepo
      * 一个用scoreRepo
      */
-    public boolean updateScore2(Map<String, String> scoreForm) {
+    public boolean updateScore2(Map<String, String> scoreForm,boolean isAdmin) {
         String sid = scoreForm.get("sid");
         Optional<Student> op = studentRepository.findStudentBySid(sid);
         if (op.isPresent()) {
             Student student = op.get();
-            if (student.isScore_lock()) return false;
+            if (student.isScore_lock()&&!isAdmin) return false;
             System.out.println("*******" + sid + " " + student.getSname());
             for (String itemName : scoreForm.keySet()) {
                 System.out.println("****" + itemName);

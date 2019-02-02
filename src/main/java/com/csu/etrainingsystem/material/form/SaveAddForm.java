@@ -9,4 +9,5 @@ public class SaveAddForm {
     private String num;
     private String tname;
     private String remark;
+    private String time;
 }
