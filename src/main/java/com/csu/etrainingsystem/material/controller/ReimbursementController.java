@@ -49,7 +49,17 @@ public class ReimbursementController {
     @PostMapping("/downloadReim")
     public void downloadReim(HttpServletResponse response,
                              @RequestBody List<String> reimIds) throws IOException {
-        reimbursementService.downloadReim(response,reimIds);
+        reimbursementService.downloadReim(response,reimIds,false);
+    }
+
+    /**
+     * -ScJn
+     * @apiNote excel
+     */
+    @PostMapping("/exportExcel")
+    public void exportExcel(HttpServletResponse response,
+                            @RequestBody List<String> reimIds) throws IOException {
+        reimbursementService.downloadReim(response,reimIds,true);
     }
 
     /**
