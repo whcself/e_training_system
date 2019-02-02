@@ -54,7 +54,7 @@ public class ApplyPurchaseController {
      */
     @ApiOperation(value = "添加一个申购记录")
     @RequestMapping(value ="/addApplyFPchse")
-    public CommonResponseForm addApplyFPchse(@RequestParam(required = false) int num,
+    public CommonResponseForm addApplyFPchse(@RequestParam(required = false) Integer num,
                                                @RequestParam String clazz,
                                              @RequestParam String apply_remark,
                                                HttpSession session){
