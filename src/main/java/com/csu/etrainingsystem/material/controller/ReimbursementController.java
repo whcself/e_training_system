@@ -77,4 +77,15 @@ public class ReimbursementController {
         return CommonResponseForm.of204("审核完成");
     }
 
+    /**
+     * -ScJn
+     * @apiNote 删除报账记录
+     * @param ids 报账ids
+     */
+    @PostMapping("/delete")
+    public CommonResponseForm delete(@RequestBody String[] ids){
+        reimbursementService.delete(ids);
+        return CommonResponseForm.of204("删除成功");
+
+    }
 }

@@ -127,4 +127,11 @@ public class ReimbursementService {
     public Integer getAllReimbNumByPId(String pid){
         return   reimbursementRepository.getAllReimbNum (pid);
     }
+
+    @Transactional
+    public void delete(String[] ids){
+        for(String id:ids){
+            reimbursementRepository.delete2(id);
+        }
+    }
 }
