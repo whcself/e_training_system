@@ -83,6 +83,10 @@ public class PurchaseController {
     }
 
 
+    /**
+     * -ScJn
+     * @apiNote 修改采购数目
+     */
     @PostMapping("/updateNum")
     public CommonResponseForm updateNum(@RequestBody UpdateForm updateForm){
         return purchaseService.updateNum(updateForm);
