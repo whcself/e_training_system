@@ -39,7 +39,7 @@ public class ApplyForPurchaseService {
      */
     @Transactional
     public void addApplyFPchse(ApplyForPurchase applyFpchse) {
-        this.applyForPurchaseRepository.save(applyFpchse);
+        this.applyForPurchaseRepository.saveAndFlush (applyFpchse);
     }
 
     /**

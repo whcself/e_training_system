@@ -1,5 +1,7 @@
+/*632.*-/9+8632
 package com.csu.etrainingsystem.material.repository;
-
+ */
+package com.csu.etrainingsystem.material.repository;
 import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.material.form.PurchaseInfoForm;
 import org.springframework.data.jpa.repository.JpaRepository;

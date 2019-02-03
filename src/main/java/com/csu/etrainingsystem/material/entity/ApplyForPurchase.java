@@ -1,6 +1,8 @@
 package com.csu.etrainingsystem.material.entity;
 
+import javafx.beans.DefaultProperty;
 import lombok.Data;
+import net.bytebuddy.implementation.bind.annotation.Default;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,8 +27,7 @@ public class ApplyForPurchase {
     private String pur_tname;//采购老师
     private boolean del_status;
 
-    public ApplyForPurchase() {
-    }
+
 
     public ApplyForPurchase(String purchase_id, String clazz, String apply_tname, String apply_vert_tname, String apply_vert_time, String apply_time, String apply_remark, Integer apply_num, Boolean apply_vertify, String pur_tname, boolean del_status) {
         this.purchase_id = purchase_id;
@@ -40,5 +41,13 @@ public class ApplyForPurchase {
         this.apply_verify = apply_vertify;
         this.pur_tname = pur_tname;
         this.del_status = del_status;
+    }
+
+    public ApplyForPurchase() {
+        this.apply_vert_tname = "";
+        this.apply_vert_time ="2000-01-01";
+        this.apply_verify = false;
+        this.pur_tname = "";
+        this.del_status = false;
     }
 }
