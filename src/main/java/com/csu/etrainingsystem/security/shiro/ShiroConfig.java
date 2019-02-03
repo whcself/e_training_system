@@ -54,7 +54,7 @@ public class ShiroConfig {
 		filterMap.put("/csu-engineer-train-front/manager/*", "authc");
 		filterMap.put("/csu-engineer-train-front/teacher/*", "authc");
 		filterMap.put("/csu-engineer-train-front/student/*", "authc");
-		filterMap.put("/csu-engineer-train-front/**", "anon");
+		//filterMap.put("/csu-engineer-train-front/**", "anon");
 		filterMap.put("/login", "anon");
 		filterMap.put("/abc", "anon");
 		filterMap.put("/tlogin", "anon");
