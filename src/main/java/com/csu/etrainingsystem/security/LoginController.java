@@ -64,7 +64,6 @@ public class LoginController {
 		//3.执行登录方法
 		try {
 			subject.login(token);
-			System.out.println (subject.getSession ().getAttribute ("applymaterial"));
 
 			//登录成功
 			User user=userService.getUser (name);
