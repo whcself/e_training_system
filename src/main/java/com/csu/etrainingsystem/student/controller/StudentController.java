@@ -93,8 +93,8 @@ public class StudentController {
     }
 
     @ApiOperation("获取特殊学生,返回数据中sid为数据的唯一标识")
-    @RequestMapping(value = "/getSpStudentById/{id}")
-    public CommonResponseForm getSpStudentById(@PathVariable("id") String id) {
+    @RequestMapping(value = "/getSpStudentById")
+    public CommonResponseForm getSpStudentById(String id) {
         SpecialStudent student = studentService.findSpStudentById(id);
         SpStudentInfoForm spStudentInfoForm = new SpStudentInfoForm(student.getSid(), student.getSname(), student.getClazz(), student.getTemplate_name());
 
