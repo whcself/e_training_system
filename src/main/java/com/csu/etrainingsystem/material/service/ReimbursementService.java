@@ -127,9 +127,14 @@ public class ReimbursementService {
     public CommonResponseForm add(ReimAddForm form) {
         Reimbursement reim = new Reimbursement();
         String pid = form.getPurchaseId();
-        int num = form.getNum();
+        Integer num = form.getNum();
         //todo 查询该pid的当前报账总数
-        if (num + reimbursementRepository.getSumReimByPId(pid) > purchaseRepository.getAllPurNum(pid)) {
+        Integer rn=reimbursementRepository.getSumReimByPId(pid);
+        Integer pn=purchaseRepository.getAllPurNum(pid);
+        pn= pn==null?0:pn;
+        rn= rn==null?0:rn;
+
+        if (num + rn > pn) {
             return CommonResponseForm.of400("报账超过总数");
         }
         String remark = form.getRemark();

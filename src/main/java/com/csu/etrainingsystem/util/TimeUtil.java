@@ -16,12 +16,23 @@ public class TimeUtil {
 
     public static String getNowDate(){
         GregorianCalendar calendar=new GregorianCalendar();
+        System.out.println(calendar.toZonedDateTime());
         System.out.println(calendar.toZonedDateTime().toString().substring(0,10));
         return calendar.toZonedDateTime().toString().substring(0,10);
 
     }
 
+    public static String getNowTime(){
+        GregorianCalendar calendar=new GregorianCalendar();
+
+        StringBuilder time=new StringBuilder(calendar.toZonedDateTime().toString().substring(0,19));
+        time.setCharAt(10,' ');
+        System.out.println(time);
+        return time.toString();
+    }
+
     public static void main(String[] args) {
-        getNowDate();
+
+        getNowTime();
     }
 }

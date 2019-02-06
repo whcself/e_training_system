@@ -17,8 +17,8 @@ import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
+import com.csu.etrainingsystem.util.TimeUtil;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -27,16 +27,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.logging.Logger;
 
 @Service
 public class ScoreService {
@@ -137,34 +133,12 @@ public class ScoreService {
      */
     public List<HashMap<String, String>> getScoreByBatchAndSGroupOrProName(String batchName, String sGroup, String proName,
                                                                            String sId, String sName) {
+
         List<HashMap<String, String>> scoreForms = new ArrayList<>();
-
-        List<Student> students = new ArrayList<>();
-
-        //根据所传的参数，先确定学生,没有学好就看批次和组号
-        if (!sId.equals("all")) {
-            students = new ArrayList<>();
-            Optional<Student> student = studentRepository.findStudentBySid(sId);
-            student.ifPresent(students::add);
-        } else if (!sName.equals("all")) {
-            students = (List<Student>) studentRepository.findStudentBySName(sName);
-        }else{
-            if (sGroup.equals("all")) sGroup = "%";
-            if (batchName.equals("all")) batchName = "%";
-            students = (List<Student>) studentRepository.findStudentByS_group_idAndBatch(sGroup, batchName);
-
-        }
-
+        List<Student> students = getStudents(sId, sName, sGroup, batchName);
         for (Student student : students) {
-            ArrayList<Score> scores = new ArrayList<>();
+            List<Score> scores = getScore(proName, student);
             System.out.println("***" + student.getSid());
-            if (!proName.equals("all")) {
-                Score score = scoreRepository.findScoreBySidAndPro_name(student.getSid(), proName);
-                if (score != null)
-                    scores.add(score);
-            } else {
-                scores = (ArrayList<Score>) scoreRepository.findScoreBySid(student.getSid());
-            }
             HashMap<String, String> scoreForm = new HashMap<>();
             scoreForm.put("sname", student.getSname());
             scoreForm.put("sid", student.getSid());
@@ -182,6 +156,47 @@ public class ScoreService {
             scoreForms.add(scoreForm);
         }
         return scoreForms;
+    }
+
+    public List<Score> getInputInfo(String sId, String sName, String sGroup, String batchName, String proName) {
+        List<Student> students = getStudents(sId, sName, sGroup, batchName);
+        List<Score> inputForm = new ArrayList<>();
+        for (Student student : students) {
+            inputForm.addAll(getScore(proName, student));
+        }
+        return inputForm;
+    }
+
+    private List<Score> getScore(String proName, Student student) {
+        List<Score> scores = new ArrayList<>();
+        if (!proName.equals("all")) {
+            Score score = scoreRepository.findScoreBySidAndPro_name(student.getSid(), proName);
+            if (score != null)
+                scores.add(score);
+        } else {
+            scores = (ArrayList<Score>) scoreRepository.findScoreBySid(student.getSid());
+        }
+        return scores;
+    }
+
+    private List<Student> getStudents(String sId, String sName, String sGroup, String batchName) {
+
+        List<Student> students;
+
+        //根据所传的参数，先确定学生,没有学好就看批次和组号
+        if (!sId.equals("all")) {
+            students = new ArrayList<>();
+            Optional<Student> student = studentRepository.findStudentBySid(sId);
+            student.ifPresent(students::add);
+        } else if (!sName.equals("all")) {
+            students = (List<Student>) studentRepository.findStudentBySName(sName);
+        } else {
+            if (sGroup.equals("all")) sGroup = "%";
+            if (batchName.equals("all")) batchName = "%";
+            students = (List<Student>) studentRepository.findStudentByS_group_idAndBatch(sGroup, batchName);
+
+        }
+        return students;
     }
 
     @Transactional
@@ -349,8 +364,8 @@ public class ScoreService {
         } else if (way.equals("score")) {
             for (Student student : students) {
                 Float score = student.getTotal_score();
-                if(score==null){
-                    score=0.0F;
+                if (score == null) {
+                    score = 0.0F;
                 }
                 if (score >= great) {
                     student.setDegree("优");
@@ -377,12 +392,12 @@ public class ScoreService {
      * 2中类别的分数，分开来执行，一个用studentRepo
      * 一个用scoreRepo
      */
-    public boolean updateScore2(Map<String, String> scoreForm,boolean isAdmin) {
+    public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin) {
         String sid = scoreForm.get("sid");
         Optional<Student> op = studentRepository.findStudentBySid(sid);
         if (op.isPresent()) {
             Student student = op.get();
-            if (student.isScore_lock()&&!isAdmin) return false;
+            if (student.isScore_lock() && !isAdmin) return false;
             System.out.println("*******" + sid + " " + student.getSname());
             for (String itemName : scoreForm.keySet()) {
                 System.out.println("****" + itemName);
@@ -534,7 +549,7 @@ public class ScoreService {
             Cell idCell = row.getCell(0);
             Cell scoreCell = row.getCell(2);
             String id = null;
-            String value =null;
+            String value = null;
 
             if (idCell == null || scoreCell == null) {
                 continue;
@@ -551,7 +566,6 @@ public class ScoreService {
             }
 
 
-
             Optional<Student> optionalStudent = studentRepository.findStudentBySid(id);
             if (optionalStudent.isPresent()) {
 
@@ -564,6 +578,7 @@ public class ScoreService {
                 newScore.setPro_name(proName);
                 newScore.setPro_score(Float.valueOf(value));
                 newScore.setSid(id);
+                newScore.setTime(TimeUtil.getNowTime());
                 scoreRepository.save(newScore);
             } else {
                 flag = 2;

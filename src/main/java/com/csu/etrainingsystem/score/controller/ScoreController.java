@@ -2,9 +2,11 @@ package com.csu.etrainingsystem.score.controller;
 
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.entity.ScoreSubmit;
 import com.csu.etrainingsystem.score.entity.ScoreUpdate;
 import com.csu.etrainingsystem.score.form.DegreeForm;
+import com.csu.etrainingsystem.score.form.InputSearchForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.SpecialStudent;
@@ -257,6 +259,12 @@ public class ScoreController {
     public CommonResponseForm releaseSpScore(@RequestBody Map<String, String> sids) {
         scoreService.releaseSpScore(sids);
         return CommonResponseForm.of204("发布成功");
+    }
+
+    @PostMapping("/getInputInfo")
+    public CommonResponseForm getInputInfo(@RequestBody InputSearchForm form){
+        List<Score> scores=scoreService.getInputInfo(form.getSId(),form.getSName(),form.getSGroup(),form.getBatchName(),form.getProName());
+        return CommonResponseForm.of200("共"+scores.size()+"条",scores);
     }
 
     public static void main(String[] args){
