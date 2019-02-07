@@ -154,7 +154,7 @@ public class ReimbursementService {
         reim.setDel_status(false);
         reim.setRemib_vertify(false);
         reim.setPur_tname(purchaseRepository.getPurTNameByPId(pid));
-        reim.setRemib_time(TimeUtil.getNowDate());
+        reim.setRemib_time(TimeUtil.getNowTime());
         reimbursementRepository.saveAndFlush(reim);
         return CommonResponseForm.of204("增加成功");
     }

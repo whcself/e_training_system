@@ -88,7 +88,7 @@ public class UserController {
      * @apiNote 我的信息
      * @param session session
      */
-    @PostMapping("getInfo")
+    @PostMapping("/getInfo")
     public CommonResponseForm getInfo(HttpSession session){
         return userService.getInfo(session);
 
