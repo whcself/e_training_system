@@ -15,4 +15,6 @@ public class ScoreUpdate {
     private String sid;
     private Timestamp update_time;
     private String reason;
+    @Column(name = "tname")
+    private String tName;
 }
