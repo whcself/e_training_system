@@ -395,6 +395,7 @@ public class ScoreService {
     public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin) {
         String sid = scoreForm.get("sid");
         Optional<Student> op = studentRepository.findStudentBySid(sid);
+        String tName=scoreForm.get("tName");
         if (op.isPresent()) {
             Student student = op.get();
             if (student.isScore_lock() && !isAdmin) return false;
@@ -404,6 +405,7 @@ public class ScoreService {
                 switch (itemName) {
                     case "sid":
                     case "reason":
+                    case "tName":
                         continue;
                     case "degree":
                         student.setDegree(scoreForm.get(itemName));
@@ -422,6 +424,7 @@ public class ScoreService {
         ScoreUpdate update = new ScoreUpdate();
         update.setReason(reason);
         update.setSid(sid);
+        update.setTName(tName);
         update.setUpdate_time(new Timestamp(System.currentTimeMillis()));
         scoreUpdateRepository.save(update);
         return true;
@@ -648,7 +651,8 @@ public class ScoreService {
     public boolean updateSpScore(SpecialStudent specialStudent, HashMap<String, String> map) {
 
         boolean flag = true;
-
+        String sid=map.get("sid");
+        String tName=map.get("tName");
         for (String key : map.keySet()) {
             switch (key) {
                 case "等级":
@@ -657,6 +661,10 @@ public class ScoreService {
                 case "总成绩":
                     specialStudent.setTotal_score(Float.parseFloat(map.get(key)));
                     break;
+                case "reason":
+                case "tName":
+                case "sid":
+                    continue;
                 default:
                     try {
                         spScoreRepository.updateSpScore(specialStudent.getSid(), key, map.get(key));
@@ -666,6 +674,13 @@ public class ScoreService {
                     }
                     break;
             }
+            String reason = map.get("reason");
+            ScoreUpdate update = new ScoreUpdate();
+            update.setSid(sid);
+            update.setReason(reason);
+            update.setTName(tName);
+            update.setUpdate_time(new Timestamp(System.currentTimeMillis()));
+            scoreUpdateRepository.saveAndFlush(update);
 
         }
         return flag;
