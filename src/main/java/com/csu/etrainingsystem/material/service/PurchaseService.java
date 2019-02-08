@@ -6,11 +6,13 @@ import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.material.form.UpdateForm;
 import com.csu.etrainingsystem.material.repository.ApplyForPurchaseRepository;
 import com.csu.etrainingsystem.material.repository.PurchaseRepository;
+import com.csu.etrainingsystem.user.entity.UserRole;
 import org.apache.poi.hssf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,10 +43,13 @@ public class PurchaseService {
 
 
 
-    public CommonResponseForm addPurchase(Purchase purchase) {
+    public CommonResponseForm addPurchase(Purchase purchase,String tName) {
         String pid = purchase.getPurchase_id();
         ApplyForPurchase infoMap = applyForPurchaseRepository.
                 getPurchaseInfo(pid);
+        if(infoMap==null||!infoMap.getPur_tname().equals(tName)){
+            return CommonResponseForm.of400("申购不存在或者采购老师不符合");
+        }
         purchase.setDel_status(false);
         purchase.setPur_tname(infoMap.getPur_tname());  // set the teacher name
         purchase.setClazz(infoMap.getClazz());

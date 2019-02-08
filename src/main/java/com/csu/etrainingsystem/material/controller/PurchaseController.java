@@ -61,8 +61,9 @@ public class PurchaseController {
      * @param purchase purchase 实体
      */
     @PostMapping("/add")
-    public CommonResponseForm addPurchase(Purchase purchase){
-        return purchaseService.addPurchase(purchase);
+    public CommonResponseForm addPurchase(Purchase purchase,
+                                          @RequestParam String tName){
+        return purchaseService.addPurchase(purchase,tName);
     }
 
     @PostMapping("/clazz")
