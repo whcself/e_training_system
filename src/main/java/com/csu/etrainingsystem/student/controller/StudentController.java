@@ -141,7 +141,7 @@ public class StudentController {
     public CommonResponseForm deleteSpStudentById(@RequestBody String[] ids) {
         for (String id : ids) {
             this.studentService.deleteSpStudentById(id);
-            this.studentService.deleteById (id);
+           // this.studentService.deleteById (id);
         }
         return CommonResponseForm.of204("删除特殊学生成功");
     }

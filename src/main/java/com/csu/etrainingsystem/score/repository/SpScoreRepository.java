@@ -33,6 +33,11 @@ public interface SpScoreRepository extends JpaRepository<SpecialScore,Integer> {
     @Modifying
     void deleteSpScoreBySidAndPro_name(String sid, String pro_name);
 
+    //删除选中的工序记录
+    @Query(value = "update sp_score SET sp_score.del_status=1 WHERE sp_score.sp_scoreid=? ", nativeQuery = true)
+    @Modifying
+    void deleteSpScoreByScoreId(String scoreId);
+
     /*
     -ScJn
      */

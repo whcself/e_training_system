@@ -110,6 +110,11 @@ public class ScoreService {
         Iterable<SpecialScore> scores = spScoreRepository.findSpScoreBySid(sid);
         if (scores != null) this.spScoreRepository.deleteSpScoreBySid(sid);
     }
+    @Transactional
+    public void deleteSpScoreByscoreId(String scoreId) {
+          this.spScoreRepository.deleteSpScoreByScoreId(scoreId);
+    }
+
 
     @Transactional
     public void deleteScoreBySidAndPro(String sid, String pro_name) {
