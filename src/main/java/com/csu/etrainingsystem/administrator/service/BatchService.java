@@ -59,4 +59,8 @@ public class BatchService {
        return batchRepository.getAllSGroup(batchName);
     }
 
+    public void updateBeginDate(String beginDate,String semesterName){
+        batchRepository.updateBeginDate(beginDate,semesterName);
+    }
+
 }

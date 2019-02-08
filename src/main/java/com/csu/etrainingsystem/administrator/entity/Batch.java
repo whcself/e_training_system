@@ -20,4 +20,6 @@ public class Batch {
     @Column(name = "del_status")
     private boolean del_status;
     private String semester_name;
+    @Column(name = "begin_date")
+    private String beginDate;
 }
