@@ -22,4 +22,5 @@ public class SpecialScore  implements Serializable {
     private Float pro_score;
     private String time_quant;//对于特殊学生,查询上课时间是在成绩表里面实现的吗,一开始就指定他的课程
     private Integer class_time;
+    private Boolean score_submit;
 }
