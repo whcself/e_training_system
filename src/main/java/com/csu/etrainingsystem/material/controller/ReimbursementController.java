@@ -81,10 +81,14 @@ public class ReimbursementController {
         return CommonResponseForm.of200("查询成功",reimbursementService.remain(pid));
     }
 
+    /**
+     * @apiNote 报账审核
+     */
     @PostMapping("/verify")
     public CommonResponseForm verify(@RequestParam String id,
-                                     @RequestParam String tname){
-        reimbursementService.verifyReim(id,tname);
+                                     @RequestParam String tname,
+                                     @RequestParam(required = false) Integer num){
+        reimbursementService.verifyReim(id,tname,num);
         return CommonResponseForm.of204("审核完成");
     }
 

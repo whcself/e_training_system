@@ -45,7 +45,6 @@ public class ReimbursementService {
     }
 
     /**
-     *
      * @param flag true all, false 报账单
      * @throws IOException
      */
@@ -70,8 +69,8 @@ public class ReimbursementService {
                     "审核人",
                     "报账备注"
             };
-        }else {
-            headers=new String []{
+        } else {
+            headers = new String[]{
                     "新增报账申请日期",
                     "采购人",
                     "物料种类",
@@ -92,7 +91,7 @@ public class ReimbursementService {
             HSSFRichTextString text = new HSSFRichTextString(headers[i]);
             cell.setCellValue(text);
         }
-        if(flag){
+        if (flag) {
             for (int i = 1; i <= rowNum; i++) {
                 HSSFRow r = sheet.createRow(i);
                 r.createCell(0).setCellValue(reimbursements.get(i - 1).getPurchase_id());
@@ -104,7 +103,7 @@ public class ReimbursementService {
                 r.createCell(6).setCellValue(reimbursements.get(i - 1).getRemib_vert_tname());
                 r.createCell(7).setCellValue(reimbursements.get(i - 1).getRemib_remark());
             }
-        }else{
+        } else {
             for (int i = 1; i <= rowNum; i++) {
                 HSSFRow r = sheet.createRow(i);
                 r.createCell(0).setCellValue(reimbursements.get(i - 1).getRemib_time());
@@ -123,13 +122,28 @@ public class ReimbursementService {
         workbook.write(response.getOutputStream());
     }
 
+    private Integer getAllPurNum(String pid) {
+        Integer pn = purchaseRepository.getAllPurNum(pid);
+        pn = pn == null ? 0 : pn;
+        return pn;
+    }
+
+    private Integer getAllReimNum(String pid) {
+        Integer rn = reimbursementRepository.getSumReimByPId(pid);
+
+        rn = rn == null ? 0 : rn;
+        return rn;
+    }
 
     public CommonResponseForm add(ReimAddForm form) {
         Reimbursement reim = new Reimbursement();
         String pid = form.getPurchaseId();
-        int num = form.getNum();
+        Integer num = form.getNum();
         //todo 查询该pid的当前报账总数
-        if (num + reimbursementRepository.getSumReimByPId(pid) > purchaseRepository.getAllPurNum(pid)) {
+        Integer pn = getAllPurNum(pid);
+        Integer rn = getAllReimNum(pid);
+
+        if (num + rn > pn) {
             return CommonResponseForm.of400("报账超过总数");
         }
         String remark = form.getRemark();
@@ -140,18 +154,23 @@ public class ReimbursementService {
         reim.setDel_status(false);
         reim.setRemib_vertify(false);
         reim.setPur_tname(purchaseRepository.getPurTNameByPId(pid));
-        reim.setRemib_time(TimeUtil.getNowDate());
+        reim.setRemib_time(TimeUtil.getNowTime());
         reimbursementRepository.saveAndFlush(reim);
         return CommonResponseForm.of204("增加成功");
     }
 
     public int remain(String pid) {
-        return purchaseRepository.getAllPurNum(pid) - reimbursementRepository.getSumReimByPId(pid);
+        return getAllPurNum(pid) - getAllReimNum(pid);
     }
 
     @Transactional
-    public void verifyReim(String id, String name) {
-        reimbursementRepository.verifyReim(TimeUtil.getNowDate(), name, id);
+    public void verifyReim(String id, String name, Integer num) {
+        reimbursementRepository.verifyReim(TimeUtil.getNowTime(), name, id);
+        if (num != null) {
+            Reimbursement r = reimbursementRepository.findById(id);
+            r.setRemib_num(num);
+            reimbursementRepository.saveAndFlush(r);
+        }
     }
 
     public Integer getAllReimbNumByPId(String pid) {

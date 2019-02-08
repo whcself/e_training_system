@@ -22,9 +22,10 @@ import java.util.Optional;
 public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final ApplyForPurchaseRepository applyForPurchaseRepository;
+
     @Autowired
-    public PurchaseService(ApplyForPurchaseRepository applyForPurchaseRepository,PurchaseRepository purchaseRepository) {
-        this.applyForPurchaseRepository=applyForPurchaseRepository;
+    public PurchaseService(ApplyForPurchaseRepository applyForPurchaseRepository, PurchaseRepository purchaseRepository) {
+        this.applyForPurchaseRepository = applyForPurchaseRepository;
         this.purchaseRepository = purchaseRepository;
     }
 
@@ -38,6 +39,8 @@ public class PurchaseService {
 
     }
 
+
+
     public CommonResponseForm addPurchase(Purchase purchase) {
         String pid = purchase.getPurchase_id();
         ApplyForPurchase infoMap = applyForPurchaseRepository.
@@ -45,7 +48,8 @@ public class PurchaseService {
         purchase.setDel_status(false);
         purchase.setPur_tname(infoMap.getPur_tname());  // set the teacher name
         purchase.setClazz(infoMap.getClazz());
-        int num = purchaseRepository.getAllPurNum(pid);  //judge the purchase total number
+        Integer num = purchaseRepository.getAllPurNum(pid);  //judge the purchase total number
+        num = num == null ? 0 : num;
         if (!infoMap.getApply_verify()) {
             return CommonResponseForm.of400("该申购未被审核");
         } else if (purchase.getPur_num() + num > infoMap.getApply_num()) {
@@ -55,9 +59,11 @@ public class PurchaseService {
         purchaseRepository.saveAndFlush(purchase);
         return CommonResponseForm.of204("增加成功");
     }
-    public Integer getAllPerNumByPId(String pid){
-      return   purchaseRepository.getAllPurNum (pid);
+
+    public Integer getAllPerNumByPId(String pid) {
+        return purchaseRepository.getAllPurNum(pid);
     }
+
     public void downloadPurchase(HttpServletResponse response,
                                  String[] purchaseIds) throws IOException {
         List<Purchase> purchases = new ArrayList<>();
@@ -101,33 +107,33 @@ public class PurchaseService {
         workbook.write(response.getOutputStream());
     }
 
-    public List<String> getClazzByTName(String tName){
+    public List<String> getClazzByTName(String tName) {
         return purchaseRepository.getClazzByTName(tName);
     }
 
     @Transactional
-    public void delete2(String[] ids){
-        for(String id:ids){
+    public void delete2(String[] ids) {
+        for (String id : ids) {
             purchaseRepository.delete2(id);
         }
     }
 
 
     @Transactional
-    public CommonResponseForm updateNum(UpdateForm form){
-        Integer id=form.getId();
-        Integer num=form.getNum();
-        if(isExist(id)){
-            purchaseRepository.updateNum(id,num);
+    public CommonResponseForm updateNum(UpdateForm form) {
+        Integer id = form.getId();
+        Integer num = form.getNum();
+        if (isExist(id)) {
+            purchaseRepository.updateNum(id, num);
             return CommonResponseForm.of204("修改成功");
-        }else{
+        } else {
             return CommonResponseForm.of400("不存在该采购项");
         }
 
     }
 
-    private boolean isExist(Integer id){
-        Optional<Purchase> optionalPurchase=purchaseRepository.findById(id);
+    private boolean isExist(Integer id) {
+        Optional<Purchase> optionalPurchase = purchaseRepository.findById(id);
         return optionalPurchase.isPresent();
     }
 }

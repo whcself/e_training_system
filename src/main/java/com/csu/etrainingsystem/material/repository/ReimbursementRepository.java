@@ -32,7 +32,7 @@ public interface ReimbursementRepository extends JpaRepository<Reimbursement,Int
 
 
     @Query(value = "select sum(remib_num) from reimbursement where purchase_id=?1 and del_status=0",nativeQuery = true)
-    int getSumReimByPId(String pid);
+    Integer getSumReimByPId(String pid);
 
 
 
