@@ -23,7 +23,7 @@ public interface BatchRepository extends JpaRepository<Batch,String> {
     List<Batch> findBatchBySemester_name(String semesterName);
 
     @Query(value = "select distinct semester_name,begin_date from batch where del_status=0",nativeQuery = true)
-    Iterable<String> findAllSemesterName();
+    List<Object[]> findAllSemesterName();
 
     @Modifying
     @Query(value = "update semester set semester_name=?2 where  semester_name=?1",nativeQuery = true)
