@@ -26,4 +26,6 @@ public interface SpStudentRepository extends JpaRepository<SpecialStudent,String
     @Query(value = "select * from sp_student where del_status=0",nativeQuery = true)
     List<SpecialStudent> findAll();
 
+    @Query(value = "select * from sp_student where template_name=?",nativeQuery = true)
+    List<SpecialStudent> findByTemplateName(String templateName);
 }

@@ -222,6 +222,7 @@ public class ScoreController {
     }
 
     /**
+     * -ScJn
      * @param sid   di
      * @param sname sname
      * @return f
@@ -229,8 +230,9 @@ public class ScoreController {
      */
     @PostMapping("/getSpScore")
     public CommonResponseForm getSpScore(@RequestParam(required = false) String sid,
-                                         @RequestParam(required = false) String sname) {
-        List<Map<String, String>> maps = scoreService.getSpScore(sid, sname);
+                                         @RequestParam(required = false) String sname,
+                                         @RequestParam(required = false) String templateName) {
+        List<Map<String, String>> maps = scoreService.getSpScore(sid, sname,templateName);
         return CommonResponseForm.of200("查询成功: 共" + maps.size(), maps);
     }
 
