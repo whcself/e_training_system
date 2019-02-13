@@ -16,9 +16,9 @@ public interface ApplyForPurchaseRepository extends JpaRepository<ApplyForPurcha
 
     @Query(value="select * from apply_for_purchase where apply_for_purchase.clazz=? and"+APPEND_DEL_STATUS,nativeQuery = true)
     Optional<ApplyForPurchase> findApplyFPchseByClazz(String clazz);
-    @Query(value="select * from apply_for_purchase where"+APPEND_DEL_STATUS,nativeQuery = true)
+    @Query(value="select * from apply_for_purchase where"+APPEND_DEL_STATUS +" ORDER by apply_time desc ",nativeQuery = true)
     Iterable<ApplyForPurchase> findAllApplyFPchse();
-    @Query(value="select * from apply_for_purchase where  "+APPEND_DEL_STATUS+" and apply_for_purchase.apply_time between ? and ?",nativeQuery = true)
+    @Query(value="select * from apply_for_purchase where  "+APPEND_DEL_STATUS+" and apply_for_purchase.apply_time between ? and ? ",nativeQuery = true)
     Iterable<ApplyForPurchase> findApplyFPchseByTime(String startTime ,String endTime);
 
     @Query(value="  SELECT  MAX(apply_for_purchase.apply_time) FROM apply_for_purchase where "+APPEND_DEL_STATUS,nativeQuery = true)

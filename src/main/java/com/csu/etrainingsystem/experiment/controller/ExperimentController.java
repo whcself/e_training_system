@@ -3,6 +3,7 @@ package com.csu.etrainingsystem.experiment.controller;
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
 import com.csu.etrainingsystem.student.service.StudentService;
@@ -22,12 +23,14 @@ public class ExperimentController {
     private final ExperimentService experimentService;
     private final StudentService studentService;
     private final StudentGroupService studentGroupService;
+    private final ScoreService scoreService;
 
     @Autowired
-    public ExperimentController(ExperimentService experimentService, StudentService studentService, StudentGroupService studentGroupService) {
+    public ExperimentController(ExperimentService experimentService, StudentService studentService, StudentGroupService studentGroupService, ScoreService scoreService) {
         this.experimentService = experimentService;
         this.studentService = studentService;
         this.studentGroupService = studentGroupService;
+        this.scoreService = scoreService;
     }
 
     @RequestMapping(value = "/addExperiment")
@@ -92,14 +95,22 @@ public class ExperimentController {
     }
 
 
+    /**
+     * 接口需要复用,在当前过程中
+     * @param sid
+     * @return
+     */
     @ApiOperation(value = "根据学生号查询实验,返回结果为该学生的课表安排")
     @RequestMapping(value = "/getClass")
     public CommonResponseForm getExperimentByStudentGroup(@RequestParam(required = false) String sid) {
         String s_group = "";
         String batch_name = "";
         if (sid != null) {
+            if (scoreService.getSpScoreBySid (sid)!=null){
+                return  CommonResponseForm.of200("特殊学生课程",scoreService.getSpScoreBySid (sid)) ;
+            }
             Student student = this.studentService.getStudentById (sid);
-            if (student != null) {
+            if (student == null) {
                 s_group = student.getS_group_id ();
                 batch_name = student.getBatch_name ();
             }
