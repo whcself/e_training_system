@@ -99,4 +99,15 @@ public class BatchController {
     public CommonResponseForm getAllSGroup(@RequestParam String batch_name){
         return CommonResponseForm.of200("查询成功",batchService.getAllSGroup(batch_name));
     }
+
+    /**
+     * -ScJn
+     * @apiNote 修改学期开始时间
+     */
+    @PostMapping("/updateBeginDate")
+    public CommonResponseForm updateBeginDate(String beginDate,String semesterName){
+        batchService.updateBeginDate(beginDate,semesterName);
+        return CommonResponseForm.of204("修改成功");
+    }
+
 }

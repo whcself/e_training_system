@@ -28,11 +28,11 @@ public class BatchService {
     }
 
     public List<SemesterForm> getAllSemesterName() {
-      Iterable<String> semesters= batchRepository.findAllSemesterName();
+      List<Object[]> semesters= batchRepository.findAllSemesterName();
        List<SemesterForm> semesterForms=new ArrayList<SemesterForm> ();
        int index=0;
-        for (String semester : semesters) {
-            semesterForms.add (new SemesterForm (semester,index++));
+        for (Object[] semester : semesters) {
+            semesterForms.add (new SemesterForm ((String)semester[0],(String)semester[1],index++));
         }
         return semesterForms;
     }
@@ -57,6 +57,11 @@ public class BatchService {
 
     public Iterable<String>getAllSGroup(String batchName){
        return batchRepository.getAllSGroup(batchName);
+    }
+
+    @Transactional
+    public void updateBeginDate(String beginDate,String semesterName){
+        batchRepository.updateBeginDate(beginDate,semesterName);
     }
 
 }

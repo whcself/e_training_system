@@ -222,6 +222,7 @@ public class ScoreController {
     }
 
     /**
+     * -ScJn
      * @param sid   di
      * @param sname sname
      * @return f
@@ -229,8 +230,9 @@ public class ScoreController {
      */
     @PostMapping("/getSpScore")
     public CommonResponseForm getSpScore(@RequestParam(required = false) String sid,
-                                         @RequestParam(required = false) String sname) {
-        List<Map<String, String>> maps = scoreService.getSpScore(sid, sname);
+                                         @RequestParam(required = false) String sname,
+                                         @RequestParam(required = false) String templateName) {
+        List<Map<String, String>> maps = scoreService.getSpScore(sid, sname,templateName);
         return CommonResponseForm.of200("查询成功: 共" + maps.size(), maps);
     }
 
@@ -247,9 +249,11 @@ public class ScoreController {
         } catch (Exception e) {
             return CommonResponseForm.of400("修改失败,该学号不存在");
         }
-        if (spStudent.isScore_lock()) {
-            return CommonResponseForm.of400("成绩已经发布，不能修改");
-        } else {
+//        if (spStudent.isScore_lock()) {
+//            return CommonResponseForm.of400("成绩已经发布，不能修改");
+//        } else
+
+        {
             scoreService.updateSpScore(spStudent, map);
             return CommonResponseForm.of204("修改成功");
         }
