@@ -5,10 +5,7 @@ import com.csu.etrainingsystem.teacher.entity.TeacherAndGroup;
 import com.csu.etrainingsystem.teacher.entity.TeacherGroupId;
 import com.csu.etrainingsystem.teacher.service.TeacherGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -61,5 +58,16 @@ public class TeacherGroupController {
     public CommonResponseForm updateTeacherGroup(TeacherAndGroup teacherAndGroup){
        this.teacherGroupService.updateTGroupConn (teacherAndGroup);
         return CommonResponseForm.of204("更新教师组记录成功");
+    }
+
+    @RequestMapping("/updateTeacherGroup2")
+    public CommonResponseForm updateTeacherGroup2(TeacherAndGroup teacherAndGroup,String newGroup){
+        teacherGroupService.updateTGroupConn (teacherAndGroup,newGroup);
+        return CommonResponseForm.of204("更新教师组记录成功");
+    }
+
+    @PostMapping("/getTGroup")
+    public CommonResponseForm getTGroup(@RequestParam String tid){
+        return CommonResponseForm.of200("查询成功",teacherGroupService.getTGroup(tid));
     }
 }

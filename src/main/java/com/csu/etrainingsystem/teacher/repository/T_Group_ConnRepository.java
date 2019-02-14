@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface T_Group_ConnRepository extends JpaRepository<TeacherAndGroup,String > {
 
@@ -26,4 +28,7 @@ public interface T_Group_ConnRepository extends JpaRepository<TeacherAndGroup,St
     @Query(value="insert into t_group_conn(t_group_id,tid)values (?,?)",nativeQuery=true)
     @Modifying
     void modifyTeacherGroupByTidSQL(String t_group_id,String tid);
+
+    @Query(value = "select t_group_id from t_group_conn where del_status=0 and tid=?1",nativeQuery = true)
+    List<String> findTGroup(String tid);
 }
