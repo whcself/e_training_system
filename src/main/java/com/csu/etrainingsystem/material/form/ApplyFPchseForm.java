@@ -33,7 +33,7 @@ public class ApplyFPchseForm {
         this.clazz=applyForPurchase.getClazz ();
         this.apply_tname=applyForPurchase.getApply_tname ();
         this.apply_vert_tname=applyForPurchase.getApply_vert_tname ();
-        this.apply_time=applyForPurchase.getApply_time ();
+        this.apply_time=applyForPurchase.getApplyTime ();
         this.apply_remark=applyForPurchase.getApply_remark ();
         this.apply_num=applyForPurchase.getApply_num ();
         this.apply_vertify=applyForPurchase.getApply_verify ();

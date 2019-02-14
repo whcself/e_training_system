@@ -57,31 +57,29 @@ public class ApplyPurchaseController {
     public CommonResponseForm addApplyFPchse(@RequestParam(required = false) Integer num,
                                                @RequestParam(required = false) String clazz,
                                              @RequestParam(required = false) String apply_remark
-    //                                           ,HttpSession session
+                                               ,HttpSession session
     ){
         System.out.println ("//////////////////////////////////////////////////");
-        //User user=UserUtils.getHttpSessionUser (session);
+        User user=UserUtils.getHttpSessionUser (session);
         System.out.println ("//////////////////////////////////////////////////");
         String tname="";
        // System.out.println (user.getRole ());
-//        if(user.getRole ().equals ("teacher")) {
-//            Teacher teacher = teacherService.getTeacher (user.getAccount ());
-//            if (teacher != null)
-//                tname = teacher.getTname ();
-//        }
-//        else if(user.getRole ().equals ("admin")) {
-//            Admin admin = adminService.getAdminById (user.getAccount ());
-//            if (admin != null)
-//                tname = admin.getAid ();
-//        }
+        if(user.getRole ().equals ("teacher")) {
+            Teacher teacher = teacherService.getTeacher (user.getAccount ());
+            if (teacher != null)
+                tname = teacher.getTname ();
+        }
+        else if(user.getRole ().equals ("admin")) {
+            Admin admin = adminService.getAdminById (user.getAccount ());
+            if (admin != null)
+                tname = admin.getAid ();
+        }
         ApplyForPurchase applyForPurchase=new ApplyForPurchase();
-      //  applyForPurchase.setApply_tname (tname);
-        applyForPurchase.setApply_tname ("111111");
-
+        applyForPurchase.setApply_tname (tname);
         //申购时间
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String time= format.format (new Date ());
-        applyForPurchase.setApply_time (time);
+        applyForPurchase.setApplyTime (time);
         applyForPurchase.setApply_num (num);
         applyForPurchase.setClazz (clazz);
         applyForPurchase.setApply_remark (apply_remark);
@@ -199,7 +197,7 @@ public class ApplyPurchaseController {
 //        List<HSSFRow> rows=new ArrayList<> ();
         for (int i=1;i<=rowNum;i++){
             HSSFRow r = sheet.createRow(i);
-            r.createCell (0).setCellValue (applyFPchses.get (i-1).getApply_time ());
+            r.createCell (0).setCellValue (applyFPchses.get (i-1).getApplyTime ());
             r.createCell (1).setCellValue (applyFPchses.get (i-1).getApply_tname ());
             r.createCell (2).setCellValue (applyFPchses.get (i-1).getClazz ());
             r.createCell (3).setCellValue (applyFPchses.get (i-1).getApply_num ());
