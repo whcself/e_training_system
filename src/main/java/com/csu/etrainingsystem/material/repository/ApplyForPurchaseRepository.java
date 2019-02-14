@@ -31,13 +31,14 @@ public interface ApplyForPurchaseRepository extends JpaRepository<ApplyForPurcha
     String findMaxPurchaseId(String thisMonth);
 
     //需要的数据:
-    //purchase_id, apply_time,apply_tname,clazz,apply_num,apply_remark,apply_vert_tname
+    //purchase_id, applyTime,apply_tname,clazz,apply_num,apply_remark,apply_vert_tname
     @Query(value="select *" +
             " from apply_for_purchase where apply_for_purchase.purchase_id=? and "+APPEND_DEL_STATUS,nativeQuery = true)
     ApplyForPurchase findApplyFPchseExcelInfos(String purchase_id);
 
     /**
      *   根据条件查询申购记录,如果传入的字段为空表示全部通过
+     *   方法过时
      * @param apply_tname
      * @param clazz
      * @param pur_tname
@@ -46,13 +47,13 @@ public interface ApplyForPurchaseRepository extends JpaRepository<ApplyForPurcha
      * @param applyEndTime
      * @return
      */
-    @Query(value="SELECT * FROM apply_for_purchase " +
-            " WHERE apply_verify like ?1 and" +
-            " apply_tname LIKE ?2 AND clazz LIKE ?3 "
-            +"AND pur_tname LIKE ?4 AND purchase_id LIKE ?5" +
-            " AND apply_time BETWEEN ?6 AND ?7 ORDER BY apply_time DESC "
-           ,nativeQuery = true)
-    Iterable<ApplyForPurchase> getSelectedApplyFPchse(String status,String apply_tname , String clazz, String pur_tname, String purchase_id, String applyStartTime, String applyEndTime);
+//    @Query(value="SELECT * FROM apply_for_purchase " +
+//            " WHERE apply_verify like ?1 and" +
+//            " apply_tname LIKE ?2 AND clazz LIKE ?3 "
+//            +"AND pur_tname LIKE ?4 AND purchase_id LIKE ?5" +
+//            " AND apply_time BETWEEN ?6 AND ?7 ORDER BY apply_time DESC "
+//           ,nativeQuery = true)
+//    Iterable<ApplyForPurchase> getSelectedApplyFPchse(String status,String apply_tname , String clazz, String pur_tname, String purchase_id, String applyStartTime, String applyEndTime);
 
 
     @Query(value = "select * from apply_for_purchase where purchase_id=?1 and del_status=0",nativeQuery = true)

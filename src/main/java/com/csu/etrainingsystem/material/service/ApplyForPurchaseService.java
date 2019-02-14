@@ -119,7 +119,7 @@ public class ApplyForPurchaseService {
 
     /**
      * 获取根据条件选择出来的申购记录
-     *
+     *方法过时
      * @param apply_tname
      * @param clazz
      * @param startTime
@@ -128,107 +128,90 @@ public class ApplyForPurchaseService {
      * @param purchase_id
      * @return
      */
-    @Transactional
-    public Iterable<ApplyForPurchase> getSelectedApplyFPchse(Boolean apply_verify ,String apply_tname , String clazz,
-                                                   String startTime, String endTime,
-                                                   String pur_tname,String purchase_id) {
-        SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
-        System.out.println ("输入参数是:" + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
-        if (startTime == null || startTime.equals (""))
-            startTime = format.format (applyForPurchaseRepository.findMinTime ());
-        String status="";
-        if(apply_verify==null)status="%";
-        else if (apply_verify)status="1";
-        else status="0";
-        if (endTime == null || endTime.equals ("")) endTime = format.format (applyForPurchaseRepository.findMaxTime ());
-        if (clazz == null || clazz.equals ("")) clazz = "%";
-        if (purchase_id == null || purchase_id.equals ("")) purchase_id = "%";
-        if (apply_tname == null || apply_tname.equals ("") || apply_tname.equals ("申购人")) apply_tname = "%";
-        if (pur_tname == null || pur_tname.equals ("") || pur_tname.equals ("采购人")) pur_tname = "%";
-        System.out.println ("修正参数是:"+status + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
-         return this.applyForPurchaseRepository.getSelectedApplyFPchse (status,apply_tname, clazz, pur_tname, purchase_id, startTime, endTime);
-    }
 //    @Transactional
-//    public Iterable<ApplyForPurchase> getSelectedApplyFPchse(Boolean apply_verify, String apply_tname, String clazz,
-//                                                             String startTime, String endTime,
-//                                                             String pur_tname, String purchase_id) {
-////        SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
-////        System.out.println ("输入参数是:" + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
-////        if (startTime == null || startTime.equals (""))
-////            startTime = format.format (applyForPurchaseRepository.findMinTime ());
-////        String status = "";
-////        if (apply_verify == null) status = "%";
-////        else if (apply_verify) status = "1";
-////        else status = "0";
-////        if (endTime == null || endTime.equals ("")) endTime = format.format (applyForPurchaseRepository.findMaxTime ());
-////        if (clazz == null || clazz.equals ("")) clazz = "%";
-////        if (purchase_id == null || purchase_id.equals ("")) purchase_id = "%";
-////        if (apply_tname == null || apply_tname.equals ("") || apply_tname.equals ("申购人")) apply_tname = "%";
-////        if (pur_tname == null || pur_tname.equals ("") || pur_tname.equals ("采购人")) pur_tname = "%";
-////        System.out.println ("修正参数是:" + status + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
-//
-//        /**
-//         * Specification<Users>:用于封装查询条件
-//         */
-//        Specification<ApplyForPurchase> spec = new Specification<ApplyForPurchase> () {
-//
-//            //Predicate:封装了 单个的查询条件
-//            /**
-//             * Root<Users> root:查询对象的属性的封装。
-//             * CriteriaQuery<?> query：封装了我们要执行的查询中的各个部分的信息，select  from order by
-//             * CriteriaBuilder cb:查询条件的构造器。定义不同的查询条件
-//             */
-//            @Override
-//            public Predicate toPredicate(Root<ApplyForPurchase> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-//
-//                List<Predicate> list = new ArrayList<> ();
-//                list.add (cb.equal (root.get ("del_status").as (Boolean.class),false));
-//                //如果输入了id就不必继续判断,直接返回
-//                if (!StringUtils.isEmpty (purchase_id)){
-//                    list.add (cb.equal (root.get ("purchase_id").as (String.class), purchase_id));
-//                    Predicate[] arr = new Predicate[list.size ()];
-//                    return cb.and (list.toArray (arr));
-//                }
-//                if (apply_verify==null){
-//
-//                }else if (apply_verify){
-//                    list.add (cb.equal (root.get ("apply_verify").as (Boolean.class), true));
-//                }
-//                else if (!apply_verify){
-//                    list.add (cb.equal (root.get ("apply_verify").as (Boolean.class), false));
-//                }
-//
-//                if (!StringUtils.isEmpty (startTime)){
-//                 list.add (cb.greaterThanOrEqualTo (root.get ("apply_time").as (String.class),startTime));
-//                }
-//                if (!StringUtils.isEmpty (endTime)){
-//                    list.add (cb.lessThanOrEqualTo (root.get ("apply_time").as (String.class),endTime));
-//                }
-//
-//                if (!StringUtils.isEmpty (clazz)){
-//                    list.add (cb.equal (root.get ("clazz").as (String.class), clazz));
-//                }
-//                if (!StringUtils.isEmpty (apply_tname)){
-//                    if (!apply_tname.equals ("申购人")) {
-//                        list.add (cb.equal (root.get ("apply_tname").as (String.class), apply_tname));
-//                    }
-//                }
-//                if (!StringUtils.isEmpty (pur_tname)){
-//                    if (!pur_tname.equals ("采购人")) {
-//                        list.add (cb.equal (root.get ("pur_tname").as (String.class), pur_tname));
-//                    }
-//                }
-//
-//                Predicate[] arr = new Predicate[list.size ()];
-//                return cb.and (list.toArray (arr));
-//            }
-//        };
-//        Sort sort = new Sort(new Sort.Order (Sort.Direction.DESC,"id"));
-//        List<ApplyForPurchase> list = this.applyForPurchaseRepository.findAll (spec,sort);
-//
-//
-//        return list;
+//    public Iterable<ApplyForPurchase> getSelectedApplyFPchse(Boolean apply_verify ,String apply_tname , String clazz,
+//                                                   String startTime, String endTime,
+//                                                   String pur_tname,String purchase_id) {
+//        SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
+//        System.out.println ("输入参数是:" + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
+//        if (startTime == null || startTime.equals (""))
+//            startTime = format.format (applyForPurchaseRepository.findMinTime ());
+//        String status="";
+//        if(apply_verify==null)status="%";
+//        else if (apply_verify)status="1";
+//        else status="0";
+//        if (endTime == null || endTime.equals ("")) endTime = format.format (applyForPurchaseRepository.findMaxTime ());
+//        if (clazz == null || clazz.equals ("")) clazz = "%";
+//        if (purchase_id == null || purchase_id.equals ("")) purchase_id = "%";
+//        if (apply_tname == null || apply_tname.equals ("") || apply_tname.equals ("申购人")) apply_tname = "%";
+//        if (pur_tname == null || pur_tname.equals ("") || pur_tname.equals ("采购人")) pur_tname = "%";
+//        System.out.println ("修正参数是:"+status + apply_tname + clazz + startTime + endTime + pur_tname + purchase_id);
+//         return this.applyForPurchaseRepository.getSelectedApplyFPchse (status,apply_tname, clazz, pur_tname, purchase_id, startTime, endTime);
 //    }
+    @Transactional
+    public Iterable<ApplyForPurchase> getSelectedApplyFPchse(Boolean apply_verify, String apply_tname, String clazz,
+                                                             String startTime, String endTime,
+                                                             String pur_tname, String purchase_id) {
+        /**
+         * Specification<Users>:用于封装查询条件
+         */
+        Specification<ApplyForPurchase> spec = new Specification<ApplyForPurchase> () {
+
+            //Predicate:封装了 单个的查询条件
+            /**
+             * Root<Users> root:查询对象的属性的封装。
+             * CriteriaQuery<?> query：封装了我们要执行的查询中的各个部分的信息，select  from order by
+             * CriteriaBuilder cb:查询条件的构造器。定义不同的查询条件
+             */
+            @Override
+            public Predicate toPredicate(Root<ApplyForPurchase> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+
+                List<Predicate> list = new ArrayList<> ();
+                list.add (cb.equal (root.get ("del_status").as (Boolean.class),false));
+                //如果输入了id就不必继续判断,直接返回
+                if (!StringUtils.isEmpty (purchase_id)){
+                    list.add (cb.equal (root.get ("purchase_id").as (String.class), purchase_id));
+                    Predicate[] arr = new Predicate[list.size ()];
+                    return cb.and (list.toArray (arr));
+                }
+                if (apply_verify==null){
+
+                }else if (apply_verify){
+                    list.add (cb.equal (root.get ("apply_verify").as (Boolean.class), true));
+                }
+                else if (!apply_verify){
+                    list.add (cb.equal (root.get ("apply_verify").as (Boolean.class), false));
+                }
+
+                if (!StringUtils.isEmpty (startTime)){
+                 list.add (cb.greaterThanOrEqualTo (root.get ("applyTime").as (String.class),startTime));
+                }
+                if (!StringUtils.isEmpty (endTime)){
+                    list.add (cb.lessThanOrEqualTo (root.get ("applyTime").as (String.class),endTime));
+                }
+
+                if (!StringUtils.isEmpty (clazz)){
+                    list.add (cb.equal (root.get ("clazz").as (String.class), clazz));
+                }
+                if (!StringUtils.isEmpty (apply_tname)){
+                    if (!apply_tname.equals ("申购人")) {
+                        list.add (cb.equal (root.get ("apply_tname").as (String.class), apply_tname));
+                    }
+                }
+                if (!StringUtils.isEmpty (pur_tname)){
+                    if (!pur_tname.equals ("采购人")) {
+                        list.add (cb.equal (root.get ("pur_tname").as (String.class), pur_tname));
+                    }
+                }
+
+                Predicate[] arr = new Predicate[list.size ()];
+                return cb.and (list.toArray (arr));
+            }
+        };
+        Sort sort = new Sort(new Sort.Order (Sort.Direction.DESC,"applyTime"));
+        List<ApplyForPurchase> list = this.applyForPurchaseRepository.findAll (spec,sort);
+        return list;
+    }
 
     /**
      * 根据权限级别获取每个老师的姓名,如果是管理员,返回其id;

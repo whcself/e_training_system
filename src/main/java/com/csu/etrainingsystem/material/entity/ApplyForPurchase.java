@@ -1,8 +1,6 @@
 package com.csu.etrainingsystem.material.entity;
 
-import javafx.beans.DefaultProperty;
 import lombok.Data;
-import net.bytebuddy.implementation.bind.annotation.Default;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +18,8 @@ public class ApplyForPurchase {
     private String apply_tname ;//申购老师
     private String apply_vert_tname;//申购审核老师
     private String apply_vert_time;//申购审核时间
-    private String apply_time ;//申购时间
+    @Column(name ="applyTime" )
+    private String applyTime;//申购时间
     private String apply_remark ;//申购备注
     private Integer    apply_num;//申购数量
     private Boolean apply_verify;//申购审核状态
@@ -28,14 +27,13 @@ public class ApplyForPurchase {
     private boolean del_status;
 
 
-
-    public ApplyForPurchase(String purchase_id, String clazz, String apply_tname, String apply_vert_tname, String apply_vert_time, String apply_time, String apply_remark, Integer apply_num, Boolean apply_vertify, String pur_tname, boolean del_status) {
+    public ApplyForPurchase(String purchase_id, String clazz,  String apply_vert_tname, String apply_vert_time, String applyTime, String apply_remark, Integer apply_num, Boolean apply_vertify, String pur_tname, boolean del_status) {
         this.purchase_id = purchase_id;
         this.clazz = clazz;
         this.apply_tname = apply_tname;
         this.apply_vert_tname = apply_vert_tname;
         this.apply_vert_time = apply_vert_time;
-        this.apply_time = apply_time;
+        this.applyTime = applyTime;
         this.apply_remark = apply_remark;
         this.apply_num = apply_num;
         this.apply_verify = apply_vertify;
