@@ -133,7 +133,22 @@ public class ApplyPurchaseController {
        Iterable<ApplyForPurchase> purchases= applyForPurchaseService.getSelectedApplyFPchse (apply_verify,apply_tname,clazz,startTime,endTime,pur_tname,purchase_id);
        return CommonResponseForm.of200("查询记录成功",ApplyFPchseForm.wrapForm (purchases,this.purchaseService,this.reimbursementService,this.saveService));
     }
-
+//    @ApiOperation (value = "根据条件获取申购记录")
+//    @RequestMapping(value ="/getSelectedPurchase")
+//    public CommonResponseForm getSelectedPurchase(
+//                                        @RequestParam(required = false)String apply_tname ,//申购人
+//                                        @RequestParam(required = false) String clazz,//种类
+//                                        @RequestParam(required = false)String startTime,//起始时间
+//                                        @RequestParam(required = false)String endTime,//截止时间
+//                                        @RequestParam(required = false)String pur_tname,//采购人
+//                                        @RequestParam(required = false)String purchase_id,//申购编号
+//                                        @RequestParam(required = false)Boolean apply_verify
+//                                        //申购审核状态
+//                                                 )
+//    {
+//       Iterable<ApplyForPurchase> purchases= applyForPurchaseService.getSelectedApplyFPchse (apply_verify,apply_tname,clazz,startTime,endTime,pur_tname,purchase_id);
+//       return CommonResponseForm.of200("查询记录成功",ApplyFPchseForm.wrapForm (purchases,this.purchaseService,this.reimbursementService,this.saveService));
+//    }
     @ApiOperation ("获取所有具有相应物料权限用户的名字(管理员返回id)")
     @RequestMapping(value ="/getAllNameByAuthType")
     public CommonResponseForm getAllPurchaserByType(int type){

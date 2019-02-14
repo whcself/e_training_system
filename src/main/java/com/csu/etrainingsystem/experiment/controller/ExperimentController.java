@@ -106,7 +106,7 @@ public class ExperimentController {
         String s_group = "";
         String batch_name = "";
         if (sid != null) {
-            if (scoreService.getSpScoreBySid (sid)!=null){
+            if (scoreService.getSpScoreBySid (sid)!=null&&((List)scoreService.getSpScoreBySid (sid)).size ()>0){
                 return  CommonResponseForm.of200("特殊学生课程",scoreService.getSpScoreBySid (sid)) ;
             }
             Student student = this.studentService.getStudentById (sid);

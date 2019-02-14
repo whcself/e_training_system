@@ -90,10 +90,10 @@ public class TeacherGroupService {
      * @param id
      */
     @Transactional
-    public void  deleteTeacherGroup(TeacherGroupId id) {
+    public int  deleteTeacherGroup(TeacherGroupId id) {
         TeacherAndGroup teacherAndGroup =getTGroupConnByGroupIdAndTid(id);
          if (teacherAndGroup ==null){
-             return ;
+             return 0;
          }
          else {
              teacherAndGroup.setDel_status(true);
@@ -110,6 +110,7 @@ public class TeacherGroupService {
        打分权限记录的取消,查询该分组的打分权限记录(Marking表),并消除
        需要一个markingService
         */
+        return 1;
     }
 
 

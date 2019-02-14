@@ -53,9 +53,9 @@ public class TeacherGroupController {
 
     @RequestMapping("/deleteTeacherGroup/{tid}/{t_group_id}")
     public  CommonResponseForm deleteTeacher(@PathVariable("tid") String tid,@PathVariable("t_group_id") String t_group_id){
-        TeacherGroupId id=new TeacherGroupId (tid,t_group_id);
-       teacherGroupService.deleteTeacherGroup (id);
-        return CommonResponseForm.of204("删除教师组记录成功成功");
+        TeacherGroupId id=new TeacherGroupId (t_group_id,tid);
+      int index= teacherGroupService.deleteTeacherGroup (id);
+      return index==1? CommonResponseForm.of204("删除教师组记录成功成功"):CommonResponseForm.of400("记录不存在");
     }
     @RequestMapping("/updateTeacherGroup")
     public CommonResponseForm updateTeacherGroup(TeacherAndGroup teacherAndGroup){
