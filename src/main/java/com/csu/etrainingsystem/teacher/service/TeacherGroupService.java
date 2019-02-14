@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class TeacherGroupService {
@@ -77,6 +78,17 @@ public class TeacherGroupService {
     }
 
     /**
+     * -ScJn
+     */
+    @Transactional
+    public void  updateTGroupConn(TeacherAndGroup teacherAndGroup,String newGroup) {
+        TeacherGroupId groupId=teacherAndGroup.getTeacherGroupId();
+        groupId.setT_group_id(newGroup);
+        teacherAndGroup.setTeacherGroupId(groupId);
+        this.tGroupConnRepository.saveAndFlush(teacherAndGroup);
+    }
+
+    /**
      * 删除该老师在教师组表的记录,这个名字起的不太好
      * @param tid
      */
@@ -112,5 +124,8 @@ public class TeacherGroupService {
         */
     }
 
+    public List<String> getTGroup(String tid){
+        return tGroupConnRepository.findTGroup(tid);
+    }
 
 }
