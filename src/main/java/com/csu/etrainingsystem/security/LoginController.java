@@ -70,27 +70,27 @@ public class LoginController {
 			if (user.getRole ().equals ("teacher")){
 				Teacher teacher= teacherService.getTeacher (name);
 				realName=teacher.getTname ();
-//				if (teacher.getMaterial_privilege () == 1){
-//					subject.getSession ().setAttribute ("material","1");
-//				}
-//				else if(teacher.getMaterial_privilege () == 2)
-//				{
-//					subject.getSession ().setAttribute ("material","2");
-//				}
-//				if (teacher.getOvertime_privilege () == 1){
-//					subject.getSession ().setAttribute ("overwork","1");
-//				}
+				if (teacher.getMaterial_privilege () == 1){
+					subject.getSession ().setAttribute ("material","1");
+				}
+				else if(teacher.getMaterial_privilege () == 2)
+				{
+					subject.getSession ().setAttribute ("material","2");
+				}
+				if (teacher.getOvertime_privilege () == 1){
+					subject.getSession ().setAttribute ("overwork","1");
+				}
                 subject.getSession().setAttribute("material",teacher.getMaterial_privilege());
                 subject.getSession().setAttribute("overwork",teacher.getOvertime_privilege());
 
             }
 			else if (user.getRole ().equals ("admin")){
 //				Admin admin =adminService.getAdminById (name);
-//				subject.getSession ().setAttribute ("material","2");
-//				subject.getSession ().setAttribute ("overwork","1");
+				subject.getSession ().setAttribute ("material","2");
+				subject.getSession ().setAttribute ("overwork","1");
                 // 管理员也是老师，跟老师同样对待了
                 Teacher admin=teacherService.getTeacher(name);
-				realName=admin.getTid ();
+				realName=admin.getTname ();
 			}
 			else if (user.getRole ().equals ("student")){
 				realName=studentService.getStudentById (name).getSname ();
