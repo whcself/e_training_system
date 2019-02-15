@@ -27,15 +27,24 @@ public interface TeacherRepository extends JpaRepository<Teacher, String> {
      * <p>
      * 如果指定了教师组就调用这个，没有指定教师组的话会有多个教师组
      */
-    @Query(value = "select *,?1 as t_group_id from teacher where role like ?2 and material_privilege like ?3 " +
+//    @Query(value = "select *,?1 as t_group_id from teacher where role like ?2 and material_privilege like ?3 " +
+//            "and overtime_privilege like ?4 and del_status=0 and  tid  in(" +
+//            "select tid from t_group_conn where t_group_id like ?1) ", nativeQuery = true)
+    @Query(value = "select *,?1 as t_group_id from teacher where role like ?2  " +
             "and overtime_privilege like ?4 and del_status=0 and  tid  in(" +
             "select tid from t_group_conn where t_group_id like ?1) ", nativeQuery = true)
     List<Map<String, String>> findTeacherByTRMO(String tClass, String role,
                                                 String material_privilege,
                                                 String overtime_privilege);
 
+//    @Query(value ="select a.*,b.all_group from" +
+//            "(select * from teacher where role like ?1 and material_privilege like ?2 and overtime_privilege like ?3 and del_status=0 and  tid " +
+//            " like'%')as a left join " +
+//            " (select tid as tid,group_concat(t_group_id) as all_group from t_group_conn  where tid like '%' group by tid) as b" +
+//            " on a.tid=b.tid",nativeQuery = true)
+
     @Query(value ="select a.*,b.all_group from" +
-            "(select * from teacher where role like ?1 and material_privilege like ?2 and overtime_privilege like ?3 and del_status=0 and  tid " +
+            "(select * from teacher where role like ?1  and overtime_privilege like ?3 and del_status=0 and  tid " +
             " like'%')as a left join " +
             " (select tid as tid,group_concat(t_group_id) as all_group from t_group_conn  where tid like '%' group by tid) as b" +
             " on a.tid=b.tid",nativeQuery = true)

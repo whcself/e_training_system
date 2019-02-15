@@ -153,6 +153,7 @@ public class ScoreService {
             scoreForm.put("total_score", String.valueOf(student.getTotal_score()));
             scoreForm.put("degree", student.getDegree());
             scoreForm.put("release", student.isScore_lock() ? "已发布" : "未发布");
+            scoreForm.put("clazz",student.getClazz());
 
             for (Score score : scores) {
                 scoreForm.put(score.getPro_name(), String.valueOf(score.getPro_score()));

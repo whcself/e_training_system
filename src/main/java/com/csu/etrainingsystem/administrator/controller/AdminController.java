@@ -9,6 +9,8 @@ import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.service.UserService;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,6 +47,12 @@ public class AdminController {
         this.userService = userService;
     }
 
+
+    public CommonResponseForm check(){
+
+        return CommonResponseForm.of204("ss");
+    }
+
     @PostMapping(value = "/addAdmin")
     public CommonResponseForm addAdmin(Admin admin,String adminName) {
         adminService.save(admin);
@@ -56,24 +64,28 @@ public class AdminController {
         return CommonResponseForm.of204("管理员增加成功");
     }
 
+
+    @Pointcut
     @PostMapping(value = "/getAdmin/{id}")
     public CommonResponseForm getAdminById(@PathVariable("id") String id) {
         Admin admin = adminService.getAdminById(id);
         return CommonResponseForm.of200("获取管理员成功", admin);
     }
 
+    @Pointcut
     @PostMapping(value = "/getAllAdmin")
     public CommonResponseForm getAllAdmin() {
         Iterable<Admin> admin = adminService.getAllAdmin();
         return CommonResponseForm.of200("获取管理员成功", admin);
     }
 
+    @Pointcut
     @PostMapping(value = "/updateAdmin")
     public CommonResponseForm updateAdmin(Admin admin) {
         adminService.updateAdmin(admin);
         return CommonResponseForm.of204("更新管理员成功");
     }
-
+    @Pointcut
     @PostMapping(value = "/deleteAdmin/{id}")
     public @ResponseBody
     CommonResponseForm deleteAdmin(@PathVariable("id") String id) {
@@ -86,19 +98,19 @@ public class AdminController {
     /*
     marking CRUD
      */
-
+    @Pointcut
     @PostMapping("/addMarking")
     public CommonResponseForm addMarking(Marking marking) {
         markingService.addMarking(marking);
         return CommonResponseForm.of204("增加管理权限条目成功");
     }
-
+    @Pointcut
     @PostMapping("/deleteMarking")
     public CommonResponseForm deleteMarking(@RequestParam String markName) {
         markingService.deleteMarking(markName);
         return CommonResponseForm.of204("删除管理权限条目成功");
     }
-
+    @Pointcut
     @PostMapping("/updateMarking")
     public CommonResponseForm updateMarking(Marking marking) {
         markingService.updateMarking(marking);
