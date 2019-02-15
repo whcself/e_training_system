@@ -20,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
@@ -34,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
+//@RequestMapping(method = RequestMethod.POST)
 public class LoginController {
 	@Autowired
 	private UserService  userService;
@@ -71,22 +69,27 @@ public class LoginController {
 			if (user.getRole ().equals ("teacher")){
 				Teacher teacher= teacherService.getTeacher (name);
 				realName=teacher.getTname ();
-				if (teacher.getMaterial_privilege () == 1){
-					subject.getSession ().setAttribute ("material","1");
-				}
-				else if(teacher.getMaterial_privilege () == 2)
-				{
-					subject.getSession ().setAttribute ("material","2");
-				}
-				if (teacher.getOvertime_privilege () == 1){
-					subject.getSession ().setAttribute ("overwork","1");
-				}
-			}
+//				if (teacher.getMaterial_privilege () == 1){
+//					subject.getSession ().setAttribute ("material","1");
+//				}
+//				else if(teacher.getMaterial_privilege () == 2)
+//				{
+//					subject.getSession ().setAttribute ("material","2");
+//				}
+//				if (teacher.getOvertime_privilege () == 1){
+//					subject.getSession ().setAttribute ("overwork","1");
+//				}
+                subject.getSession().setAttribute("material",teacher.getMaterial_privilege());
+                subject.getSession().setAttribute("overwork",teacher.getOvertime_privilege());
+
+            }
 			else if (user.getRole ().equals ("admin")){
-				Admin admin =adminService.getAdminById (name);
-				subject.getSession ().setAttribute ("material","2");
-				subject.getSession ().setAttribute ("overwork","1");
-				realName=admin.getAid ();
+//				Admin admin =adminService.getAdminById (name);
+//				subject.getSession ().setAttribute ("material","2");
+//				subject.getSession ().setAttribute ("overwork","1");
+                // 管理员也是老师，跟老师同样对待了
+                Teacher admin=teacherService.getTeacher(name);
+				realName=admin.getTid ();
 			}
 			else if (user.getRole ().equals ("student")){
 				realName=studentService.getStudentById (name).getSname ();
@@ -107,7 +110,7 @@ public class LoginController {
 		}
 	}
 	//退出登录
-	@RequestMapping("/logout")
+	@PostMapping("/logout")
 	@ResponseBody
 	public CommonResponseForm loginout(HttpSession session){
 		User user=null;
@@ -126,18 +129,18 @@ public class LoginController {
 	}
 	//tologin
 
-	@RequestMapping("/toLogin")
+	@PostMapping("/toLogin")
 	public String toLogin(){
 		return  "redirect:/csu-engineer-train-front/login.html";
 	}
 	//noauth
-	@RequestMapping("/noAuth")
+	@PostMapping("/noAuth")
 	@ResponseBody
 	public CommonResponseForm onAuth(){
 		return  CommonResponseForm.of400 ("您没有访问权限");
 	}
 
-	@RequestMapping("/abc")
+	@PostMapping("/abc")
     public String abc(){
 	    return "login.html";
     }
