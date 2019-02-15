@@ -12,6 +12,7 @@ import com.csu.etrainingsystem.user.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -21,6 +22,7 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.util.StringUtils;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,33 +57,43 @@ public class UserRealm extends AuthorizingRealm {
         Subject subject = SecurityUtils.getSubject ();
         User u = (User) subject.getPrincipal ();
         User user = this.userService.getUser (u.getAccount ());
-        System.out.println (user.getRole ());
         //根据不同的角色授予不同权限,管理员权限才能打开管理员界面,老师权限才能打开老师界面;
         if (user.getRole ().equals ("admin")) {
-
+             //5种权限,加到对应的方法上面
+            //然后这里做移位判断,分别授予几种权限,就得了
             info.addStringPermission ("user:admin");
-            info.addStringPermission ("user:purchasematerial");
-            info.addStringPermission ("user:applymaterial");
-            info.addStringPermission ("user:overwork");
-            info.addStringPermission ("user:teacher");
-            info.addStringPermission ("user:student");
+            info.addStringPermission ("material:MATERIAL_REGISTER");
+            info.addStringPermission ("material:MATERIAL_BUY");
+            info.addStringPermission ("material:MATERIAL_BUY_V");
+            info.addStringPermission ("material:MATERIAL_PURCHASE");
+            info.addStringPermission ("material:REMI_V");
+            info.addStringPermission ("material:SAVE");
+
         } else if (user.getRole ().equals ("student")) {
             info.addStringPermission ("user:student");
         } else {
-
             Teacher teacher = teacherService.getTeacher (user.getAccount ());
             if (teacher != null) {
                 info.addStringPermission ("user:teacher");
-                if (teacher.getMaterial_privilege () == 1){
-                    info.addStringPermission ("user:applymaterial");
+              Integer privilege= teacher.getMaterial_privilege ();
+              String[] pvls= com.csu.etrainingsystem.util.StringUtils.toBinary (privilege);
+              if (Integer.parseInt (pvls[0])==1){
+                  info.addStringPermission ("material:SAVE");
+              }
+                if (Integer.parseInt (pvls[1])==1){
+                    info.addStringPermission ("material:REMI_V");
                 }
-                else if(teacher.getMaterial_privilege () == 2)
-                {
-                    info.addStringPermission ("user:purchasematerial");
-                    info.addStringPermission ("user:applymaterial");
+                if (Integer.parseInt (pvls[2])==1){
+                    info.addStringPermission ("material:MATERIAL_PURCHASE");
                 }
-                if (teacher.getOvertime_privilege () == 1){
-                    info.addStringPermission ("user:overwork");
+                if (Integer.parseInt (pvls[3])==1){
+                    info.addStringPermission ("material:MATERIAL_BUY_V");
+                }
+                if (Integer.parseInt (pvls[4])==1){
+                    info.addStringPermission ("material:MATERIAL_BUY");
+                }
+                if (Integer.parseInt (pvls[5])==1){
+                    info.addStringPermission ("material:MATERIAL_REGISTER");
                 }
             }
         }
@@ -101,7 +113,6 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         System.out.println ("登录的密码是"+token.getPassword ().toString ());
         User user = userService.getUser (token.getUsername ());
-        System.out.println ("数据库的密码是"+user.getPwd ());
         //如果不能存在就创建
         Subject subject = SecurityUtils.getSubject ();
         if (user == null) {
