@@ -63,11 +63,10 @@ public class ScoreController {
 
 
     /**
+     * -ScJn
      * @param batch_name 批次名
      * @param s_group_id 学生组
      * @param pro_name   工序名
-     * @return 成绩列表, 上三查询，或确定工序名
-     * <p>
      * 学生端就传自己的id
      * @apiNote 管理员端：成绩列表 评分查询
      */
