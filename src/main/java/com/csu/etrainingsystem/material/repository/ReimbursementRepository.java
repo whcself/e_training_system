@@ -19,8 +19,8 @@ public interface ReimbursementRepository extends JpaRepository<Reimbursement,Int
 
     @Query(value = "select * from reimbursement where remib_time between ?1 and " +
             "  ?2 and pur_tname like ?3 and clazz like ?4 and remib_vertify like ?5 " +
-            " and purchase_id like ?6 and del_status=0",nativeQuery = true)
-    public List<Reimbursement> findBy6(String begin,
+            " and purchase_id like ?6 and del_status=0 order by remib_time desc ",nativeQuery = true)
+    List<Reimbursement> findBy6(String begin,
                                 String end,
                                 String tName,
                                 String clazz,

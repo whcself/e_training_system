@@ -66,6 +66,12 @@ public class TeacherGroupController {
         return CommonResponseForm.of204("更新教师组记录成功");
     }
 
+    /**
+     * -ScJn
+     * @apiNote 查询教师所有教师组
+     * @param tid
+     * @return
+     */
     @PostMapping("/getTGroup")
     public CommonResponseForm getTGroup(@RequestParam String tid){
         return CommonResponseForm.of200("查询成功",teacherGroupService.getTGroup(tid));
