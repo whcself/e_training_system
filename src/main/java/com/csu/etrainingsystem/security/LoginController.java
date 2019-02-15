@@ -66,6 +66,7 @@ public class LoginController {
 			subject.login(token);
 
 			//登录成功
+			//这里面name就是account
 			User user=userService.getUser (name);
 			String realName="";
 			if (user.getRole ().equals ("teacher")){
@@ -90,7 +91,12 @@ public class LoginController {
 			}
 			else if (user.getRole ().equals ("student")){
 				realName=studentService.getStudentById (name).getSname ();
-
+			}
+			/**
+			 * 特殊学生页需要登录
+			 */
+			else if (user.getRole ().equals ("spStudent")){
+				realName=studentService.findSpStudentById (name).getSname ();
 			}
 			Map<String,String> m=new HashMap<String,String>();
 			m.put ("id",name);//name即是id
