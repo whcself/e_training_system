@@ -222,11 +222,7 @@ public class ApplyForPurchaseService {
     @Transactional
     public List<String> getAllAuthedName(int type) {
         List<String> names = new ArrayList<String> ();
-        Iterable<Admin> admins = adminService.getAllAdmin ();
-        //所有管理员都拥有各种权限
-        for (Admin admin : admins) {
-            names.add (admin.getAid ());
-        }
+
         Iterable<String> teachers = teacherService.getTeacherByAuth (type);
         for (String teacher : teachers) {
             names.add (teacher);
