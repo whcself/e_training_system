@@ -110,7 +110,7 @@ public class ExperimentController {
                 return  CommonResponseForm.of200("特殊学生课程",scoreService.getSpScoreBySid (sid)) ;
             }
             Student student = this.studentService.getStudentById (sid);
-            if (student == null) {
+            if (student != null) {
                 s_group = student.getS_group_id ();
                 batch_name = student.getBatch_name ();
             }
