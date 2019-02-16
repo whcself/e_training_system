@@ -5,6 +5,7 @@ import com.csu.etrainingsystem.administrator.service.AdminService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.teacher.entity.Marking;
+import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.service.UserService;
@@ -53,8 +54,13 @@ public class AdminController {
     }
 
     @PostMapping(value = "/addAdmin")
-    public CommonResponseForm addAdmin(Admin admin) {
+    public CommonResponseForm addAdmin(Admin admin,String adminName) {
         adminService.save(admin);
+        Teacher teacher=new Teacher ();
+        teacher.setRole ("管理员");
+        teacher.setTname (adminName);
+        teacher.setTid (admin.getAid ());
+        teacherService.addTeacher(teacher,null);
         return CommonResponseForm.of204("管理员增加成功");
     }
 

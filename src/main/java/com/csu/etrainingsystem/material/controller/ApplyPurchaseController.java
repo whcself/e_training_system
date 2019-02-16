@@ -59,20 +59,15 @@ public class ApplyPurchaseController {
                                              @RequestParam(required = false) String apply_remark
                                                ,HttpSession session
     ){
-        System.out.println ("//////////////////////////////////////////////////");
         User user=UserUtils.getHttpSessionUser (session);
-        System.out.println ("//////////////////////////////////////////////////");
         String tname="";
-       // System.out.println (user.getRole ());
-        if(user.getRole ().equals ("teacher")) {
+        if(user.getRole ().equals ("teacher")||user.getRole ().equals ("admin")) {
             Teacher teacher = teacherService.getTeacher (user.getAccount ());
             if (teacher != null)
                 tname = teacher.getTname ();
         }
-        else if(user.getRole ().equals ("admin")) {
-            Admin admin = adminService.getAdminById (user.getAccount ());
-            if (admin != null)
-                tname = admin.getAid ();
+        else {
+            return CommonResponseForm.of400 ("用户操作异常,请检查权限");
         }
         ApplyForPurchase applyForPurchase=new ApplyForPurchase();
         applyForPurchase.setApply_tname (tname);
@@ -137,7 +132,7 @@ public class ApplyPurchaseController {
     @ApiOperation ("获取所有具有相应物料权限用户的名字(管理员返回id)")
     @RequestMapping(value ="/getAllNameByAuthType")
     public CommonResponseForm getAllPurchaserByType(int type){
-        return  CommonResponseForm.of200 ("获取所有记录成功",this.applyForPurchaseService.getAllAuthedName (type));
+        return  CommonResponseForm.of200 ("获取记录成功",this.applyForPurchaseService.getAllAuthedName (type));
     }
     @ApiOperation ("审核申购")
     @RequestMapping(value ="/ApplyVertify")
@@ -150,22 +145,29 @@ public class ApplyPurchaseController {
         applyForPurchase.setPur_tname (purchase_tname);
         applyForPurchase.setApply_verify(true);
         User user= UserUtils.getHttpSessionUser (session);
-        if (user.getRole ().equals ("admin"))applyForPurchase.setApply_vert_tname (user.getAccount ());
-        else applyForPurchase.setApply_vert_tname (teacherService.getTeacher (user.getAccount ()).getTname ());
+        //管理员才有权限审核或者统一一下
+        applyForPurchase.setApply_vert_tname (user.getAccount ());
+        applyForPurchase.setApply_vert_tname (teacherService.getTeacher (user.getAccount ()).getTname ());
         this.applyForPurchaseService.updateApplyFPchse (applyForPurchase);
         return  CommonResponseForm.of204 ("申购审核成功");
     }
 
+    /**
+     * 这个接口需要修改
+     * @param session
+     * @return
+     */
     @ApiOperation ("查询该用户是是否有权限")
     @RequestMapping(value ="/getPurchaser")
     public CommonResponseForm JustifyAuthority(HttpSession session){
         int type;
         User user=UserUtils.getHttpSessionUser (session);
-        if(user.getRole ().equals ("teacher")){
+        if(user.getRole ().equals ("teacher")||user.getRole ().equals ("admin")){
            type=this.teacherService.getTeacher (user.getAccount ()).getMaterial_privilege ();
         }
-        else if (user.getRole ().equals ("admin"))type=3;
-        else type=0;
+        else{
+            type=0;
+        }
         return  CommonResponseForm.of200 ("获取物料权限成功",type);
     }
     /**

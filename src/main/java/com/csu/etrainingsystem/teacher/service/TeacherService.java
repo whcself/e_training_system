@@ -35,58 +35,60 @@ public class TeacherService {
     @Transactional
     public void addTeacher(Teacher teacher, String t_group_id) {
         //添加教师,同时指定分组
-        teacherRepository.save(teacher);
+        if (teacher != null) {
+            teacherRepository.save (teacher);
+            User user = new User ();
+            user.setAccount (teacher.getTid ());
+            //密码为123456的密文
+            user.setPwd ("e10adc3949ba59abbe56e057f20f883e");
+            user.setRole ("teacher");
+            this.userRepository.save (user);
+        }
         if (t_group_id != null) {
-            TeacherAndGroup teacherAndGroup = new TeacherAndGroup();
-            TeacherGroupId teacherGroupId = new TeacherGroupId();
-            teacherGroupId.setTid(teacher.getTid());
-
-            teacherGroupId.setT_group_id(t_group_id);
-            teacherAndGroup.setTeacherGroupId(teacherGroupId);
-            User user = new User();
-            user.setAccount(teacher.getTid());
-            user.setPwd("e10adc3949ba59abbe56e057f20f883e");
-            user.setRole("teacher");
-            this.userRepository.save(user);
-            tGroupConnRepository.save(teacherAndGroup);
+            TeacherAndGroup teacherAndGroup = new TeacherAndGroup ();
+            TeacherGroupId teacherGroupId = new TeacherGroupId ();
+            teacherGroupId.setTid (teacher.getTid ());
+            teacherGroupId.setT_group_id (t_group_id);
+            teacherAndGroup.setTeacherGroupId (teacherGroupId);
+            tGroupConnRepository.save (teacherAndGroup);
 
         }
     }
 
     @Transactional
     public Teacher getTeacher(String id) {
-        return teacherRepository.findTeacherByTid(id);
+        return teacherRepository.findTeacherByTid (id);
     }
 
     @Transactional
     public Iterable<Teacher> getAllTeacher() {
-        return teacherRepository.findAllTeacher();
+        return teacherRepository.findAllTeacher ();
     }
 
     @Transactional
     public Iterable<String> getTeacherByAuth(int type) {
-        return teacherRepository.getTeacherByAuth(type);
+        return teacherRepository.getTeacherByAuth (type);
     }
 
     @Transactional
     public void updateTeacher(Teacher teacher, String t_group_id) {
         // tGroupConnRepository.modifyTeacherGroupByTidSQL (t_group_id,teacher.getTid ());
-        TeacherAndGroup tad = new TeacherAndGroup();
-        TeacherGroupId teacherGroupId = new TeacherGroupId();
-        teacherGroupId.setTid(teacher.getTid());
-        teacherGroupId.setT_group_id(t_group_id);
-        tad.setTeacherGroupId(teacherGroupId);
-        tGroupConnRepository.saveAndFlush(tad);
-        teacherRepository.saveAndFlush(teacher);
+        TeacherAndGroup tad = new TeacherAndGroup ();
+        TeacherGroupId teacherGroupId = new TeacherGroupId ();
+        teacherGroupId.setTid (teacher.getTid ());
+        teacherGroupId.setT_group_id (t_group_id);
+        tad.setTeacherGroupId (teacherGroupId);
+        tGroupConnRepository.saveAndFlush (tad);
+        teacherRepository.saveAndFlush (teacher);
     }
 
     @Transactional
     public void deleteTeacher(String[] tids) {
         for (String tid : tids) {
-            Teacher teacher = getTeacher(tid);
-            teacher.setDel_status(true);
-            this.teacherRepository.saveAndFlush(teacher);
-            this.tGroupConnRepository.DeleteTeacherGroupByTidSQL(tid);
+            Teacher teacher = getTeacher (tid);
+            teacher.setDel_status (true);
+            this.teacherRepository.saveAndFlush (teacher);
+            this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
 
         }
 
@@ -130,12 +132,12 @@ public class TeacherService {
                 overwork_privilege = TeacherAuthority.ALL;
                 break;
         }
-        if (role.equals("all")) role = TeacherAuthority.ALL;
-        if (tClass.equals("all")) {
-            return teacherRepository.findTeacherByRMO(role, material_privilege, overwork_privilege);
+        if (role.equals ("all")) role = TeacherAuthority.ALL;
+        if (tClass.equals ("all")) {
+            return teacherRepository.findTeacherByRMO (role, material_privilege, overwork_privilege);
         } else {
-            System.out.println(tClass + " " + role + " " + material_privilege + " " + overwork_privilege);
-            return teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege);
+            System.out.println (tClass + " " + role + " " + material_privilege + " " + overwork_privilege);
+            return teacherRepository.findTeacherByTRMO (tClass, role, material_privilege, overwork_privilege);
         }
     }
 

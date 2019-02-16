@@ -1,7 +1,9 @@
 package com.csu.etrainingsystem.user.service;
 
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
+import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.teacher.repository.GroupRepository;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import com.csu.etrainingsystem.user.entity.User;
@@ -23,16 +25,18 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
+    private final StudentService  studentService;
     private final TeacherRepository teacherRepository;
     private final GroupRepository groupRepository;
 
 
     @Autowired
-    public UserService(GroupRepository groupRepository, TeacherRepository teacherRepository, UserRepository userRepository, StudentRepository studentRepository) {
+    public UserService(GroupRepository groupRepository, TeacherRepository teacherRepository, UserRepository userRepository, StudentRepository studentRepository, StudentService studentService) {
         this.groupRepository=groupRepository;
         this.teacherRepository=teacherRepository;
         this.userRepository = userRepository;
         this.studentRepository = studentRepository;
+        this.studentService = studentService;
     }
 
     @Transactional
@@ -65,7 +69,7 @@ public class UserService {
         String id=user.getAccount();
         map.put("id",id);
 
-        if(role.equals("teacher")||role.equals("admin")){
+        if(role.equals("teacher")){
             Teacher teacher=teacherRepository.findTeacherByTid(id);
             List<String> tGroups=groupRepository.getAllGroupByTId(id);
             String StrGroups=StringUtils.join(tGroups, ',');
@@ -77,13 +81,25 @@ public class UserService {
             map.put("角色",role2);
             map.put("姓名",teacher.getTname());
             map.put("教师组",StrGroups);
-        }else if(role.equals("student")){
+        }else if (role.equals("admin")){
+            Teacher teacher=teacherRepository.findTeacherByTid(id);
+            map.put("角色",teacher.getRole ());
+            map.put("姓名",teacher.getTname());
+        }
+        else if(role.equals("student")){
             Student student=studentRepository.findStudentBySid (id).get ();
             map.put("班级",student.getClazz());
             map.put("姓名",student.getSname());
             map.put("组号",student.getS_group_id());
             map.put("批次",student.getBatch_name());
+        }else if (role.equals("spStudent")){
+            SpecialStudent student=studentService.findSpStudentById (id);
+            map.put("班级",student.getClazz());
+            map.put("姓名",student.getSname());
+            map.put("打分模板",student.getTemplate_name ());
+            map.put("系",student.getSdept ());
         }
+
         return CommonResponseForm.of200("查询成功",map);
 
     }
