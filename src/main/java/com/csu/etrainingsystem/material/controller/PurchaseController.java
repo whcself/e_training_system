@@ -4,6 +4,7 @@ import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.material.form.UpdateForm;
 import com.csu.etrainingsystem.material.service.PurchaseService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,6 +62,7 @@ public class PurchaseController {
      * @param purchase purchase 实体
      */
     @PostMapping("/add")
+    @RequiresPermissions(value = "material:MATERIAL_PURCHASE")
     public CommonResponseForm addPurchase(Purchase purchase,
                                           @RequestParam String tName){
         return purchaseService.addPurchase(purchase,tName);
