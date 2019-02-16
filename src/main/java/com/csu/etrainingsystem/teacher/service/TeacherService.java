@@ -19,68 +19,74 @@ import java.util.Map;
 
 @Service
 public class TeacherService {
-    private  final TeacherRepository teacherRepository;
-    private  final TeacherGroupService teacherGroupService;
+    private final TeacherRepository teacherRepository;
+    private final TeacherGroupService teacherGroupService;
     private final T_Group_ConnRepository tGroupConnRepository;
     private final UserRepository userRepository;
+
     @Autowired
-    public TeacherService(TeacherRepository teacherRepository, TeacherGroupService teacherGroupService, T_Group_ConnRepository tGroupConnRepository,UserRepository userRepository) {
+    public TeacherService(TeacherRepository teacherRepository, TeacherGroupService teacherGroupService, T_Group_ConnRepository tGroupConnRepository, UserRepository userRepository) {
         this.teacherRepository = teacherRepository;
         this.teacherGroupService = teacherGroupService;
         this.tGroupConnRepository = tGroupConnRepository;
-        this.userRepository=userRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
-    public void addTeacher(Teacher teacher,String t_group_id ){
+    public void addTeacher(Teacher teacher, String t_group_id) {
         //添加教师,同时指定分组
         teacherRepository.save(teacher);
-        if(t_group_id!=null){
-        TeacherAndGroup teacherAndGroup=new TeacherAndGroup ();
-        TeacherGroupId teacherGroupId=new TeacherGroupId ();
-        teacherGroupId.setTid (teacher.getTid ());
-        teacherGroupId.setT_group_id (t_group_id);
-        teacherAndGroup.setTeacherGroupId (teacherGroupId);
-        User user=new User();
-        user.setAccount (teacher.getTid ());
-        user.setPwd ("e10adc3949ba59abbe56e057f20f883e");
-        user.setRole ("teacher");
-       this.userRepository.save (user);
-        tGroupConnRepository.save (teacherAndGroup);
+        if (t_group_id != null) {
+            TeacherAndGroup teacherAndGroup = new TeacherAndGroup();
+            TeacherGroupId teacherGroupId = new TeacherGroupId();
+            teacherGroupId.setTid(teacher.getTid());
+
+            teacherGroupId.setT_group_id(t_group_id);
+            teacherAndGroup.setTeacherGroupId(teacherGroupId);
+            User user = new User();
+            user.setAccount(teacher.getTid());
+            user.setPwd("e10adc3949ba59abbe56e057f20f883e");
+            user.setRole("teacher");
+            this.userRepository.save(user);
+            tGroupConnRepository.save(teacherAndGroup);
 
         }
     }
 
     @Transactional
-    public Teacher getTeacher(String id){return teacherRepository.findTeacherByTid(id);}
+    public Teacher getTeacher(String id) {
+        return teacherRepository.findTeacherByTid(id);
+    }
 
     @Transactional
-    public Iterable<Teacher>getAllTeacher(){
-        return teacherRepository.findAllTeacher();}
+    public Iterable<Teacher> getAllTeacher() {
+        return teacherRepository.findAllTeacher();
+    }
 
     @Transactional
-    public Iterable<String>getTeacherByAuth(int type){
-        return teacherRepository.getTeacherByAuth(type);}
+    public Iterable<String> getTeacherByAuth(int type) {
+        return teacherRepository.getTeacherByAuth(type);
+    }
 
     @Transactional
-    public void updateTeacher(Teacher teacher,String t_group_id){
-       // tGroupConnRepository.modifyTeacherGroupByTidSQL (t_group_id,teacher.getTid ());
-        TeacherAndGroup tad=new TeacherAndGroup ();
-        TeacherGroupId teacherGroupId=new TeacherGroupId ();
-        teacherGroupId.setTid (teacher.getTid ());
-        teacherGroupId.setT_group_id (t_group_id);
-        tad.setTeacherGroupId (teacherGroupId);
-        tGroupConnRepository.saveAndFlush (tad);
+    public void updateTeacher(Teacher teacher, String t_group_id) {
+        // tGroupConnRepository.modifyTeacherGroupByTidSQL (t_group_id,teacher.getTid ());
+        TeacherAndGroup tad = new TeacherAndGroup();
+        TeacherGroupId teacherGroupId = new TeacherGroupId();
+        teacherGroupId.setTid(teacher.getTid());
+        teacherGroupId.setT_group_id(t_group_id);
+        tad.setTeacherGroupId(teacherGroupId);
+        tGroupConnRepository.saveAndFlush(tad);
         teacherRepository.saveAndFlush(teacher);
     }
 
     @Transactional
-    public void deleteTeacher(String[] tids){
+    public void deleteTeacher(String[] tids) {
         for (String tid : tids) {
-            Teacher teacher=getTeacher(tid);
+            Teacher teacher = getTeacher(tid);
             teacher.setDel_status(true);
-            this.teacherRepository.saveAndFlush (teacher);
-            this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
+            this.teacherRepository.saveAndFlush(teacher);
+            this.tGroupConnRepository.DeleteTeacherGroupByTidSQL(tid);
 
         }
 
@@ -92,15 +98,13 @@ public class TeacherService {
     }
 
     /**
-     *
-     *
      * @param tClass             String
      * @param role               String
      * @param material_privilege String 转换成int
      * @param overwork_privilege String 转换成 int
      * @return
      */
-    public List<Map<String, String>> findTeachers(String tClass, String role, String  material_privilege, String overwork_privilege) {
+    public List<Map<String, String>> findTeachers(String tClass, String role, String material_privilege, String overwork_privilege) {
         switch (material_privilege) {
             case "物料登记":
                 material_privilege = TeacherAuthority.MATERIAL_REGISTER;//1
@@ -128,7 +132,7 @@ public class TeacherService {
         }
         if (role.equals("all")) role = TeacherAuthority.ALL;
         if (tClass.equals("all")) {
-            return teacherRepository.findTeacherByRMO(role,material_privilege,overwork_privilege);
+            return teacherRepository.findTeacherByRMO(role, material_privilege, overwork_privilege);
         } else {
             System.out.println(tClass + " " + role + " " + material_privilege + " " + overwork_privilege);
             return teacherRepository.findTeacherByTRMO(tClass, role, material_privilege, overwork_privilege);
