@@ -30,7 +30,7 @@ public class SaveController {
      * @return
      */
     @PostMapping("/add")
-    @RequiresPermissions(value = "material:SAVE")
+//    @RequiresPermissions(value = "material:SAVE")
 
     public CommonResponseForm add(@RequestBody SaveAddForm form){
         return saveService.addSave(form.getPid(),form.getNum(),form.getTname(),form.getRemark(),form.getTime());

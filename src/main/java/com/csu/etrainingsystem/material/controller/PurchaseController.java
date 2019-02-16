@@ -62,7 +62,7 @@ public class PurchaseController {
      * @param purchase purchase 实体
      */
     @PostMapping("/add")
-    @RequiresPermissions(value = "material:MATERIAL_PURCHASE")
+//    @RequiresPermissions(value = "material:MATERIAL_PURCHASE")
     public CommonResponseForm addPurchase(Purchase purchase,
                                           @RequestParam String tName){
         return purchaseService.addPurchase(purchase,tName);

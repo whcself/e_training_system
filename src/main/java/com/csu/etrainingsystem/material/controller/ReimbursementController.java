@@ -86,7 +86,7 @@ public class ReimbursementController {
      * @apiNote 报账审核
      */
     @PostMapping("/verify")
-    @RequiresPermissions(value = "material:REMI_V")
+//    @RequiresPermissions(value = "material:REMI_V")
     public CommonResponseForm verify(@RequestParam String id,
                                      @RequestParam String tname,
                                      @RequestParam(required = false) Integer num){
