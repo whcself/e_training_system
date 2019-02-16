@@ -8,14 +8,10 @@ import com.csu.etrainingsystem.teacher.repository.T_Group_ConnRepository;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.repository.UserRepository;
-import com.csu.etrainingsystem.user.service.UserService;
-import com.csu.etrainingsystem.util.EncryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,16 +30,29 @@ public class TeacherService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * 如果是 管理员，就添加user 设role admin
+     * @param teacher
+     * @param t_group_id
+     */
     @Transactional
     public void addTeacher(Teacher teacher, String t_group_id) {
         //添加教师,同时指定分组
+
         if (teacher != null) {
-            teacherRepository.save (teacher);
+            String role = teacher.getRole();
             User user = new User ();
             user.setAccount (teacher.getTid ());
             //密码为123456的密文
             user.setPwd ("e10adc3949ba59abbe56e057f20f883e");
-            user.setRole ("teacher");
+            if(role.equals("管理员")){
+                user.setRole ("admin");
+                teacher.setOvertime_privilege(1);
+                teacher.setMaterial_privilege(63);
+            }else {
+                user.setRole("teacher");
+            }
+            teacherRepository.save (teacher);
             this.userRepository.save (user);
         }
         if (t_group_id != null) {
@@ -97,10 +106,10 @@ public class TeacherService {
     @Transactional
     public void deleteTeacher(String[] tids) {
         for (String tid : tids) {
+//            deleteTeachersGroups(tid);
             Teacher teacher = getTeacher (tid);
             teacher.setDel_status (true);
             this.teacherRepository.saveAndFlush (teacher);
-            this.tGroupConnRepository.DeleteTeacherGroupByTidSQL (tid);
 
         }
 
@@ -109,6 +118,11 @@ public class TeacherService {
       所在教师组的记录需要被删除,实验表的提交老师需要被删除?暂定不删除,好追责
 
        */
+    }
+    @Transactional
+    void deleteTeachersGroups(String tid){
+        this.tGroupConnRepository.deleteTeacherGroupByTidSQL(tid);
+
     }
 
     /**

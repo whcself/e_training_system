@@ -94,7 +94,7 @@ public class TeacherGroupService {
      */
     @Transactional
     public void deleteTGroupConnByTeacher(String tid ){
-        this.tGroupConnRepository.DeleteTeacherGroupByTidSQL(tid);
+        this.tGroupConnRepository.deleteTeacherGroupByTidSQL(tid);
     }
 
     /**

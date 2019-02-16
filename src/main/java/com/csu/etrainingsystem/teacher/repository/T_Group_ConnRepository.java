@@ -22,9 +22,11 @@ public interface T_Group_ConnRepository extends JpaRepository<TeacherAndGroup,St
      * @param tid
      * @return
      */
-    @Query(value="UPDATE t_group_conn SET t_group_conn.del_status=1 WHERE t_group_conn.tid=?",nativeQuery=true)
     @Modifying
-    void DeleteTeacherGroupByTidSQL(String tid);
+    @Query(value="update t_group_conn set del_status=1 where tid=?1 and del_status=0",nativeQuery=true)
+    void deleteTeacherGroupByTidSQL(String tid);
+
+
     @Query(value="insert into t_group_conn(t_group_id,tid)values (?,?)",nativeQuery=true)
     @Modifying
     void modifyTeacherGroupByTidSQL(String t_group_id,String tid);
