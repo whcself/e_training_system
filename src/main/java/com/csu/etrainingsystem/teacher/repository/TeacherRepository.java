@@ -52,11 +52,18 @@ public interface TeacherRepository extends JpaRepository<Teacher, String> {
                                                String material_privilege,
                                                String overtime_privilege);
 
-    @Query(value = "select a.*,b.all_group from" +
+    @Query(value = "select a.*,b.t_groups from" +
             "(select * from teacher where  del_status=0 )as a left join " +
-            " (select tid as tid,group_concat(t_group_id) as all_group from t_group_conn  where tid like '%' group by tid) as b" +
+            " (select tid as tid,group_concat(t_group_id) as t_groups from t_group_conn  where tid like '%' group by tid) as b" +
             " on a.tid=b.tid",nativeQuery = true)
-    List<Map<String,String>> findAllTeacher2();
+    List<Map<String,Object>> findAllTeacher2();
+
+
+    @Query(value = "select a.*,b.t_groups from" +
+            "(select * from teacher where  del_status=0 )as a left join " +
+            " (select tid as tid,concat('[',group_concat(concat('\"',t_group_id,'\"')),']') as t_groups from t_group_conn  where tid like '%' group by tid) as b" +
+            " on a.tid=b.tid",nativeQuery = true)
+    List<Map<String,Object>> findAllTeacher3();
 
     @Query(value = "select * from teacher where tname=? and del_status=0", nativeQuery = true)
     Teacher findTeacherByTName(String tName);

@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,8 +63,19 @@ public class TeacherService {
     }
 
     @Transactional
-    public List<Map<String,String>> getAllTeacher() {
+    public List<Map<String,Object>> getAllTeacher() {
+
+//        List<Map<String,Object>> forms=teacherRepository.findAllTeacher2 ();
+//        for(Map<String, Object> teacher:forms){
+//
+//            String tGroups=(String)teacher.get("t_groups2");
+//
+//            List<String> arrGroups=Arrays.asList(tGroups.split(","));
+//            teacher.put("t_groups",arrGroups);
+//            teacher.remove("t_groups2");
+//        }
         return teacherRepository.findAllTeacher2 ();
+
     }
 
     @Transactional
