@@ -5,6 +5,7 @@ import com.csu.etrainingsystem.material.entity.Save;
 import com.csu.etrainingsystem.material.form.SaveAddForm;
 import com.csu.etrainingsystem.material.form.SaveQueryForm;
 import com.csu.etrainingsystem.material.service.SaveService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,8 @@ public class SaveController {
      * @return
      */
     @PostMapping("/add")
+//    @RequiresPermissions(value = "material:SAVE")
+
     public CommonResponseForm add(@RequestBody SaveAddForm form){
         return saveService.addSave(form.getPid(),form.getNum(),form.getTname(),form.getRemark(),form.getTime());
     }

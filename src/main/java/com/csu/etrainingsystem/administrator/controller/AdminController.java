@@ -60,6 +60,8 @@ public class AdminController {
         teacher.setRole ("管理员");
         teacher.setTname (adminName);
         teacher.setTid (admin.getAid ());
+        teacher.setMaterial_privilege(63);
+        teacher.setOvertime_privilege(1);
         teacherService.addTeacher(teacher,null);
         return CommonResponseForm.of204("管理员增加成功");
     }

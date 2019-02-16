@@ -74,7 +74,7 @@ public class MaterialController {
 
     @ApiOperation(value = "派出物料,需要在物料表里面新增加申请记录")
     @RequestMapping(value = "/decrMaterialNum")
-    @RequiresPermissions ("material:MATERIAL_REGISTER")
+//    @RequiresPermissions ("material:MATERIAL_REGISTER")
     public CommonResponseForm decrMaterialNum(HttpSession session,
                                               @RequestParam(required = false) int num,
                                               @RequestParam String clazz,
