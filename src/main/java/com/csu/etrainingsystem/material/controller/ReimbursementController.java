@@ -6,6 +6,7 @@ import com.csu.etrainingsystem.material.form.ReimAddForm;
 import com.csu.etrainingsystem.material.form.ReimQueryForm;
 import com.csu.etrainingsystem.material.form.UpdateForm;
 import com.csu.etrainingsystem.material.service.ReimbursementService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,6 +86,7 @@ public class ReimbursementController {
      * @apiNote 报账审核
      */
     @PostMapping("/verify")
+    @RequiresPermissions(value = "material:REMI_V")
     public CommonResponseForm verify(@RequestParam String id,
                                      @RequestParam String tname,
                                      @RequestParam(required = false) Integer num){
