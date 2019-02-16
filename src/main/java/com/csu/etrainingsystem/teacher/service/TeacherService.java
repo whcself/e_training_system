@@ -61,8 +61,8 @@ public class TeacherService {
     }
 
     @Transactional
-    public Iterable<Teacher> getAllTeacher() {
-        return teacherRepository.findAllTeacher ();
+    public List<Map<String,String>> getAllTeacher() {
+        return teacherRepository.findAllTeacher2 ();
     }
 
     @Transactional
@@ -71,14 +71,13 @@ public class TeacherService {
     }
 
     @Transactional
-    public void updateTeacher(Teacher teacher, String t_group_id) {
+    public void updateTeacher(Teacher teacher) {
         // tGroupConnRepository.modifyTeacherGroupByTidSQL (t_group_id,teacher.getTid ());
-        TeacherAndGroup tad = new TeacherAndGroup ();
-        TeacherGroupId teacherGroupId = new TeacherGroupId ();
-        teacherGroupId.setTid (teacher.getTid ());
-        teacherGroupId.setT_group_id (t_group_id);
-        tad.setTeacherGroupId (teacherGroupId);
-        tGroupConnRepository.saveAndFlush (tad);
+//        TeacherAndGroup tad = new TeacherAndGroup ();
+//        TeacherGroupId teacherGroupId = new TeacherGroupId ();
+//        teacherGroupId.setTid (teacher.getTid ());
+//        tad.setTeacherGroupId (teacherGroupId);
+//        tGroupConnRepository.saveAndFlush (tad);
         teacherRepository.saveAndFlush (teacher);
     }
 
