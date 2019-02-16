@@ -14,7 +14,7 @@ public interface T_Group_ConnRepository extends JpaRepository<TeacherAndGroup,St
     @Query(value="select * from t_group_conn where tid=? and t_group_id=? and del_status=0",nativeQuery = true)
     TeacherAndGroup findTeacherGroupById(String tid, String t_group_id);
 
-    @Query(value="select * from t_group_conn where t_group.del_status=0",nativeQuery = true)
+    @Query(value="select * from t_group_conn where t_group_conn.del_status=0",nativeQuery = true)
     Iterable<TeacherAndGroup> findAllTeacherGroup();
 
     /**

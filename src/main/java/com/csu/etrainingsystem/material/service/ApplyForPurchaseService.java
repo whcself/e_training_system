@@ -224,6 +224,7 @@ public class ApplyForPurchaseService {
         List<String> names = new ArrayList<String> ();
 
         Iterable<String> teachers = teacherService.getTeacherByAuth (type);
+       // Iterable<String> admins = teacherService.get;
         for (String teacher : teachers) {
             names.add (teacher);
         }
