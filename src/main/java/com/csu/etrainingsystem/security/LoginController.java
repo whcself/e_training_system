@@ -33,113 +33,116 @@ import java.util.Map;
 @Controller
 //@RequestMapping(method = RequestMethod.POST)
 public class LoginController {
-	@Autowired
-	private UserService  userService;
-	@Autowired
-	private TeacherService teacherService;
-	@Autowired
-	private AdminService adminService;
-	@Autowired
-	private StudentService studentService;
+    @Autowired
+    private UserService  userService;
+    @Autowired
+    private TeacherService teacherService;
+    @Autowired
+    private AdminService adminService;
+    @Autowired
+    private StudentService studentService;
 
 
-	/**
-	 * 登录逻辑处理
-	 */
-	@PostMapping("/login")
-	@ResponseBody
-	public CommonResponseForm login(String name, String password,HttpServletResponse response,HttpServletRequest request){
+    /**
+     * 登录逻辑处理
+     */
+    @PostMapping("/login")
+    @ResponseBody
+    public CommonResponseForm login(String name, String password,HttpServletResponse response,HttpServletRequest request){
 
-		System.out.println("name="+name);
-		/**
-		 * 使用Shiro编写认证操作
-		 */
-		//1.获取Subject 如果不存在就创建并且绑定到当前线程,如果已经存在就从当前线程拿出来就行了
-		Subject subject = SecurityUtils.getSubject();
-		//2.封装用户数据
-		UsernamePasswordToken token = new UsernamePasswordToken(name,password);
+        System.out.println("name="+name);
+        /**
+         * 使用Shiro编写认证操作
+         */
+        //1.获取Subject 如果不存在就创建并且绑定到当前线程,如果已经存在就从当前线程拿出来就行了
+        Subject subject = SecurityUtils.getSubject();
+        //2.封装用户数据
+        UsernamePasswordToken token = new UsernamePasswordToken(name,password);
 
-		//3.执行登录方法
-		try {
-			subject.login(token);
+        //3.执行登录方法
+        try {
+            subject.login(token);
 
-			//登录成功
-			//这里面name就是account
-
-			User user=userService.getUser (name);
-			String realName="";
-			if (user.getRole ().equals ("teacher")){
-				Teacher teacher= teacherService.getTeacher (name);
-				realName=teacher.getTname ();
+            //登录成功
+            User user=userService.getUser (name);
+            String realName="";
+            if (user.getRole ().equals ("teacher")){
+                Teacher teacher= teacherService.getTeacher (name);
+                realName=teacher.getTname ();
+//				if (teacher.getMaterial_privilege () == 1){
+//					subject.getSession ().setAttribute ("material","1");
+//				}
+//				else if(teacher.getMaterial_privilege () == 2)
+//				{
+//					subject.getSession ().setAttribute ("material","2");
+//				}
+//				if (teacher.getOvertime_privilege () == 1){
+//					subject.getSession ().setAttribute ("overwork","1");
+//				}
                 subject.getSession().setAttribute("material",teacher.getMaterial_privilege());
                 subject.getSession().setAttribute("overwork",teacher.getOvertime_privilege());
 
             }
-			else if (user.getRole ().equals ("admin")){
-
+            else if (user.getRole ().equals ("admin")){
+//				Admin admin =adminService.getAdminById (name);
+//				subject.getSession ().setAttribute ("material","2");
+//				subject.getSession ().setAttribute ("overwork","1");
                 // 管理员也是老师，跟老师同样对待了
                 Teacher admin=teacherService.getTeacher(name);
-				realName=admin.getTname ();
-                subject.getSession ().setAttribute ("material",admin.getMaterial_privilege ());
-                subject.getSession ().setAttribute ("overwork",admin.getOvertime_privilege ());
-			}
-			else if (user.getRole ().equals ("student")){
-				realName=studentService.getStudentById (name).getSname ();
-			}
-			/**
-			 * 特殊学生页需要登录
-			 */
-			else if (user.getRole ().equals ("spStudent")){
-				realName=studentService.findSpStudentById (name).getSname ();
-			}
-			Map<String,String> m=new HashMap<String,String>();
-			m.put ("id",name);//name即是id
-			m.put ("身份",user.getRole ());
-			m.put ("姓名",realName);
-			subject.getSession ().setAttribute ("name",realName);
-			return CommonResponseForm.of200 ("登录成功",m);
-		} catch (UnknownAccountException e) {
-			return CommonResponseForm.of400 ("用户不存在");
-		}catch (IncorrectCredentialsException e) {
-			return CommonResponseForm.of400 ("用户名或密码不正确");
-		}catch (ConcurrentAccessException e){
-			return CommonResponseForm.of400 ("重复登录");
-		}
-	}
-	//退出登录
-	@PostMapping("/logout")
-	@ResponseBody
-	public CommonResponseForm loginout(HttpSession session){
-		User user=null;
-		//1.获取Subject 如果不存在就创建并且绑定到当前线程,如果已经存在就从当前线程拿出来就行了
-		try {
-			Subject subject = SecurityUtils.getSubject();
-			user= UserRole.getUser (session);
-			subject.logout ();
-		}catch (Exception e){
-			e.printStackTrace ();
-		}finally {
-			return  CommonResponseForm.of204 ("退出登录成功");
-		}
+                realName=admin.getTid ();
+            }
+            else if (user.getRole ().equals ("student")){
+                realName=studentService.getStudentById (name).getSname ();
+
+            }
+            Map<String,String> m=new HashMap<String,String>();
+            m.put ("id",name);//name即是id
+            m.put ("身份",user.getRole ());
+            m.put ("姓名",realName);
+            subject.getSession ().setAttribute ("name",realName);
+            return CommonResponseForm.of200 ("登录成功",m);
+        } catch (UnknownAccountException e) {
+            return CommonResponseForm.of400 ("用户不存在");
+        }catch (IncorrectCredentialsException e) {
+            return CommonResponseForm.of400 ("用户名或密码不正确");
+        }catch (ConcurrentAccessException e){
+            return CommonResponseForm.of400 ("重复登录");
+        }
+    }
+    //退出登录
+    @PostMapping("/logout")
+    @ResponseBody
+    public CommonResponseForm loginout(HttpSession session){
+        User user=null;
+        //1.获取Subject 如果不存在就创建并且绑定到当前线程,如果已经存在就从当前线程拿出来就行了
+        try {
+            Subject subject = SecurityUtils.getSubject();
+            user= UserRole.getUser (session);
+            subject.logout ();
+        }catch (Exception e){
+            e.printStackTrace ();
+        }finally {
+            return  CommonResponseForm.of204 ("退出登录成功");
+        }
 
 
-	}
-	//tologin
+    }
+    //tologin
 
-	@PostMapping("/toLogin")
-	public String toLogin(){
-		return  "redirect:/csu-engineer-train-front/login.html";
-	}
-	//noauth
-	@PostMapping("/noAuth")
-	@ResponseBody
-	public CommonResponseForm onAuth(){
-		return  CommonResponseForm.of400 ("您没有访问权限");
-	}
+    @PostMapping("/toLogin")
+    public String toLogin(){
+        return  "redirect:/csu-engineer-train-front/login.html";
+    }
+    //noauth
+    @PostMapping("/noAuth")
+    @ResponseBody
+    public CommonResponseForm onAuth(){
+        return  CommonResponseForm.of400 ("您没有访问权限");
+    }
 
-	@PostMapping("/abc")
+    @PostMapping("/abc")
     public String abc(){
-	    return "login.html";
+        return "login.html";
     }
     @PostMapping("/tlogin")
     public String tologin(String name, String password){
@@ -153,9 +156,9 @@ public class LoginController {
         UsernamePasswordToken token = new UsernamePasswordToken(name,password);
 
         //3.执行登录方法
-            subject.login(token);
+        subject.login(token);
 
-       return "test.html";
+        return "test.html";
     }
 
 }
