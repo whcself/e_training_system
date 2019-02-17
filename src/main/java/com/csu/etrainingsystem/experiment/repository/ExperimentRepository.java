@@ -119,7 +119,7 @@ public interface ExperimentRepository extends JpaRepository<Experiment, Integer>
      * @param batchName batch
      * @return num of group
      */
-    @Query(value = "select distinct s_group_id from experiment where batch_name=?1",nativeQuery = true)
+    @Query(value = "select distinct s_group_id from experiment where batch_name=?1 and del_status=0",nativeQuery = true)
     List<String> getNumOfGroup(String batchName);
     @Query(value = "SELECT DISTINCT s_group_id FROM experiment WHERE batch_name=? AND del_status=0 ",nativeQuery = true)
     List<String>getSGroupsOfBatch(String batch_name);
