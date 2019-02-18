@@ -46,7 +46,6 @@ public class MaterialController {
 
     @ApiOperation(value = "查询所有物料")
     @RequestMapping(value = "/getAllMaterial")
-    @RequiresPermissions ("material:MATERIAL_REGISTER")
     public CommonResponseForm getAllMaterial() {
         return CommonResponseForm.of200 ("获取物料成功", this.materialService.getAllMaterial ());
     }
