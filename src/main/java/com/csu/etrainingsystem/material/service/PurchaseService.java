@@ -129,7 +129,7 @@ public class PurchaseService {
             HSSFCell cell4=r.createCell(2);
             HSSFCell cell5=r.createCell(3);
             HSSFCell cell6=r.createCell(4);
-            cell2.setCellValue(purchases.get(i - 2).getPur_time());
+            cell2.setCellValue(purchases.get(i - 2).getPur_time().substring(0,16));
             cell3.setCellValue(purchases.get(i - 2).getPur_tname());
             cell4.setCellValue(purchases.get(i - 2).getClazz());
             cell5.setCellValue(purchases.get(i - 2).getPur_num());

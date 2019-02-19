@@ -235,7 +235,7 @@ public class ApplyPurchaseController {
             HSSFCell cell6= r.createCell(4);
             HSSFCell cell7= r.createCell(5);
             cell2.setCellValue(applyFPchses.get(i - 2).getApplyTime());
-            cell3.setCellValue(applyFPchses.get(i - 2).getApply_tname());
+            cell3.setCellValue(applyFPchses.get(i - 2).getApply_tname().substring(0,16));
             cell4.setCellValue(applyFPchses.get(i - 2).getClazz());
             cell5.setCellValue(applyFPchses.get(i - 2).getApply_num());
             cell6.setCellValue(applyFPchses.get(i - 2).getApply_remark());
@@ -292,7 +292,7 @@ public class ApplyPurchaseController {
         for (int i = 1; i <= rowNum; i++) {
             HSSFRow r = sheet.createRow(i);
             r.createCell(0).setCellValue(forms.get(i - 1).getPurchase_id());
-            r.createCell(1).setCellValue(forms.get(i - 1).getApply_time());
+            r.createCell(1).setCellValue(forms.get(i - 1).getApply_time().substring(0,16));
             r.createCell(2).setCellValue(forms.get(i - 1).getApply_tname());
             r.createCell(3).setCellValue(forms.get(i - 1).getClazz());
             r.createCell(4).setCellValue(forms.get(i - 1).getApply_num());

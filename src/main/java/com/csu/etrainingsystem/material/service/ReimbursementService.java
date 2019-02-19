@@ -124,7 +124,7 @@ public class ReimbursementService {
             for (int i = 1; i <= rowNum; i++) {
                 HSSFRow r = sheet.createRow(i);
                 r.createCell(0).setCellValue(reimbursements.get(i - 1).getPurchase_id());
-                r.createCell(1).setCellValue(reimbursements.get(i - 1).getRemib_time());
+                r.createCell(1).setCellValue(reimbursements.get(i - 1).getRemib_time().substring(0,16));
                 r.createCell(2).setCellValue(reimbursements.get(i - 1).getPur_tname());
                 r.createCell(3).setCellValue(reimbursements.get(i - 1).getClazz());
                 r.createCell(4).setCellValue(reimbursements.get(i - 1).getRemib_num());
@@ -141,7 +141,7 @@ public class ReimbursementService {
                 HSSFCell cell5=r.createCell(3);
                 HSSFCell cell6=r.createCell(4);
                 HSSFCell cell7=r.createCell(5);
-                cell2.setCellValue(reimbursements.get(i - 2).getRemib_time());
+                cell2.setCellValue(reimbursements.get(i - 2).getRemib_time().substring(0,16));
                 cell3.setCellValue(reimbursements.get(i - 2).getPur_tname());
                 cell4.setCellValue(reimbursements.get(i - 2).getClazz());
                 cell5.setCellValue(reimbursements.get(i - 2).getRemib_num());
