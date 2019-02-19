@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.sql.Timestamp;
@@ -399,10 +400,14 @@ public class ScoreService {
      * 2中类别的分数，分开来执行，一个用studentRepo
      * 一个用scoreRepo
      */
-    public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin) {
+    public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin, HttpSession session) {
         String sid = scoreForm.get("sid");
         Optional<Student> op = studentRepository.findStudentBySid(sid);
         String tName = scoreForm.get("tName");
+        // if the form does not have the tName, use the session attribute
+        if(tName==null){
+            tName= (String) session.getAttribute("name");
+        }
         if (op.isPresent()) {
             Student student = op.get();
             if (student.isScore_lock() && !isAdmin) return false;
