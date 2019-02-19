@@ -167,6 +167,10 @@ public class StudentService {
         return spStudentRepository.findSpStudentBySid(sid).get();
     }
 
+    public List<SpecialStudent> findSpStudentsByTemplate(String templateName){
+        return spStudentRepository.findByTemplateName(templateName);
+    }
+
     /**
      * 获取所有的特殊学生
      *

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -103,6 +104,18 @@ public class StudentController {
         SpStudentInfoForm spStudentInfoForm = new SpStudentInfoForm (student.getSid (), student.getSname (), student.getClazz (), student.getTemplate_name ());
 
         return CommonResponseForm.of200 ("获取特殊学生成功", spStudentInfoForm);
+    }
+
+    /**
+     * -ScJn
+     * @apiNote 根据模板查询特殊学生
+     * @param templateName
+     * @return
+     */
+    @RequestMapping("/getSpStudentByTemplate")
+    public CommonResponseForm getSpStudentByTemplate(@RequestParam String templateName){
+        ArrayList<SpecialStudent> students= (ArrayList<SpecialStudent>) studentService.findSpStudentsByTemplate(templateName);
+        return CommonResponseForm.of200("共"+students.size()+"条记录",students);
     }
 
     @RequestMapping(value = "/getAllStudent")
