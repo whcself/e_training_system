@@ -6,6 +6,7 @@ import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.entity.ScoreSubmit;
 import com.csu.etrainingsystem.score.entity.ScoreUpdate;
 import com.csu.etrainingsystem.score.form.DegreeForm;
+import com.csu.etrainingsystem.score.form.EnteringForm;
 import com.csu.etrainingsystem.score.form.InputSearchForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
@@ -176,8 +177,9 @@ public class ScoreController {
      * @apiNote 管理员端-修改成绩
      */
     @PostMapping("/updateScore")
-    public CommonResponseForm updateScore(@RequestBody Map<String, String> scoreForm) {
-        scoreService.updateScore2(scoreForm,true);
+    public CommonResponseForm updateScore(@RequestBody Map<String, String> scoreForm,
+                                          HttpSession session) {
+        scoreService.updateScore2(scoreForm,true,session);
         return CommonResponseForm.of204("修改成功");
     }
 
@@ -187,8 +189,9 @@ public class ScoreController {
      * @return
      */
     @PostMapping("/updateScore2")
-    public CommonResponseForm updateScore2(@RequestBody Map<String, String> scoreForm) {
-        if (scoreService.updateScore2(scoreForm,false))
+    public CommonResponseForm updateScore2(@RequestBody Map<String, String> scoreForm,
+                                           HttpSession session) {
+        if (scoreService.updateScore2(scoreForm,false,session))
             return CommonResponseForm.of204("修改成功");
         return CommonResponseForm.of400("成绩已发布，无法修改");
     }
@@ -200,8 +203,10 @@ public class ScoreController {
      * @apiNote 导入学生成绩
      */
     @PostMapping("/importScore")
-    public CommonResponseForm importScore(@RequestParam MultipartFile file, String batch_name, @RequestParam String pro_name) throws IOException {
-        int flag = scoreService.importScore(file, batch_name, pro_name);
+    public CommonResponseForm importScore(@RequestParam MultipartFile file, String batch_name,
+                                          @RequestParam String pro_name,
+                                          HttpSession session) throws IOException {
+        int flag = scoreService.importScore(file, batch_name, pro_name,session);
         if (flag == 1) {
             return CommonResponseForm.of204("导入成绩成功，部分学生不属于该批次所以未导入");
         } else if (flag == 2) {
@@ -266,7 +271,7 @@ public class ScoreController {
 
     @PostMapping("/getInputInfo")
     public CommonResponseForm getInputInfo(@RequestBody InputSearchForm form){
-        List<Score> scores=scoreService.getInputInfo(form.getSId(),form.getSName(),form.getSGroup(),form.getBatchName(),form.getProName());
+        List<EnteringForm> scores=scoreService.getInputInfo(form.getSId(),form.getSName(),form.getSGroup(),form.getBatchName(),form.getProName());
         return CommonResponseForm.of200("共"+scores.size()+"条",scores);
     }
 

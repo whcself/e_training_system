@@ -8,6 +8,7 @@ import com.csu.etrainingsystem.score.entity.ScoreSubmit;
 import com.csu.etrainingsystem.score.entity.ScoreUpdate;
 import com.csu.etrainingsystem.score.entity.SpecialScore;
 import com.csu.etrainingsystem.score.form.DegreeForm;
+import com.csu.etrainingsystem.score.form.EnteringForm;
 import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.repository.ScoreRepository;
 import com.csu.etrainingsystem.score.repository.ScoreSubmitRepository;
@@ -166,13 +167,29 @@ public class ScoreService {
         return scoreForms;
     }
 
-    public List<Score> getInputInfo(String sId, String sName, String sGroup, String batchName, String proName) {
+    public List<EnteringForm> getInputInfo(String sId, String sName, String sGroup, String batchName, String proName) {
         List<Student> students = getStudents(sId, sName, sGroup, batchName);
         List<Score> inputForm = new ArrayList<>();
+        List<EnteringForm> enteringForms=new ArrayList<>();
         for (Student student : students) {
-            inputForm.addAll(getScore(proName, student));
+            List<Score> scores=getScore(proName, student);
+            String batchName2=student.getBatch_name();
+            String sGroup2=student.getBatch_name();
+            String sName2=student.getSname();
+
+            for(Score score:scores){
+                EnteringForm enteringForm=new EnteringForm();
+                enteringForm.setBatchName(batchName2);
+                enteringForm.setSGroup(sGroup2);
+                enteringForm.setEnterTime(score.getTime());
+                enteringForm.setProced(score.getPro_name());
+                enteringForm.setSid(score.getSid());
+                enteringForm.setSName(sName2);
+                enteringForm.setTName(score.getTname());
+                enteringForms.add(enteringForm);
+            }
         }
-        return inputForm;
+        return enteringForms;
     }
 
     private List<Score> getScore(String proName, Student student) {
@@ -544,7 +561,7 @@ public class ScoreService {
      * @return 状态位
      */
     @Transactional
-    public int importScore(MultipartFile contactFile, String batchName, String proName) throws IOException {
+    public int importScore(MultipartFile contactFile, String batchName, String proName,HttpSession session) throws IOException {
 
         int flag = 0;
 
@@ -561,8 +578,8 @@ public class ScoreService {
         //Iterate through each rows one by one
         for (Row row : sheet) {
             if (row.getRowNum() == 0) continue;
-            Cell idCell = row.getCell(0);
-            Cell scoreCell = row.getCell(2);
+            Cell idCell = row.getCell(0);// id column
+            Cell scoreCell = row.getCell(2);// score column
             String id = null;
             String value = null;
 
@@ -589,10 +606,13 @@ public class ScoreService {
                     flag = 1;  //不属于该批次
                     continue;
                 }
+                String name= (String) session.getAttribute("name");
+
                 Score newScore = new Score();
                 newScore.setPro_name(proName);
                 newScore.setPro_score(Float.valueOf(value));
                 newScore.setSid(id);
+                newScore.setTname(name);
                 newScore.setTime(TimeUtil.getNowTime());
                 scoreRepository.save(newScore);
             } else {
