@@ -8,6 +8,10 @@ import com.csu.etrainingsystem.material.repository.ApplyForPurchaseRepository;
 import com.csu.etrainingsystem.material.repository.PurchaseRepository;
 import com.csu.etrainingsystem.user.entity.UserRole;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,12 +46,11 @@ public class PurchaseService {
     }
 
 
-
-    public CommonResponseForm addPurchase(Purchase purchase,String tName) {
+    public CommonResponseForm addPurchase(Purchase purchase, String tName) {
         String pid = purchase.getPurchase_id();
         ApplyForPurchase infoMap = applyForPurchaseRepository.
                 getPurchaseInfo(pid);
-        if(infoMap==null||!infoMap.getPur_tname().equals(tName)){
+        if (infoMap == null || !infoMap.getPur_tname().equals(tName)) {
             return CommonResponseForm.of400("申购不存在或者采购老师不符合");
         }
         purchase.setDel_status(false);
@@ -78,6 +81,7 @@ public class PurchaseService {
 
         HSSFWorkbook workbook = new HSSFWorkbook();
         HSSFSheet sheet = workbook.createSheet("采购表");
+
         String[] headers = {
                 "采购日期",
                 "采购人",
@@ -85,25 +89,58 @@ public class PurchaseService {
                 "采购数量",
                 "采购备注"
         };
+
+
+        //set the width
+        int[] widths = {20, 10, 16, 9, 18};
+        for (int i = 0; i <= 4; i++)
+            sheet.setColumnWidth(i, 256 * widths[i] + 184);
         String fileName = "purchase" + System.currentTimeMillis() + ".xls";//设置要导出的文件的名字
 
+        /*
+
+         */
+        HSSFRow row0 = sheet.createRow(0);
+        HSSFCell cell0=row0.createCell(0);
+        cell0.setCellValue("采购单");
+        CellUtil.setAlignment(cell0,HorizontalAlignment.CENTER_SELECTION);
+
+        //单元格范围 参数（int firstRow, int lastRow, int firstCol, int lastCol)
+        CellRangeAddress cellRangeAddress =new CellRangeAddress(0, 0, 0, 5);
+
+        //在sheet里增加合并单元格
+        sheet.addMergedRegion(cellRangeAddress);
+
         //新增数据行，并且设置单元格数据
-        HSSFRow row = sheet.createRow(0);
+        HSSFRow row = sheet.createRow(1);
         int rowNum = purchaseIds.length;
 
         //在excel表中添加表头
         for (int i = 0; i < headers.length; i++) {
             HSSFCell cell = row.createCell(i);
+            CellUtil.setAlignment(cell,HorizontalAlignment.CENTER_SELECTION);
             HSSFRichTextString text = new HSSFRichTextString(headers[i]);
             cell.setCellValue(text);
         }
-        for (int i = 1; i <= rowNum; i++) {
+        for (int i = 2; i <= rowNum+1; i++) {
             HSSFRow r = sheet.createRow(i);
-            r.createCell(0).setCellValue(purchases.get(i - 1).getPur_time());
-            r.createCell(1).setCellValue(purchases.get(i - 1).getPur_tname());
-            r.createCell(2).setCellValue(purchases.get(i - 1).getClazz());
-            r.createCell(3).setCellValue(purchases.get(i - 1).getPur_num());
-            r.createCell(4).setCellValue(purchases.get(i - 1).getPur_remark());
+            HSSFCell cell2=r.createCell(0);
+            HSSFCell cell3=r.createCell(1);
+            HSSFCell cell4=r.createCell(2);
+            HSSFCell cell5=r.createCell(3);
+            HSSFCell cell6=r.createCell(4);
+            cell2.setCellValue(purchases.get(i - 2).getPur_time());
+            cell3.setCellValue(purchases.get(i - 2).getPur_tname());
+            cell4.setCellValue(purchases.get(i - 2).getClazz());
+            cell5.setCellValue(purchases.get(i - 2).getPur_num());
+            cell6.setCellValue(purchases.get(i - 2).getPur_remark());
+
+            CellUtil.setAlignment(cell2,HorizontalAlignment.CENTER_SELECTION);
+            CellUtil.setAlignment(cell3,HorizontalAlignment.CENTER_SELECTION);
+            CellUtil.setAlignment(cell4,HorizontalAlignment.CENTER_SELECTION);
+            CellUtil.setAlignment(cell5,HorizontalAlignment.CENTER_SELECTION);
+            CellUtil.setAlignment(cell6,HorizontalAlignment.CENTER_SELECTION);
+
         }
 //);
         response.setContentType("application/octet-stream");

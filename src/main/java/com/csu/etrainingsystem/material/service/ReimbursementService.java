@@ -9,6 +9,9 @@ import com.csu.etrainingsystem.material.repository.PurchaseRepository;
 import com.csu.etrainingsystem.material.repository.ReimbursementRepository;
 import com.csu.etrainingsystem.util.TimeUtil;
 import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +72,18 @@ public class ReimbursementService {
                     "审核人",
                     "报账备注"
             };
+
+            //新增数据行，并且设置单元格数据
+            HSSFRow row = sheet.createRow(0);
+            int rowNum = reimIds.size();
+
+            //在excel表中添加表头
+            for (int i = 0; i < headers.length; i++) {
+                HSSFCell cell = row.createCell(i);
+                HSSFRichTextString text = new HSSFRichTextString(headers[i]);
+                cell.setCellValue(text);
+            }
+
         } else {
             headers = new String[]{
                     "新增报账申请日期",
@@ -78,19 +93,33 @@ public class ReimbursementService {
                     "审核人",
                     "报账备注"
             };
+            HSSFRow row0 = sheet.createRow(0);
+            HSSFCell cell0=row0.createCell(0);
+            cell0.setCellValue("报账单");
+            CellUtil.setAlignment(cell0,HorizontalAlignment.CENTER_SELECTION);
+            CellRangeAddress cellRangeAddress =new CellRangeAddress(0, 0, 0, 5);
+            sheet.addMergedRegion(cellRangeAddress);
+
+            //新增数据行，并且设置单元格数据
+            HSSFRow row = sheet.createRow(1);
+
+            //在excel表中添加表头
+            for (int i = 0; i < headers.length; i++) {
+                HSSFCell cell = row.createCell(i);
+                CellUtil.setAlignment(cell,HorizontalAlignment.CENTER_SELECTION);
+                HSSFRichTextString text = new HSSFRichTextString(headers[i]);
+                cell.setCellValue(text);
+            }
+
+            int[] widths = {20, 10, 16, 9,10, 18};
+            for (int i = 0; i <= 5; i++)
+                sheet.setColumnWidth(i, 256 * widths[i] + 184);
+
         }
         String fileName = "purchase" + TimeUtil.getNowDate() + ".xls";//设置要导出的文件的名字
 
-        //新增数据行，并且设置单元格数据
-        HSSFRow row = sheet.createRow(0);
         int rowNum = reimIds.size();
 
-        //在excel表中添加表头
-        for (int i = 0; i < headers.length; i++) {
-            HSSFCell cell = row.createCell(i);
-            HSSFRichTextString text = new HSSFRichTextString(headers[i]);
-            cell.setCellValue(text);
-        }
         if (flag) {
             for (int i = 1; i <= rowNum; i++) {
                 HSSFRow r = sheet.createRow(i);
@@ -104,14 +133,27 @@ public class ReimbursementService {
                 r.createCell(7).setCellValue(reimbursements.get(i - 1).getRemib_remark());
             }
         } else {
-            for (int i = 1; i <= rowNum; i++) {
+            for (int i = 2; i <= rowNum+1; i++) {
                 HSSFRow r = sheet.createRow(i);
-                r.createCell(0).setCellValue(reimbursements.get(i - 1).getRemib_time());
-                r.createCell(1).setCellValue(reimbursements.get(i - 1).getPur_tname());
-                r.createCell(2).setCellValue(reimbursements.get(i - 1).getClazz());
-                r.createCell(3).setCellValue(reimbursements.get(i - 1).getRemib_num());
-                r.createCell(4).setCellValue(reimbursements.get(i - 1).getRemib_vert_tname());
-                r.createCell(5).setCellValue(reimbursements.get(i - 1).getRemib_remark());
+                HSSFCell cell2=r.createCell(0);
+                HSSFCell cell3=r.createCell(1);
+                HSSFCell cell4=r.createCell(2);
+                HSSFCell cell5=r.createCell(3);
+                HSSFCell cell6=r.createCell(4);
+                HSSFCell cell7=r.createCell(5);
+                cell2.setCellValue(reimbursements.get(i - 2).getRemib_time());
+                cell3.setCellValue(reimbursements.get(i - 2).getPur_tname());
+                cell4.setCellValue(reimbursements.get(i - 2).getClazz());
+                cell5.setCellValue(reimbursements.get(i - 2).getRemib_num());
+                cell6.setCellValue(reimbursements.get(i - 2).getRemib_vert_tname());
+                cell7.setCellValue(reimbursements.get(i - 2).getRemib_remark());
+
+                CellUtil.setAlignment(cell2,HorizontalAlignment.CENTER_SELECTION);
+                CellUtil.setAlignment(cell3,HorizontalAlignment.CENTER_SELECTION);
+                CellUtil.setAlignment(cell4,HorizontalAlignment.CENTER_SELECTION);
+                CellUtil.setAlignment(cell5,HorizontalAlignment.CENTER_SELECTION);
+                CellUtil.setAlignment(cell6,HorizontalAlignment.CENTER_SELECTION);
+                CellUtil.setAlignment(cell7,HorizontalAlignment.CENTER_SELECTION);
             }
         }
 
