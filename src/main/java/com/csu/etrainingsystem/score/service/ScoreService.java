@@ -139,12 +139,17 @@ public class ScoreService {
      * @return list scoreForm 分数表单，对应于前端的需求
      * 如果 proName 非空，就查询学号，跟proName的score，空的话就查询学号的score
      */
-    public List<HashMap<String, String>> getScoreByBatchAndSGroupOrProName(String batchName, String sGroup, String proName,
-                                                                           String sId, String sName) {
+    public CommonResponseForm getScoreByBatchAndSGroupOrProName(String batchName, String sGroup, String proName,
+                                                                           String sId, String sName,boolean isStudent) {
 
         List<HashMap<String, String>> scoreForms = new ArrayList<>();
+
         List<Student> students = getStudents(sId, sName, sGroup, batchName);
         for (Student student : students) {
+            if(isStudent&&student.isScore_lock()){
+                return CommonResponseForm.of400("成绩未发布");
+            }
+
             List<Score> scores = getScore(proName, student);
             System.out.println("***" + student.getSid());
             HashMap<String, String> scoreForm = new HashMap<>();
@@ -164,7 +169,7 @@ public class ScoreService {
             }
             scoreForms.add(scoreForm);
         }
-        return scoreForms;
+        return CommonResponseForm.of200("查询成功:共" + scoreForms.size() + "条记录", scoreForms);
     }
 
     public List<EnteringForm> getInputInfo(String sId, String sName, String sGroup, String batchName, String proName) {

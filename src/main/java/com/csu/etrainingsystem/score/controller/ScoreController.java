@@ -77,11 +77,10 @@ public class ScoreController {
                                                              @RequestParam(required = false) String pro_name,
                                                              @RequestParam(required = false) String sId,
                                                              @RequestParam(required = false) String sName) {
-        List<HashMap<String, String>> scoreForms = scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName);
+        return scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName,false);
 //        if ( == 0) {
 //            return CommonResponseForm.of400("查询失败，结果为空");
 //        }
-        return CommonResponseForm.of200("查询成功:共" + scoreForms.size() + "条记录", scoreForms);
     }
 
     /**
@@ -93,17 +92,13 @@ public class ScoreController {
     public CommonResponseForm getMyScore(@RequestParam(required = false) String sid, HttpSession session) {
         List<HashMap<String, String>> scoreForms;
         if (sid != null) {
-            scoreForms = scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sid, "all");
+            return scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sid, "all",true);
         } else {
             User user = UserRole.getUser(session);
             String sId = user.getAccount();
-            scoreForms = scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sId, "all");
-            if (scoreForms.size() == 0) {
-                return CommonResponseForm.of400("查询失败，结果为空");
-            }
-        }
-        return CommonResponseForm.of200("查询成功", scoreForms);
+            return scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sId, "all",true);
 
+        }
     }
 
     /**
