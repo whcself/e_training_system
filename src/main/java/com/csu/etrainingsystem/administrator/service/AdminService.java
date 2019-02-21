@@ -7,8 +7,10 @@ import com.csu.etrainingsystem.administrator.repository.AdminRepository;
 import com.csu.etrainingsystem.administrator.repository.BatchRepository;
 import com.csu.etrainingsystem.administrator.repository.SemesterRepository;
 import com.csu.etrainingsystem.experiment.service.ExperimentService;
+import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.procedure.service.ProcedureService;
 import com.csu.etrainingsystem.student.entity.Student;
+import com.csu.etrainingsystem.student.repository.StudentRepository;
 import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.student.service.StudentGroupService;
 import com.csu.etrainingsystem.teacher.entity.Marking;
@@ -39,9 +41,12 @@ public class AdminService {
     private final StudentService studentService;
     private final SemesterRepository semesterRepository;
     private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
+
 
     @Autowired
-    public AdminService(UserRepository userRepository,AdminRepository adminRepository, SemesterRepository semesterRepository, BatchRepository batchRepository, StudentGroupService studentGroupService, ExperimentService experimentService, ProcedureService procedureService, MarkingService markingService, StudentService studentService) {
+    public AdminService(StudentRepository studentRepository,UserRepository userRepository,AdminRepository adminRepository, SemesterRepository semesterRepository, BatchRepository batchRepository, StudentGroupService studentGroupService, ExperimentService experimentService, ProcedureService procedureService, MarkingService markingService, StudentService studentService) {
+        this.studentRepository=studentRepository;
         this.userRepository=userRepository;
         this.semesterRepository = semesterRepository;
         this.adminRepository = adminRepository;
@@ -182,18 +187,15 @@ public class AdminService {
      * 2018 11.3 update:
      * @apiNote 管理员端-学生管理
      */
-    public ArrayList<Student> importStudent(MultipartFile file, String batchName) {
+    @Transactional
+    public CommonResponseForm importStudent(MultipartFile file, String batchName) throws Exception {
         ArrayList<Student> students = ExcelPort.readExcel(file, batchName);
         for (Student student : students) {
+
             studentService.addStudent(student);
-            User user=new User();
-            user.setAccount(student.getSid());
-            user.setRole("student");
-            user.setPwd("e10adc3949ba59abbe56e057f20f883e");
-            userRepository.save(user);
         }
 
-        return students;
+        return CommonResponseForm.of200("导入成功",students);
     }
 
 

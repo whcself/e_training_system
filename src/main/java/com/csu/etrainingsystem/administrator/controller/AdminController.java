@@ -9,6 +9,7 @@ import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.service.UserService;
+import com.csu.etrainingsystem.util.ExceptionPrint;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentNavigableMap;
 
 
 /**
@@ -141,8 +146,13 @@ public class AdminController {
     public CommonResponseForm importStudents(HttpServletRequest request,
                                              MultipartFile file,
                                              @RequestParam String batchName) {
-        ArrayList<Student> students = adminService.importStudent(file,batchName);
-        return CommonResponseForm.of200("导入学生信息成功", students);
+        try{
+            return adminService.importStudent(file,batchName);
+
+        } catch (Exception e) {
+            return CommonResponseForm.of400(ExceptionPrint.get(e));
+
+        }
     }
 
 

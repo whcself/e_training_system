@@ -43,6 +43,12 @@ public class LoginController {
     @Autowired
     private StudentService studentService;
 
+    @PostMapping("/sessionInfo")
+    public CommonResponseForm sessionInfo(HttpSession session){
+        String role= (String) session.getAttribute("role");
+        return CommonResponseForm.of200("ss",role);
+    }
+
 
     /**
      * 登录逻辑处理

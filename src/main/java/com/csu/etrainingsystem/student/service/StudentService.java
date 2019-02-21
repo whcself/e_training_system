@@ -59,7 +59,12 @@ public class StudentService {
     }
 
     @Transactional
-    public void addStudent(Student student) {
+    public void addStudent(Student student) throws Exception {
+        String id=student.getSid();
+        System.out.println(id);
+        if(studentRepository.findStudentBySid(id).isPresent()){
+            throw new Exception("#学号重复，该学生已经存在"+id+"#");
+        }
         User user=new User ();
         user.setRole ("student");
         user.setAccount (student.getSid ());
@@ -168,6 +173,10 @@ public class StudentService {
     @Transactional
     public SpecialStudent findSpStudentById(String sid) {
         return spStudentRepository.findSpStudentBySid(sid).get();
+    }
+
+    public List<SpecialStudent> findSpStudentsByTemplate(String templateName){
+        return spStudentRepository.findByTemplateName(templateName);
     }
 
     /**
