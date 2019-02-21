@@ -9,6 +9,7 @@ import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.MarkingService;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.service.UserService;
+import com.csu.etrainingsystem.util.ExceptionPrint;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -146,8 +150,8 @@ public class AdminController {
             return adminService.importStudent(file,batchName);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return CommonResponseForm.of400("学号重复，学生已存在");
+            return CommonResponseForm.of400(ExceptionPrint.get(e));
+
         }
     }
 

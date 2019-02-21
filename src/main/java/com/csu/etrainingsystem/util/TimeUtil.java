@@ -33,6 +33,6 @@ public class TimeUtil {
 
     public static void main(String[] args) {
 
-        getNowTime();
+        System.out.println("java.lang.Exception: 学号重复，该学生已经存在343434\\r\\n\\tat ".substring(10,20));
     }
 }

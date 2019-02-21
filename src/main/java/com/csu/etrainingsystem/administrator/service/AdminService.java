@@ -191,16 +191,8 @@ public class AdminService {
     public CommonResponseForm importStudent(MultipartFile file, String batchName) throws Exception {
         ArrayList<Student> students = ExcelPort.readExcel(file, batchName);
         for (Student student : students) {
-            String id=student.getS_group_id();
-            if(studentRepository.findStudentBySid(id)!=null){
-                throw new Exception("学号重复，该学生已经存在"+id);
-            }
+
             studentService.addStudent(student);
-            User user=new User();
-            user.setAccount(student.getSid());
-            user.setRole("student");
-            user.setPwd("e10adc3949ba59abbe56e057f20f883e");
-            userRepository.save(user);
         }
 
         return CommonResponseForm.of200("导入成功",students);
