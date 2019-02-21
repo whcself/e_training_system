@@ -63,7 +63,7 @@ public class StudentService {
         String id=student.getSid();
         System.out.println(id);
         if(studentRepository.findStudentBySid(id).isPresent()){
-            throw new Exception("学号重复，该学生已经存在"+id);
+            throw new Exception("#学号重复，该学生已经存在"+id+"#");
         }
         User user=new User ();
         user.setRole ("student");

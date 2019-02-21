@@ -12,7 +12,9 @@ public class ExceptionPrint {
         PrintWriter writer = new PrintWriter(stringWriter);
         e.printStackTrace(writer);
         StringBuffer buffer = stringWriter.getBuffer();
-        System.out.println(buffer.toString());
-        return buffer.toString();
+        String s=buffer.toString();
+        String[] mess=s.split("#");
+        System.out.println(mess[1]);
+        return mess[1];
     }
 }
