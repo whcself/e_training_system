@@ -110,8 +110,11 @@ public class StudentService {
             this.scoreService.deleteScoreBySid(sid);
             //删除这个学生申请加班的记录,由于只是记录,就不删除了
             // this.overwork_applyService.deleteOverwork_apply();
+            //删除user用户
             student.setDel_status(true);
             updateStudent(student);
+            //删除用户
+            userRepository.delById (sid);
         }
     }
 
@@ -281,6 +284,8 @@ public class StudentService {
             //删除这个学生申请加班的记录
             // this.overwork_applyService.deleteOverwork_apply();
             student.setDel_status(true);
+            //级联删除用户
+            userRepository.delById (student.getSid ());
             updateSpStudent(student);
         }
     }

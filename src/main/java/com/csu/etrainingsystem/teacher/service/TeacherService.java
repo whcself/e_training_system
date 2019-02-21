@@ -110,9 +110,8 @@ public class TeacherService {
             Teacher teacher = getTeacher (tid);
             teacher.setDel_status (true);
             this.teacherRepository.saveAndFlush (teacher);
-
+            userRepository.delById (tid);
         }
-
       /*
       todo:消除删除一个老师所带来的影响:
       所在教师组的记录需要被删除,实验表的提交老师需要被删除?暂定不删除,好追责

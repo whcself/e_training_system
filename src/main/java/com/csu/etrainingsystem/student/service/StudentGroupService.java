@@ -69,6 +69,8 @@ public class StudentGroupService {
         Iterable<StudentGroup> studentGroups = this.studentGroupRepository.findStudentGroupByBatch(batch_name);
         if (studentGroups != null) {
             for (StudentGroup studentGroup : studentGroups) {
+                //删除该组中的所有学生
+                studentService.deleteByS_group (studentGroup.getStudentGroupId ().getS_group_id (),batch_name);
                 studentGroup.setDel_status(true);
                 updateStudentGroup(studentGroup);
             }
@@ -83,7 +85,7 @@ public class StudentGroupService {
     @Transactional
     public void deleteStudentGroup(StudentGroupId studentGroupId) {
         //删除学生表中该批次该组中的学生
-        this.studentService.deleteByS_group(studentGroupId.getS_group_id(), studentGroupId.getBatch_name());
+       this.studentService.deleteByS_group(studentGroupId.getS_group_id(), studentGroupId.getBatch_name());
         //删除该批次该组学生所参与的实验记录,
         this.experimentService.deleteExperimentByS_group(studentGroupId.getS_group_id(), studentGroupId.getBatch_name());
     }
