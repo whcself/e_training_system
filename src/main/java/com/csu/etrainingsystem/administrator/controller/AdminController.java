@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentNavigableMap;
 
 
 /**
@@ -141,8 +142,13 @@ public class AdminController {
     public CommonResponseForm importStudents(HttpServletRequest request,
                                              MultipartFile file,
                                              @RequestParam String batchName) {
-        ArrayList<Student> students = adminService.importStudent(file,batchName);
-        return CommonResponseForm.of200("导入学生信息成功", students);
+        try{
+            return adminService.importStudent(file,batchName);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return CommonResponseForm.of400("学号重复，学生已存在");
+        }
     }
 
 

@@ -240,7 +240,9 @@ public class ScoreController {
      */
     @PostMapping("/updateSpScore")
     public CommonResponseForm updateSpScore(@RequestParam String sid,
-                                            @RequestBody HashMap<String, String> map) {
+                                            @RequestBody HashMap<String, String> map,
+                                            HttpSession session) {
+
 
         SpecialStudent spStudent;
         try {
@@ -248,11 +250,9 @@ public class ScoreController {
         } catch (Exception e) {
             return CommonResponseForm.of400("修改失败,该学号不存在");
         }
-//        if (spStudent.isScore_lock()) {
-//            return CommonResponseForm.of400("成绩已经发布，不能修改");
-//        } else
-
-        {
+        if (spStudent.isScore_lock()&&!session.getAttribute("role").equals("管理员")) {
+            return CommonResponseForm.of400("成绩已经发布，不能修改");
+        } else {
             scoreService.updateSpScore(spStudent, map);
             return CommonResponseForm.of204("修改成功");
         }
