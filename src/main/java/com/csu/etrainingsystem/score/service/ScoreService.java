@@ -656,7 +656,7 @@ public class ScoreService {
             score.setPro_score(sco);
             score.setPro_name(proName);
             score.setEnter_time(TimeUtil.getNowTime());
-            score.setEnter_time(tName);
+            score.setTname(tName);
         }
         scoreRepository.save(score);
 

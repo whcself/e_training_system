@@ -5,6 +5,7 @@ import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.service.UserService;
+import com.csu.etrainingsystem.util.ExceptionPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,7 +66,11 @@ public class TeacherController {
     @RequestMapping("/deleteTeacher")
     public  CommonResponseForm deleteTeacherById(@RequestBody String[] ids){
 
-        teacherService.deleteTeacher (ids);
+        try {
+            teacherService.deleteTeacher (ids);
+        } catch (Exception e) {
+            return CommonResponseForm.of400(ExceptionPrint.get(e));
+        }
         return CommonResponseForm.of204("删除教师成功");
     }
     @RequestMapping("/updateTeacher")
