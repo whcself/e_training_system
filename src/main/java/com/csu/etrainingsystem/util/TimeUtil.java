@@ -22,6 +22,10 @@ public class TimeUtil {
 
     }
 
+    /**
+     *
+     * @return 2019-02-22 15:12:09
+     */
     public static String getNowTime(){
         GregorianCalendar calendar=new GregorianCalendar();
 
@@ -32,8 +36,8 @@ public class TimeUtil {
     }
 
     public static void main(String[] args) {
-
-        System.out.println("java.lang.Exception: 学号重复，该学生已经存在343434\\r\\n\\tat ".substring(10,20));
-        System.out.println("2019-01-22 20:33:00".substring(0,16));
+        System.out.println(getNowTime());
+//        System.out.println("java.lang.Exception: 学号重复，该学生已经存在343434\\r\\n\\tat ".substring(10,20));
+//        System.out.println("2019-01-22 20:33:00".substring(0,16));
     }
 }

@@ -186,7 +186,7 @@ public class ScoreService {
                 EnteringForm enteringForm=new EnteringForm();
                 enteringForm.setBatchName(batchName2);
                 enteringForm.setSGroup(sGroup2);
-                enteringForm.setEnterTime(score.getTime());
+                enteringForm.setEnterTime(score.getEnter_time());
                 enteringForm.setProced(score.getPro_name());
                 enteringForm.setSid(score.getSid());
                 enteringForm.setSName(sName2);
@@ -453,14 +453,16 @@ public class ScoreService {
                 }
             }
         }
+        if (isAdmin) {
+            String reason = scoreForm.get("reason");
+            ScoreUpdate update = new ScoreUpdate();
+            update.setReason(reason);
+            update.setSid(sid);
+            update.setTName(tName);
+            update.setUpdate_time(new Timestamp(System.currentTimeMillis()));
+            scoreUpdateRepository.save(update);
+        }
 
-        String reason = scoreForm.get("reason");
-        ScoreUpdate update = new ScoreUpdate();
-        update.setReason(reason);
-        update.setSid(sid);
-        update.setTName(tName);
-        update.setUpdate_time(new Timestamp(System.currentTimeMillis()));
-        scoreUpdateRepository.save(update);
         return true;
 
 
@@ -618,7 +620,7 @@ public class ScoreService {
                 newScore.setPro_score(Float.valueOf(value));
                 newScore.setSid(id);
                 newScore.setTname(name);
-                newScore.setTime(TimeUtil.getNowTime());
+                newScore.setEnter_time(TimeUtil.getNowTime());
                 scoreRepository.save(newScore);
             } else {
                 flag = 2;

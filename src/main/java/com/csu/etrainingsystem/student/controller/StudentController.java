@@ -73,6 +73,8 @@ public class StudentController {
         //将普通学生转换成特殊学生
         studentService.addSpStudent (student, template_name);
 
+
+
         //Score score = new Score();需要一个特殊成绩表来实现
         //todo:在service层添加特殊学生的同时需要添加他对应的成绩表;已经安排
         //this.scoreService.addScore(score);
