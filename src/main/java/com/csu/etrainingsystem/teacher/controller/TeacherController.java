@@ -64,9 +64,7 @@ public class TeacherController {
 
     @RequestMapping("/deleteTeacher")
     public  CommonResponseForm deleteTeacherById(@RequestBody String[] ids){
-        for (String id : ids) {
-            userService.deleteUser (id);
-        }
+
         teacherService.deleteTeacher (ids);
         return CommonResponseForm.of204("删除教师成功");
     }

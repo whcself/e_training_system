@@ -71,6 +71,14 @@ public class StudentController {
         Student student = studentService.getStudentById(sid);
         if (student == null) return CommonResponseForm.of400("特殊学生添加失败,不存在该学生");
         //将普通学生转换成特殊学生
+        studentService.addSpStudent (student, template_name);
+        //先取出用户记录
+        User user = this.userService.getUser (student.getSid ());
+        //连同用户表记录一同被删除
+        studentService.deleteById (student.getSid ());
+        user.setRole ("spStudent");
+        user.setDel_status (false);
+        this.userService.updateUser (user);
         studentService.addSpStudent(student, template_name);
         studentService.deleteById(student.getSid());
         User user = this.userService.getUser(student.getSid());
