@@ -43,6 +43,7 @@ public class OverWorkController {
     // TODO-whc: 2018/11/15  权限不足的json返回，或者未登录的json返回
 
     @PostMapping("/getOverworkApplyByTime")
+    @RequiresPermissions("overwork")
     public CommonResponseForm getOverworkApplyByTime(@RequestParam(required = false) String begin,
                                                      @RequestParam(required = false) String end,
                                                      @RequestParam(required = false) String pro_name) {
@@ -83,6 +84,7 @@ public class OverWorkController {
     // TODO-whc: 2018/11/15  权限不足的json返回，或者未登录的json返回
 
     @PostMapping("/addTeacherOverwork")
+    @RequiresPermissions("overwork")
     public CommonResponseForm addTeacherOverwork(@RequestParam String begin,
                                                  @RequestParam(defaultValue = "2") String duration,
                                                  @RequestParam String pro_name,
@@ -104,6 +106,7 @@ public class OverWorkController {
      * @return s
      */
     @PostMapping("/updateTeacherOverwork")
+    @RequiresPermissions("overwork")
     public CommonResponseForm updateTeacherOverwork(@RequestParam Integer overworkId,
                                                     @RequestParam String begin,
                                                     @RequestParam String end,
@@ -155,6 +158,7 @@ public class OverWorkController {
      * @apiNote 删除加班记录
      */
     @PostMapping("/deleteOverwork")
+    @RequiresPermissions("overwork")
     public CommonResponseForm deleteOverwork(Integer id){
         return overworkService.deleteOverwork(id);
     }

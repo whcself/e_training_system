@@ -65,6 +65,9 @@ public class StudentService {
         if(studentRepository.findStudentBySid(id).isPresent()){
             throw new Exception("#学号重复，该学生已经存在"+id+"#");
         }
+        if(userRepository.findUserByAccount(id)==null){
+            throw new Exception("#账号重复，该用户已存在"+id+"#");
+        }
         User user=new User ();
         user.setRole ("student");
         user.setAccount (student.getSid ());
