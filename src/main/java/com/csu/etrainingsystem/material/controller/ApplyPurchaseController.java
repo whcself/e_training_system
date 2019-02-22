@@ -219,7 +219,7 @@ public class ApplyPurchaseController {
             HSSFRichTextString text = new HSSFRichTextString(headers.get(i));
             cell.setCellValue(text);
         }
-        int[] widths = {20, 10, 16, 9, 26, 10};
+        int[] widths = {16, 10, 16, 9, 26, 10};
         for (int i = 0; i <= 4; i++)
             sheet.setColumnWidth(i, 256 * widths[i] + 184);
 

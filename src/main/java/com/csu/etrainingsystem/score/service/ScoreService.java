@@ -184,6 +184,7 @@ public class ScoreService {
 
             for(Score score:scores){
                 EnteringForm enteringForm=new EnteringForm();
+                enteringForm.setScore(score.getPro_score());
                 enteringForm.setBatchName(batchName2);
                 enteringForm.setSGroup(sGroup2);
                 enteringForm.setEnterTime(score.getEnter_time());
@@ -421,6 +422,8 @@ public class ScoreService {
      * 修改的话，以前就有记录了
      * 2中类别的分数，分开来执行，一个用studentRepo
      * 一个用scoreRepo
+     *
+     * 对应的录入信息也会更新
      */
     public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin, HttpSession session) {
         String sid = scoreForm.get("sid");
@@ -432,7 +435,7 @@ public class ScoreService {
         }
         if (op.isPresent()) {
             Student student = op.get();
-            if (student.isScore_lock() && !isAdmin) return false;
+            if (student.isScore_lock() && !isAdmin) return false; // 如果是老师，并且锁了，就return
             System.out.println("*******" + sid + " " + student.getSname());
             for (String itemName : scoreForm.keySet()) {
                 System.out.println("****" + itemName);
@@ -448,10 +451,12 @@ public class ScoreService {
                         student.setTotal_score(Float.parseFloat(scoreForm.get(itemName)));
                         break;
                     default:
-                        updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)));
+                        updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)),tName);
                         break;
                 }
             }
+
+
         }
         if (isAdmin) {
             String reason = scoreForm.get("reason");
@@ -633,7 +638,14 @@ public class ScoreService {
     }
 
 
-    private void updateScoreInScore(String sid, String proName, float sco) {
+    /**
+     * 如果有这个对应sid，proName的score，就更新，如果没有就增加
+     * 所以也可以用于打分，而用于打分的时候就必须要加入录入记录，也就是更新这个时间和老师
+     * @param sid sid
+     * @param proName proName
+     * @param sco score
+     */
+    private void updateScoreInScore(String sid, String proName, float sco,String tName) {
 
         Score score = scoreRepository.findScoreBySidAndPro_name(sid, proName);
         if (score != null) {
@@ -643,6 +655,8 @@ public class ScoreService {
             score.setSid(sid);
             score.setPro_score(sco);
             score.setPro_name(proName);
+            score.setEnter_time(TimeUtil.getNowTime());
+            score.setEnter_time(tName);
         }
         scoreRepository.save(score);
 

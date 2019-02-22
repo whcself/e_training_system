@@ -9,6 +9,7 @@ public class EnteringForm {
     private String sid;
     private String sName;
     private String proced;
+    private Float score;
     private String enterTime;
     private String tName;
 }

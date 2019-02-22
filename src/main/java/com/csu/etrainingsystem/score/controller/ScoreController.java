@@ -258,12 +258,18 @@ public class ScoreController {
         }
     }
 
+    /**
+     * @apiNote 提交特殊学生成绩
+     */
     @PostMapping("/releaseSpScore")
     public CommonResponseForm releaseSpScore(@RequestBody Map<String, String> sids) {
         scoreService.releaseSpScore(sids);
         return CommonResponseForm.of204("发布成功");
     }
 
+    /**
+     * @apiNote 录入记录
+     */
     @PostMapping("/getInputInfo")
     public CommonResponseForm getInputInfo(@RequestBody InputSearchForm form){
         List<EnteringForm> scores=scoreService.getInputInfo(form.getSId(),form.getSName(),form.getSGroup(),form.getBatchName(),form.getProName());
