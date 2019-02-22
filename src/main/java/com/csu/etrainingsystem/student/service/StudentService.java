@@ -35,6 +35,7 @@ public class StudentService {
 
 
     private final StudentRepository studentRepository;
+
     private final ScoreService scoreService;
     private final Overwork_applyService overwork_applyService;
     private final SpStudentRepository spStudentRepository;
@@ -127,8 +128,8 @@ public class StudentService {
     }
 
     @Transactional
-    public void deleteByBacth(String sid) {
-
+    public void deleteByBacth(String batch_name) {
+     this.studentRepository.deleteByBatch (batch_name);
     }
 
     @Transactional
@@ -210,6 +211,13 @@ public class StudentService {
                 scoreService.addSpScore(s);
             }
         }
+        //先取出用户记录
+        User user = this.userRepository.findUserByAccount (student.getSid ());
+        //连同用户表记录一同被删除
+        studentRepository.deleteBySid(student.getSid ());
+        user.setRole ("spStudent");
+        user.setDel_status (false);
+        this.userRepository.saveAndFlush (user);
 
     }
 

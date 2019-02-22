@@ -116,7 +116,11 @@ public class AdminService {
         Batch batch = batchRepository.getOne(id);
         if (batch != null) {
             batch.setDel_status(true);
+
             batchRepository.saveAndFlush(batch);
+
+
+            studentService.deleteByBacth (id);
             //批次中的学生组被删除
             this.studentGroupService.deleteStudentGroupByBatch(id);
             //该批次的工序被删除
