@@ -8,6 +8,7 @@ import com.csu.etrainingsystem.overwork.service.Overwork_applyService;
 import com.csu.etrainingsystem.teacher.repository.TeacherRepository;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.entity.UserRole;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -125,6 +126,7 @@ public class OverWorkController {
     // TODO-whc: 2018/11/15  权限不足的json返回，或者未登录的json返回
 
     @PostMapping("/getOverworkByTimeOrProName")
+    @RequiresPermissions("overwork")
     public CommonResponseForm getOverworkByTimeOrProName(@RequestParam(required = false) String begin,
                                                          @RequestParam(required = false) String end,
                                                          @RequestParam(required = false) String pro_name,
@@ -132,8 +134,7 @@ public class OverWorkController {
 //        User user=UserRole.getUser(session);
 //        if(UserRole.hasRole(user,UserRole.ADMIN)||UserRole.hasRole(user,UserRole.TEACHER))
         List<Overwork> overWorks = overworkService.getOverworkByTimeOrProName(begin, end, pro_name);
-        if (overWorks.size() == 0) return CommonResponseForm.of400("查询失败,结果为空");
-        return CommonResponseForm.of200("查询成功", overWorks);
+        return CommonResponseForm.of200("查询成功共"+overWorks.size(), overWorks);
     }
 
     /**

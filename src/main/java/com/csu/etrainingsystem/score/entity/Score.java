@@ -19,7 +19,7 @@ public class Score implements Serializable {
     private String pro_name;
     private Float pro_score;
     private String tname;  //提交老师
-    private String time;
+    private String enter_time;
     private boolean del_status;
 
 

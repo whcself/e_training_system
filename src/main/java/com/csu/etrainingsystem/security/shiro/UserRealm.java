@@ -68,6 +68,7 @@ public class UserRealm extends AuthorizingRealm {
             info.addStringPermission ("material:MATERIAL_PURCHASE");
             info.addStringPermission ("material:REMI_V");
             info.addStringPermission ("material:SAVE");
+            info.addStringPermission("overwork");
 
         } else if (user.getRole ().equals ("student")) {
             info.addStringPermission ("user:student");
@@ -76,6 +77,8 @@ public class UserRealm extends AuthorizingRealm {
             if (teacher != null) {
                 info.addStringPermission ("user:teacher");
               Integer privilege= teacher.getMaterial_privilege ();
+              Integer overwork=teacher.getOvertime_privilege();
+              if(overwork==1)info.addStringPermission("overwork");
               String[] pvls= com.csu.etrainingsystem.util.StringUtils.toBinary (privilege);
               if (Integer.parseInt (pvls[0])==1){
                   info.addStringPermission ("material:SAVE");
