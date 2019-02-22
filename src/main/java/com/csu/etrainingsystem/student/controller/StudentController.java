@@ -79,11 +79,11 @@ public class StudentController {
         user.setRole ("spStudent");
         user.setDel_status (false);
         this.userService.updateUser (user);
-        studentService.addSpStudent(student, template_name);
-        studentService.deleteById(student.getSid());
-        User user = this.userService.getUser(student.getSid());
-        user.setRole("spStudent");
-        this.userService.updateUser(user);
+//        studentService.addSpStudent(student, template_name);
+//        studentService.deleteById(student.getSid());
+//        User user = this.userService.getUser(student.getSid());
+//        user.setRole("spStudent");
+//        this.userService.updateUser(user);
         //Score score = new Score();需要一个特殊成绩表来实现
         //todo:在service层添加特殊学生的同时需要添加他对应的成绩表;已经安排
         //this.scoreService.addScore(score);
