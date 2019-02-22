@@ -453,14 +453,16 @@ public class ScoreService {
                 }
             }
         }
+        if (isAdmin) {
+            String reason = scoreForm.get("reason");
+            ScoreUpdate update = new ScoreUpdate();
+            update.setReason(reason);
+            update.setSid(sid);
+            update.setTName(tName);
+            update.setUpdate_time(new Timestamp(System.currentTimeMillis()));
+            scoreUpdateRepository.save(update);
+        }
 
-        String reason = scoreForm.get("reason");
-        ScoreUpdate update = new ScoreUpdate();
-        update.setReason(reason);
-        update.setSid(sid);
-        update.setTName(tName);
-        update.setUpdate_time(new Timestamp(System.currentTimeMillis()));
-        scoreUpdateRepository.save(update);
         return true;
 
 

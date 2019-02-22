@@ -65,7 +65,7 @@ public class StudentService {
         if(studentRepository.findStudentBySid(id).isPresent()){
             throw new Exception("#学号重复，该学生已经存在"+id+"#");
         }
-        if(spStudentRepository.findSpStudentBySid(id)==null){
+        if(spStudentRepository.findSpStudentBySid(id)!=null){
             throw new Exception("#账号重复，该学生已存在，为特殊学生"+id+"#");
         }
         User user=new User ();
