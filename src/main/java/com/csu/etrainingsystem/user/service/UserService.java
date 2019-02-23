@@ -110,6 +110,11 @@ public class UserService {
         try {
             for (UserPwdForm form : forms) {
                 User user = userRepository.findUserByAccount(form.getId());
+                if(user==null){
+                    user=new User();
+                    user.setRole("student");
+                    user.setAccount(form.getId());
+                }
                 user.setPwd(form.getPwd());
                 user.setDel_status(false);// 防止用户被删除，而学生还存在
                 userRepository.save(user);
