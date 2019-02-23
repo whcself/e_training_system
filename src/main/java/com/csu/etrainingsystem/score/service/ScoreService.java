@@ -625,7 +625,7 @@ public class ScoreService {
                 newScore.setPro_score(Float.valueOf(value));
                 newScore.setSid(id);
                 newScore.setTname(name);
-                newScore.setEnter_time(TimeUtil.getNowTime());
+                newScore.setEnter_time(TimeUtil.getZoneTime());
                 scoreRepository.save(newScore);
             } else {
                 flag = 2;
@@ -655,7 +655,7 @@ public class ScoreService {
             score.setSid(sid);
             score.setPro_score(sco);
             score.setPro_name(proName);
-            score.setEnter_time(TimeUtil.getNowTime());
+            score.setEnter_time(TimeUtil.getZoneTime());
             score.setTname(tName);
         }
         scoreRepository.save(score);

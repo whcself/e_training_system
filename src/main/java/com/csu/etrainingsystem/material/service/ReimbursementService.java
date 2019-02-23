@@ -106,7 +106,7 @@ public class ReimbursementService {
             //在excel表中添加表头
             for (int i = 0; i < headers.length; i++) {
                 HSSFCell cell = row.createCell(i);
-                CellUtil.setAlignment(cell,HorizontalAlignment.CENTER_SELECTION);
+                CellUtil.setAlignment(cell,HorizontalAlignment.CENTER);
                 HSSFRichTextString text = new HSSFRichTextString(headers[i]);
                 cell.setCellValue(text);
             }
@@ -141,19 +141,26 @@ public class ReimbursementService {
                 HSSFCell cell5=r.createCell(3);
                 HSSFCell cell6=r.createCell(4);
                 HSSFCell cell7=r.createCell(5);
-                cell2.setCellValue(reimbursements.get(i - 2).getRemib_time().substring(0,16));
+                cell2.setCellValue(reimbursements.get(i - 2).getRemib_time().substring(0,16));//截取到分钟
                 cell3.setCellValue(reimbursements.get(i - 2).getPur_tname());
                 cell4.setCellValue(reimbursements.get(i - 2).getClazz());
                 cell5.setCellValue(reimbursements.get(i - 2).getRemib_num());
-                cell6.setCellValue(reimbursements.get(i - 2).getRemib_vert_tname());
+                String vert_tname=reimbursements.get(i - 2).getRemib_vert_tname();
+                if(vert_tname==null){
+                    cell6.setCellValue("未审核");
+
+                }
+                else{
+                    cell6.setCellValue(vert_tname);
+                }
                 cell7.setCellValue(reimbursements.get(i - 2).getRemib_remark());
 
-                CellUtil.setAlignment(cell2,HorizontalAlignment.CENTER_SELECTION);
-                CellUtil.setAlignment(cell3,HorizontalAlignment.CENTER_SELECTION);
-                CellUtil.setAlignment(cell4,HorizontalAlignment.CENTER_SELECTION);
-                CellUtil.setAlignment(cell5,HorizontalAlignment.CENTER_SELECTION);
-                CellUtil.setAlignment(cell6,HorizontalAlignment.CENTER_SELECTION);
-                CellUtil.setAlignment(cell7,HorizontalAlignment.CENTER_SELECTION);
+                CellUtil.setAlignment(cell2,HorizontalAlignment.CENTER);
+                CellUtil.setAlignment(cell3,HorizontalAlignment.CENTER);
+                CellUtil.setAlignment(cell4,HorizontalAlignment.CENTER);
+                CellUtil.setAlignment(cell5,HorizontalAlignment.CENTER);
+                CellUtil.setAlignment(cell6,HorizontalAlignment.CENTER);
+                CellUtil.setAlignment(cell7,HorizontalAlignment.CENTER);
             }
         }
 

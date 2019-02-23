@@ -118,7 +118,7 @@ public class PurchaseService {
         //在excel表中添加表头
         for (int i = 0; i < headers.length; i++) {
             HSSFCell cell = row.createCell(i);
-            CellUtil.setAlignment(cell,HorizontalAlignment.CENTER_SELECTION);
+            CellUtil.setAlignment(cell,HorizontalAlignment.CENTER);
             HSSFRichTextString text = new HSSFRichTextString(headers[i]);
             cell.setCellValue(text);
         }
@@ -135,11 +135,11 @@ public class PurchaseService {
             cell5.setCellValue(purchases.get(i - 2).getPur_num());
             cell6.setCellValue(purchases.get(i - 2).getPur_remark());
 
-            CellUtil.setAlignment(cell2,HorizontalAlignment.CENTER_SELECTION);
-            CellUtil.setAlignment(cell3,HorizontalAlignment.CENTER_SELECTION);
-            CellUtil.setAlignment(cell4,HorizontalAlignment.CENTER_SELECTION);
-            CellUtil.setAlignment(cell5,HorizontalAlignment.CENTER_SELECTION);
-            CellUtil.setAlignment(cell6,HorizontalAlignment.CENTER_SELECTION);
+            CellUtil.setAlignment(cell2,HorizontalAlignment.CENTER);
+            CellUtil.setAlignment(cell3,HorizontalAlignment.CENTER);
+            CellUtil.setAlignment(cell4,HorizontalAlignment.CENTER);
+            CellUtil.setAlignment(cell5,HorizontalAlignment.CENTER);
+            CellUtil.setAlignment(cell6,HorizontalAlignment.CENTER);
 
         }
 //);

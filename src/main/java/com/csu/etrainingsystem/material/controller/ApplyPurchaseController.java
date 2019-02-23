@@ -214,7 +214,7 @@ public class ApplyPurchaseController {
         //在excel表中添加表头
         for (int i = 0; i < headers.size(); i++) {
             HSSFCell cell = row.createCell(i);
-            CellUtil.setAlignment(cell, HorizontalAlignment.CENTER_SELECTION);
+            CellUtil.setAlignment(cell, HorizontalAlignment.CENTER);
 
             HSSFRichTextString text = new HSSFRichTextString(headers.get(i));
             cell.setCellValue(text);
@@ -241,12 +241,12 @@ public class ApplyPurchaseController {
             cell5.setCellValue(applyFPchses.get(i - 2).getApply_num());
             cell6.setCellValue(applyFPchses.get(i - 2).getApply_remark());
             cell7.setCellValue(applyFPchses.get(i - 2).getApply_vert_tname());
-            CellUtil.setAlignment(cell2, HorizontalAlignment.CENTER_SELECTION);
-            CellUtil.setAlignment(cell3, HorizontalAlignment.CENTER_SELECTION);
-            CellUtil.setAlignment(cell4, HorizontalAlignment.CENTER_SELECTION);
-            CellUtil.setAlignment(cell5, HorizontalAlignment.CENTER_SELECTION);
-            CellUtil.setAlignment(cell6, HorizontalAlignment.CENTER_SELECTION);
-            CellUtil.setAlignment(cell7, HorizontalAlignment.CENTER_SELECTION);
+            CellUtil.setAlignment(cell2, HorizontalAlignment.CENTER);
+            CellUtil.setAlignment(cell3, HorizontalAlignment.CENTER);
+            CellUtil.setAlignment(cell4, HorizontalAlignment.CENTER);
+            CellUtil.setAlignment(cell5, HorizontalAlignment.CENTER);
+            CellUtil.setAlignment(cell6, HorizontalAlignment.CENTER);
+            CellUtil.setAlignment(cell7, HorizontalAlignment.CENTER);
 
 //          HSSFCell cell2=   rows.add (r);
         }
