@@ -109,7 +109,7 @@ public class UserService {
 
         try {
             for (UserPwdForm form : forms) {
-                User user = userRepository.findUserByAccount(form.getId());
+                User user = userRepository.findExistUserByAccount(form.getId());
                 if(user==null){
                     user=new User();
                     user.setRole("student");
