@@ -11,7 +11,7 @@ public interface UserRepository extends JpaRepository<User,String> {
 
 
 
-     @Query(value="select * from users where users.account=? and users.del_status=0",nativeQuery = true)
+     @Query(value="select * from users where users.account=?",nativeQuery = true)
      User findUserByAccount(String account);
 
      @Query(value="update users set del_status=1 where account=?",nativeQuery = true)
