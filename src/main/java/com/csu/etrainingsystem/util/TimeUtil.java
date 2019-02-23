@@ -37,15 +37,16 @@ public class TimeUtil {
     }
 
     /**
-     * 2019-02-23T11:17:20.709+08:00[Asia/Shanghai]
+     * 2019-02-23T12:50:11.468+08:00
      * @return
      */
     public static String getZoneTime(){
-        return new GregorianCalendar().toZonedDateTime().toString();
+        return new GregorianCalendar().toZonedDateTime().toString().substring(0,29);
     }
 
     public static void main(String[] args) {
-        System.out.println(getNowDate());
+        System.out.println(getZoneTime());
+
 //        System.out.println("java.lang.Exception: 学号重复，该学生已经存在343434\\r\\n\\tat ".substring(10,20));
 //        System.out.println("2019-01-22 20:33:00".substring(0,16));
     }
