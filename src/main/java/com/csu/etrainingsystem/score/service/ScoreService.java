@@ -77,6 +77,12 @@ public class ScoreService {
     }
 
     @Transactional
+    public CommonResponseForm executeSpScore(String templateName){
+        scoreRepository.executeSpScore(templateName);
+        return null;
+    }
+
+    @Transactional
     public Iterable<Score> getScoreBySid(String sid) {
         return scoreRepository.findScoreBySid(sid);
     }
@@ -425,7 +431,7 @@ public class ScoreService {
      *
      * 对应的录入信息也会更新
      */
-    public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin, HttpSession session) {
+    public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin, boolean isEnter,HttpSession session) {
         String sid = scoreForm.get("sid");
         Optional<Student> op = studentRepository.findStudentBySid(sid);
         String tName = scoreForm.get("tName");
@@ -451,7 +457,7 @@ public class ScoreService {
                         student.setTotal_score(Float.parseFloat(scoreForm.get(itemName)));
                         break;
                     default:
-                        updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)),tName);
+                        updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)),tName,isEnter);
                         break;
                 }
             }
@@ -645,24 +651,27 @@ public class ScoreService {
      * @param proName proName
      * @param sco score
      */
-    private void updateScoreInScore(String sid, String proName, float sco,String tName) {
+    private void updateScoreInScore(String sid, String proName, float sco,String tName,boolean isEnter) {
 
         Score score = scoreRepository.findScoreBySidAndPro_name(sid, proName);
-        if (score != null) {
-            score.setPro_score(sco);
-        } else {
+
+        // 如果为空就new， setSid, setPro_name
+        if(score==null){
             score = new Score();
             score.setSid(sid);
-            score.setPro_score(sco);
             score.setPro_name(proName);
-            score.setEnter_time(TimeUtil.getZoneTime());
-            score.setTname(tName);
         }
+        if(isEnter){
+            score.setTname(tName);
+            score.setEnter_time(TimeUtil.getZoneTime());
+
+        }
+        score.setPro_score(sco);
         scoreRepository.save(score);
 
     }
 
-    public List<Map<String, String>> getSpScore(String sid, String sname, String templateName) {
+    public List<Map<String, String>> getSpScore(String sid, String sname, String templateName,boolean isSpStudent) {
         List<Map<String, String>> maps = new ArrayList<>();
         List<SpecialStudent> spStudents = new ArrayList<>();
         /* 拿到所有的学生,所有或者具体一个 */
@@ -690,8 +699,10 @@ public class ScoreService {
             map.put("姓名", student.getSname());
             map.put("学号", student.getSid());
             map.put("等级", student.getDegree());
-            map.put("总成绩", String.valueOf(student.getTotal_score()));
-            map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
+            if(!isSpStudent&&student.isScore_lock()) {
+                map.put("总成绩", String.valueOf(student.getTotal_score()));
+                map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
+            }
             System.out.println(map.get("发布情况") + "********");
             for (SpecialScore score : scores) {
                 map.put(score.getPro_name(), String.valueOf(score.getPro_score()));

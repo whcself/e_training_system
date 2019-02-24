@@ -26,6 +26,13 @@ public interface ScoreRepository extends JpaRepository<Score, Integer> {
             "ON student.sid = total.sid  SET student.total_score = total.total_score",nativeQuery = true)
     void executeScore(String batchName);
 
+    @Modifying
+    @Query(value = "UPDATE sp_student INNER JOIN (SELECT newscore.sid, sum( newscore.pro_score * exp.weight ) AS total_score  FROM " +
+            "( SELECT s.*, stu.template_name FROM sp_score AS s, sp_student AS stu WHERE s.sid = stu.sid ) AS newscore, experiment AS exp  " +
+            "WHERE newscore.template_name = exp.template_id AND newscore.pro_name = exp.pro_name  and newscore.template_name=? GROUP BY newscore.sid  ) total " +
+            "ON sp_student.sid = total.sid  SET sp_student.total_score = total.total_score",nativeQuery = true)
+    void executeSpScore(String templateName);
+
     @Query(value = "select count(*) from proced where batch_name=? and del_status=0",nativeQuery = true)
     int checkBand(String batchName);
 
