@@ -96,7 +96,7 @@ public class ScoreController {
         String role = (String) session.getAttribute("role");
         String itId=(String) session.getAttribute("id");
         if (role.equals("spStudent")) {
-            return CommonResponseForm.of200("成功", scoreService.getSpScore(itId, null, null, true));
+            return CommonResponseForm.of200("成功", scoreService.getSpScore2(itId));
         }
         if (role.equals("student")) {
             if (sid != null) {

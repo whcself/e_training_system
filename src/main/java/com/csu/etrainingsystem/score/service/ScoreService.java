@@ -718,6 +718,33 @@ public class ScoreService {
         return maps;
     }
 
+    public Map<String, String> getSpScore2(String sid) {
+        Optional<SpecialStudent> optionalSpecialStudent = spStudentRepository.findSpStudentBySid(sid);
+        Map<String, String> map = new HashMap<>();
+
+        if(optionalSpecialStudent.isPresent()) {
+            SpecialStudent student=optionalSpecialStudent.get();
+            List<SpecialScore> scores;
+            scores = (List<SpecialScore>) spScoreRepository.findSpScoreBySid(student.getSid());
+            /* 一个学生的所有分数信息 */
+            map.put("sname", student.getSname());
+            map.put("sid", student.getSid());
+            //如果成绩已经发布就返回,并且如果是教师就再返回发布情况
+            if (student.isScore_lock()) {
+                map.put("degree", student.getDegree());
+                map.put("total_score", String.valueOf(student.getTotal_score()));
+
+            }
+
+            System.out.println(map.get("发布情况") + "********");
+            for (SpecialScore score : scores) {
+                map.put(score.getPro_name(), String.valueOf(score.getPro_score()));
+            }
+        }
+        //***********************
+        return map;
+    }
+
     @Transactional
     public boolean updateSpScore(SpecialStudent specialStudent, HashMap<String, String> map) {
 
