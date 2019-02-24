@@ -94,8 +94,9 @@ public class ScoreController {
     public CommonResponseForm getMyScore(@RequestParam(required = false) String sid, HttpSession session) {
         List<HashMap<String, String>> scoreForms;
         String role = (String) session.getAttribute("role");
+        String itId=(String) session.getAttribute("id");
         if (role.equals("spStudent")) {
-            return CommonResponseForm.of200("成功", scoreService.getSpScore(sid, null, null, true));
+            return CommonResponseForm.of200("成功", scoreService.getSpScore(itId, null, null, true));
         }
         if (role.equals("student")) {
             if (sid != null) {
@@ -110,9 +111,15 @@ public class ScoreController {
         return CommonResponseForm.of400("此用户不是学生");
     }
 
+    /**
+     * @apiNote 计算特殊学生成绩
+     * @param templateName
+     * @return
+     */
     @RequestMapping("/executeSpScore")
     public CommonResponseForm executeSpScore(@RequestParam String templateName){
-        return null;
+        scoreService.executeSpScore(templateName);
+        return CommonResponseForm.of204("计算成功");
     }
 
 
@@ -189,7 +196,7 @@ public class ScoreController {
     @PostMapping("/updateScore")
     public CommonResponseForm updateScore(@RequestBody Map<String, String> scoreForm,
                                           HttpSession session) {
-        scoreService.updateScore2(scoreForm, true,false, session);
+        scoreService.updateScore2(scoreForm, true, session);
         return CommonResponseForm.of204("修改成功");
     }
 
@@ -201,7 +208,7 @@ public class ScoreController {
     @PostMapping("/updateScore2")
     public CommonResponseForm updateScore2(@RequestBody Map<String, String> scoreForm,
                                            HttpSession session) {
-        if (scoreService.updateScore2(scoreForm, false, true,session))
+        if (scoreService.updateScore2(scoreForm, false,session))
             return CommonResponseForm.of204("修改成功");
         return CommonResponseForm.of400("成绩已发布，无法修改");
     }

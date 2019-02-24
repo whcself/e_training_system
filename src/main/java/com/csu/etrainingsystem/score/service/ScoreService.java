@@ -77,7 +77,7 @@ public class ScoreService {
     }
 
     @Transactional
-    public CommonResponseForm executeSpScore(String templateName){
+    public CommonResponseForm executeSpScore(String templateName) {
         scoreRepository.executeSpScore(templateName);
         return null;
     }
@@ -146,13 +146,13 @@ public class ScoreService {
      * 如果 proName 非空，就查询学号，跟proName的score，空的话就查询学号的score
      */
     public CommonResponseForm getScoreByBatchAndSGroupOrProName(String batchName, String sGroup, String proName,
-                                                                           String sId, String sName,boolean isStudent) {
+                                                                String sId, String sName, boolean isStudent) {
 
         List<HashMap<String, String>> scoreForms = new ArrayList<>();
 
         List<Student> students = getStudents(sId, sName, sGroup, batchName);
         for (Student student : students) {
-            if(isStudent&&student.isScore_lock()){
+            if (isStudent && student.isScore_lock()) {
                 return CommonResponseForm.of400("成绩未发布");
             }
 
@@ -166,7 +166,7 @@ public class ScoreService {
             scoreForm.put("total_score", String.valueOf(student.getTotal_score()));
             scoreForm.put("degree", student.getDegree());
             scoreForm.put("release", student.isScore_lock() ? "已发布" : "未发布");
-            scoreForm.put("clazz",student.getClazz());
+            scoreForm.put("clazz", student.getClazz());
 
             for (Score score : scores) {
                 scoreForm.put(score.getPro_name(), String.valueOf(score.getPro_score()));
@@ -181,15 +181,15 @@ public class ScoreService {
     public List<EnteringForm> getInputInfo(String sId, String sName, String sGroup, String batchName, String proName) {
         List<Student> students = getStudents(sId, sName, sGroup, batchName);
         List<Score> inputForm = new ArrayList<>();
-        List<EnteringForm> enteringForms=new ArrayList<>();
+        List<EnteringForm> enteringForms = new ArrayList<>();
         for (Student student : students) {
-            List<Score> scores=getScore(proName, student);
-            String batchName2=student.getBatch_name();
-            String sGroup2=student.getBatch_name();
-            String sName2=student.getSname();
+            List<Score> scores = getScore(proName, student);
+            String batchName2 = student.getBatch_name();
+            String sGroup2 = student.getBatch_name();
+            String sName2 = student.getSname();
 
-            for(Score score:scores){
-                EnteringForm enteringForm=new EnteringForm();
+            for (Score score : scores) {
+                EnteringForm enteringForm = new EnteringForm();
                 enteringForm.setScore(score.getPro_score());
                 enteringForm.setBatchName(batchName2);
                 enteringForm.setSGroup(sGroup2);
@@ -428,16 +428,16 @@ public class ScoreService {
      * 修改的话，以前就有记录了
      * 2中类别的分数，分开来执行，一个用studentRepo
      * 一个用scoreRepo
-     *
+     * <p>
      * 对应的录入信息也会更新
      */
-    public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin, boolean isEnter,HttpSession session) {
+    public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin, HttpSession session) {
         String sid = scoreForm.get("sid");
         Optional<Student> op = studentRepository.findStudentBySid(sid);
         String tName = scoreForm.get("tName");
         // if the form does not have the tName, use the session attribute
-        if(tName==null){
-            tName= (String) session.getAttribute("name");
+        if (tName == null) {
+            tName = (String) session.getAttribute("name");
         }
         if (op.isPresent()) {
             Student student = op.get();
@@ -457,13 +457,14 @@ public class ScoreService {
                         student.setTotal_score(Float.parseFloat(scoreForm.get(itemName)));
                         break;
                     default:
-                        updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)),tName,isEnter);
+                        updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)), tName);
                         break;
                 }
             }
 
 
         }
+        // 如果是admin 就是修改
         if (isAdmin) {
             String reason = scoreForm.get("reason");
             ScoreUpdate update = new ScoreUpdate();
@@ -579,7 +580,7 @@ public class ScoreService {
      * @return 状态位
      */
     @Transactional
-    public int importScore(MultipartFile contactFile, String batchName, String proName,HttpSession session) throws IOException {
+    public int importScore(MultipartFile contactFile, String batchName, String proName, HttpSession session) throws IOException {
 
         int flag = 0;
 
@@ -624,7 +625,7 @@ public class ScoreService {
                     flag = 1;  //不属于该批次
                     continue;
                 }
-                String name= (String) session.getAttribute("name");
+                String name = (String) session.getAttribute("name");
 
                 Score newScore = new Score();
                 newScore.setPro_name(proName);
@@ -647,31 +648,30 @@ public class ScoreService {
     /**
      * 如果有这个对应sid，proName的score，就更新，如果没有就增加
      * 所以也可以用于打分，而用于打分的时候就必须要加入录入记录，也就是更新这个时间和老师
-     * @param sid sid
+     *
+     * @param sid     sid
      * @param proName proName
-     * @param sco score
+     * @param sco     score
      */
-    private void updateScoreInScore(String sid, String proName, float sco,String tName,boolean isEnter) {
+    private void updateScoreInScore(String sid, String proName, float sco, String tName) {
 
         Score score = scoreRepository.findScoreBySidAndPro_name(sid, proName);
 
         // 如果为空就new， setSid, setPro_name
-        if(score==null){
+        if (score == null) {
             score = new Score();
             score.setSid(sid);
             score.setPro_name(proName);
         }
-        if(isEnter){
-            score.setTname(tName);
-            score.setEnter_time(TimeUtil.getZoneTime());
-
-        }
+        // 属于录入范畴
+        score.setTname(tName);
+        score.setEnter_time(TimeUtil.getZoneTime());
         score.setPro_score(sco);
         scoreRepository.save(score);
 
     }
 
-    public List<Map<String, String>> getSpScore(String sid, String sname, String templateName,boolean isSpStudent) {
+    public List<Map<String, String>> getSpScore(String sid, String sname, String templateName, boolean isSpStudent) {
         List<Map<String, String>> maps = new ArrayList<>();
         List<SpecialStudent> spStudents = new ArrayList<>();
         /* 拿到所有的学生,所有或者具体一个 */
@@ -698,11 +698,16 @@ public class ScoreService {
             /* 一个学生的所有分数信息 */
             map.put("姓名", student.getSname());
             map.put("学号", student.getSid());
-            map.put("等级", student.getDegree());
-            if(!isSpStudent&&student.isScore_lock()) {
+            //如果成绩已经发布就返回,并且如果是教师就再返回发布情况
+            if (student.isScore_lock()) {
+                if (!isSpStudent) {
+                    map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
+                }
+                map.put("等级", student.getDegree());
                 map.put("总成绩", String.valueOf(student.getTotal_score()));
-                map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
+
             }
+
             System.out.println(map.get("发布情况") + "********");
             for (SpecialScore score : scores) {
                 map.put(score.getPro_name(), String.valueOf(score.getPro_score()));
