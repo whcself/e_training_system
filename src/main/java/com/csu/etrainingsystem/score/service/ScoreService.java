@@ -699,17 +699,11 @@ public class ScoreService {
             map.put("姓名", student.getSname());
             map.put("学号", student.getSid());
             //如果成绩已经发布就返回,并且如果是教师就再返回发布情况
-            if (isSpStudent) {
-                if (!student.isScore_lock()) {
-                    map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
-                    map.put("等级", student.getDegree());
-                    map.put("总成绩", String.valueOf(student.getTotal_score()));
-                }
-            }else{
-                map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
-                map.put("等级", student.getDegree());
-                map.put("总成绩", String.valueOf(student.getTotal_score()));
-            }
+
+            map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
+            map.put("等级", student.getDegree());
+            map.put("总成绩", String.valueOf(student.getTotal_score()));
+
 
             System.out.println(map.get("发布情况") + "********");
             for (SpecialScore score : scores) {
@@ -727,8 +721,8 @@ public class ScoreService {
 
         Map<String, String> map = new HashMap<>();
 
-        if(optionalSpecialStudent.isPresent()) {
-            SpecialStudent student=optionalSpecialStudent.get();
+        if (optionalSpecialStudent.isPresent()) {
+            SpecialStudent student = optionalSpecialStudent.get();
             List<SpecialScore> scores;
             scores = (List<SpecialScore>) spScoreRepository.findSpScoreBySid(student.getSid());
             /* 一个学生的所有分数信息 */
