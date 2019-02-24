@@ -718,8 +718,10 @@ public class ScoreService {
         return maps;
     }
 
-    public Map<String, String> getSpScore2(String sid) {
+    public List<Map<String, String>> getSpScore2(String sid) {
         Optional<SpecialStudent> optionalSpecialStudent = spStudentRepository.findSpStudentBySid(sid);
+        List<Map<String, String>> maps = new ArrayList<>();
+
         Map<String, String> map = new HashMap<>();
 
         if(optionalSpecialStudent.isPresent()) {
@@ -744,7 +746,8 @@ public class ScoreService {
             }
         }
         //***********************
-        return map;
+        maps.add(map);
+        return maps;
     }
 
     @Transactional
