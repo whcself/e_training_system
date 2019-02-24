@@ -735,6 +735,8 @@ public class ScoreService {
                 map.put("total_score", String.valueOf(student.getTotal_score()));
 
             }
+            map.put("release", student.isScore_lock() ? "已发布" : "未发布");
+
 
             System.out.println(map.get("发布情况") + "********");
             for (SpecialScore score : scores) {
