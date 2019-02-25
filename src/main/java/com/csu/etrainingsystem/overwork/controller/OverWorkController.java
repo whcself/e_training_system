@@ -43,7 +43,6 @@ public class OverWorkController {
     // TODO-whc: 2018/11/15  权限不足的json返回，或者未登录的json返回
 
     @PostMapping("/getOverworkApplyByTime")
-    @RequiresPermissions("overwork")
     public CommonResponseForm getOverworkApplyByTime(@RequestParam(required = false) String begin,
                                                      @RequestParam(required = false) String end,
                                                      @RequestParam(required = false) String pro_name) {
