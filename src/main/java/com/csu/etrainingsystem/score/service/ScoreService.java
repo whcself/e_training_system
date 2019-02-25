@@ -3,6 +3,7 @@ package com.csu.etrainingsystem.score.service;
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.repository.ExperimentRepository;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.entity.ScoreSubmit;
 import com.csu.etrainingsystem.score.entity.ScoreUpdate;
@@ -19,9 +20,13 @@ import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
 import com.csu.etrainingsystem.util.TimeUtil;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 //import org.apache.shiro.crypto.hash.Hash;
@@ -29,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.io.*;
@@ -56,6 +62,8 @@ public class ScoreService {
         this.spStudentRepository = spStudentRepository;
         this.spScoreRepository = spScoreRepository;
     }
+
+
 
     @Transactional
     public void addScore(Score score) {
@@ -626,14 +634,17 @@ public class ScoreService {
                     continue;
                 }
                 String name = (String) session.getAttribute("name");
+                Score oldScore=scoreRepository.findScoreBySidAndPro_name(id,proName);
+                if(oldScore==null){
+                    Score newScore = new Score();
+                    newScore.setPro_name(proName);
+                    newScore.setPro_score(Float.valueOf(value));
+                    newScore.setSid(id);
+                    newScore.setTname(name);
+                    newScore.setEnter_time(TimeUtil.getZoneTime());
+                    scoreRepository.save(newScore);
+                }
 
-                Score newScore = new Score();
-                newScore.setPro_name(proName);
-                newScore.setPro_score(Float.valueOf(value));
-                newScore.setSid(id);
-                newScore.setTname(name);
-                newScore.setEnter_time(TimeUtil.getZoneTime());
-                scoreRepository.save(newScore);
             } else {
                 flag = 2;
             }

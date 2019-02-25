@@ -21,15 +21,16 @@ public interface ScoreRepository extends JpaRepository<Score, Integer> {
 
     @Modifying
     @Query(value = "UPDATE student INNER JOIN (SELECT newscore.sid, sum( newscore.pro_score * p.weight ) AS total_score  FROM " +
-            "( SELECT s.*, stu.batch_name FROM score AS s, student AS stu WHERE s.sid = stu.sid ) AS newscore, proced AS p  " +
-            "WHERE newscore.batch_name = p.batch_name AND newscore.pro_name = p.pro_name  and newscore.batch_name=? GROUP BY newscore.sid  ) total " +
+            "( SELECT s.*, stu.batch_name FROM score AS s, student AS stu WHERE s.sid = stu.sid and s.del_status=0 and stu.del_status=0) AS newscore, proced AS p  " +
+            "WHERE newscore.batch_name = p.batch_name AND newscore.pro_name = p.pro_name  and newscore.batch_name=? and p.del_status=0 GROUP BY newscore.sid  ) total " +
             "ON student.sid = total.sid  SET student.total_score = total.total_score",nativeQuery = true)
     void executeScore(String batchName);
 
     @Modifying
     @Query(value = "update sp_student stu inner join( select sp.sid,sum(sp.pro_score*p.weight) as score " +
-            "from sp_score as sp, proced_template as p, sp_student as spstu where sp.pro_name=p.pro_name  " +
-            " and p.template_name=?1 and spstu.template_name=?1 and sp.sid=spstu.sid group by sp.sid) a " +
+            "from sp_score as sp, proced_template as p, sp_student as spstu where sp.pro_name=p.pro_name " +
+            " and p.template_name=?1 and spstu.template_name=?1 " +
+            " and sp.sid=spstu.sid and sp.del_status=0 and p.del_status=0 and spstu.del_status=0 group by sp.sid) a" +
             " on a.sid=stu.sid set stu.total_score=score;",nativeQuery = true)
     void executeSpScore(String templateName);
 
