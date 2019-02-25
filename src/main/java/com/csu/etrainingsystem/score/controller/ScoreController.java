@@ -15,6 +15,7 @@ import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.entity.UserRole;
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.print.attribute.standard.Sides;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.swing.text.html.Option;
 import java.io.File;
@@ -242,6 +244,15 @@ public class ScoreController {
 
     }
 
+    /**
+     * @apiNote 下载成绩excel
+     */
+
+    @PostMapping("/scoreExcel")
+    public void scoreExcel(@RequestBody List<List<Object>> data,
+                           HttpServletResponse response) throws IOException {
+        scoreService.downloadScoreExcel(response,data);
+    }
     /**
      * -ScJn
      *

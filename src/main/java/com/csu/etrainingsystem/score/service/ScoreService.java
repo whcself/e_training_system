@@ -63,6 +63,53 @@ public class ScoreService {
         this.spScoreRepository = spScoreRepository;
     }
 
+    public void downloadScoreExcel(HttpServletResponse response,
+                                 List<List<Object>> data) throws IOException {
+
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("采购表");
+
+        List<String> headers=new ArrayList<>();
+        for(Object header:data.get(0)){
+            headers.add((String) header);
+        }
+
+        String fileName = "Score" + System.currentTimeMillis() + ".xls";//设置要导出的文件的名字
+
+        HSSFRow row0 = sheet.createRow(0);
+        HSSFCell cell0=row0.createCell(0);
+        cell0.setCellValue("成绩单");
+        CellUtil.setAlignment(cell0,HorizontalAlignment.CENTER_SELECTION);
+
+        //单元格范围 参数（int firstRow, int lastRow, int firstCol, int lastCol)
+        CellRangeAddress cellRangeAddress =new CellRangeAddress(0, 0, 0, headers.size()-1);
+
+        //在sheet里增加合并单元格
+        sheet.addMergedRegion(cellRangeAddress);
+
+        //新增数据行，并且设置单元格数据
+        HSSFRow row1 = sheet.createRow(1);
+        //在excel表中添加表头
+        for (int i = 0; i < headers.size(); i++) {
+            HSSFCell cell = row1.createCell(i);
+            CellUtil.setAlignment(cell,HorizontalAlignment.CENTER);
+            HSSFRichTextString text = new HSSFRichTextString(headers.get(i));
+            cell.setCellValue(text);
+        }
+        for (int i = 1; i < data.size(); i++) {
+            HSSFRow r = sheet.createRow(i+1);
+            List<Object> rowData=data.get(i);
+            for(int j=0;j<headers.size();j++){
+                HSSFCell cell=r.createCell(j);
+                cell.setCellValue((String) rowData.get(j));
+                CellUtil.setAlignment(cell,HorizontalAlignment.CENTER);
+            }
+        }
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+        response.flushBuffer();
+        workbook.write(response.getOutputStream());
+    }
 
 
     @Transactional
