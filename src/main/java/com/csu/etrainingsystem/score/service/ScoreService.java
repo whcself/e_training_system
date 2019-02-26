@@ -3,6 +3,7 @@ package com.csu.etrainingsystem.score.service;
 import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.experiment.repository.ExperimentRepository;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.material.entity.Purchase;
 import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.entity.ScoreSubmit;
 import com.csu.etrainingsystem.score.entity.ScoreUpdate;
@@ -19,9 +20,13 @@ import com.csu.etrainingsystem.student.entity.Student;
 import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.repository.StudentRepository;
 import com.csu.etrainingsystem.util.TimeUtil;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 //import org.apache.shiro.crypto.hash.Hash;
@@ -29,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.io.*;
@@ -57,6 +63,55 @@ public class ScoreService {
         this.spScoreRepository = spScoreRepository;
     }
 
+    public void downloadScoreExcel(HttpServletResponse response,
+                                 List<List<Object>> data) throws IOException {
+
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("采购表");
+
+        List<String> headers=new ArrayList<>();
+        for(Object header:data.get(0)){
+            headers.add((String) header);
+        }
+
+        String fileName = "Score" + System.currentTimeMillis() + ".xls";//设置要导出的文件的名字
+
+        HSSFRow row0 = sheet.createRow(0);
+        HSSFCell cell0=row0.createCell(0);
+        cell0.setCellValue("成绩单");
+        CellUtil.setAlignment(cell0,HorizontalAlignment.CENTER_SELECTION);
+
+        //单元格范围 参数（int firstRow, int lastRow, int firstCol, int lastCol)
+        CellRangeAddress cellRangeAddress =new CellRangeAddress(0, 0, 0, headers.size()-1);
+
+        //在sheet里增加合并单元格
+        sheet.addMergedRegion(cellRangeAddress);
+
+        //新增数据行，并且设置单元格数据
+        HSSFRow row1 = sheet.createRow(1);
+        //在excel表中添加表头
+        for (int i = 0; i < headers.size(); i++) {
+            HSSFCell cell = row1.createCell(i);
+            CellUtil.setAlignment(cell,HorizontalAlignment.CENTER);
+            HSSFRichTextString text = new HSSFRichTextString(headers.get(i));
+            cell.setCellValue(text);
+        }
+        for (int i = 1; i < data.size(); i++) {
+            HSSFRow r = sheet.createRow(i+1);
+            List<Object> rowData=data.get(i);
+            for(int j=0;j<headers.size();j++){
+                HSSFCell cell=r.createCell(j);
+                cell.setCellValue((String) rowData.get(j));
+                CellUtil.setAlignment(cell,HorizontalAlignment.CENTER);
+            }
+        }
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-disposition", "attachment;filename=" + fileName);
+        response.flushBuffer();
+        workbook.write(response.getOutputStream());
+    }
+
+
     @Transactional
     public void addScore(Score score) {
         this.scoreRepository.save(score);
@@ -74,6 +129,12 @@ public class ScoreService {
             scoreRepository.executeScore(batch_name);
             return CommonResponseForm.of204("计算成功");
         } else return CommonResponseForm.of400("该批次未绑定权重模板，无法计算");
+    }
+
+    @Transactional
+    public CommonResponseForm executeSpScore(String templateName) {
+        scoreRepository.executeSpScore(templateName);
+        return null;
     }
 
     @Transactional
@@ -140,13 +201,13 @@ public class ScoreService {
      * 如果 proName 非空，就查询学号，跟proName的score，空的话就查询学号的score
      */
     public CommonResponseForm getScoreByBatchAndSGroupOrProName(String batchName, String sGroup, String proName,
-                                                                           String sId, String sName,boolean isStudent) {
+                                                                String sId, String sName, boolean isStudent) {
 
         List<HashMap<String, String>> scoreForms = new ArrayList<>();
 
         List<Student> students = getStudents(sId, sName, sGroup, batchName);
         for (Student student : students) {
-            if(isStudent&&student.isScore_lock()){
+            if (isStudent && student.isScore_lock()) {
                 return CommonResponseForm.of400("成绩未发布");
             }
 
@@ -160,7 +221,7 @@ public class ScoreService {
             scoreForm.put("total_score", String.valueOf(student.getTotal_score()));
             scoreForm.put("degree", student.getDegree());
             scoreForm.put("release", student.isScore_lock() ? "已发布" : "未发布");
-            scoreForm.put("clazz",student.getClazz());
+            scoreForm.put("clazz", student.getClazz());
 
             for (Score score : scores) {
                 scoreForm.put(score.getPro_name(), String.valueOf(score.getPro_score()));
@@ -175,15 +236,16 @@ public class ScoreService {
     public List<EnteringForm> getInputInfo(String sId, String sName, String sGroup, String batchName, String proName) {
         List<Student> students = getStudents(sId, sName, sGroup, batchName);
         List<Score> inputForm = new ArrayList<>();
-        List<EnteringForm> enteringForms=new ArrayList<>();
+        List<EnteringForm> enteringForms = new ArrayList<>();
         for (Student student : students) {
-            List<Score> scores=getScore(proName, student);
-            String batchName2=student.getBatch_name();
-            String sGroup2=student.getBatch_name();
-            String sName2=student.getSname();
+            List<Score> scores = getScore(proName, student);
+            String batchName2 = student.getBatch_name();
+            String sGroup2 = student.getBatch_name();
+            String sName2 = student.getSname();
 
-            for(Score score:scores){
-                EnteringForm enteringForm=new EnteringForm();
+            for (Score score : scores) {
+                EnteringForm enteringForm = new EnteringForm();
+                enteringForm.setScore(score.getPro_score());
                 enteringForm.setBatchName(batchName2);
                 enteringForm.setSGroup(sGroup2);
                 enteringForm.setEnterTime(score.getEnter_time());
@@ -421,18 +483,20 @@ public class ScoreService {
      * 修改的话，以前就有记录了
      * 2中类别的分数，分开来执行，一个用studentRepo
      * 一个用scoreRepo
+     * <p>
+     * 对应的录入信息也会更新
      */
     public boolean updateScore2(Map<String, String> scoreForm, boolean isAdmin, HttpSession session) {
         String sid = scoreForm.get("sid");
         Optional<Student> op = studentRepository.findStudentBySid(sid);
         String tName = scoreForm.get("tName");
         // if the form does not have the tName, use the session attribute
-        if(tName==null){
-            tName= (String) session.getAttribute("name");
+        if (tName == null) {
+            tName = (String) session.getAttribute("name");
         }
         if (op.isPresent()) {
             Student student = op.get();
-            if (student.isScore_lock() && !isAdmin) return false;
+            if (student.isScore_lock() && !isAdmin) return false; // 如果是老师，并且锁了，就return
             System.out.println("*******" + sid + " " + student.getSname());
             for (String itemName : scoreForm.keySet()) {
                 System.out.println("****" + itemName);
@@ -448,11 +512,14 @@ public class ScoreService {
                         student.setTotal_score(Float.parseFloat(scoreForm.get(itemName)));
                         break;
                     default:
-                        updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)));
+                        updateScoreInScore(sid, itemName, Float.parseFloat(scoreForm.get(itemName)), tName);
                         break;
                 }
             }
+
+
         }
+        // 如果是admin 就是修改
         if (isAdmin) {
             String reason = scoreForm.get("reason");
             ScoreUpdate update = new ScoreUpdate();
@@ -568,7 +635,7 @@ public class ScoreService {
      * @return 状态位
      */
     @Transactional
-    public int importScore(MultipartFile contactFile, String batchName, String proName,HttpSession session) throws IOException {
+    public int importScore(MultipartFile contactFile, String batchName, String proName, HttpSession session) throws IOException {
 
         int flag = 0;
 
@@ -613,15 +680,18 @@ public class ScoreService {
                     flag = 1;  //不属于该批次
                     continue;
                 }
-                String name= (String) session.getAttribute("name");
+                String name = (String) session.getAttribute("name");
+                Score oldScore=scoreRepository.findScoreBySidAndPro_name(id,proName);
+                if(oldScore==null){
+                    Score newScore = new Score();
+                    newScore.setPro_name(proName);
+                    newScore.setPro_score(Float.valueOf(value));
+                    newScore.setSid(id);
+                    newScore.setTname(name);
+                    newScore.setEnter_time(TimeUtil.getZoneTime());
+                    scoreRepository.save(newScore);
+                }
 
-                Score newScore = new Score();
-                newScore.setPro_name(proName);
-                newScore.setPro_score(Float.valueOf(value));
-                newScore.setSid(id);
-                newScore.setTname(name);
-                newScore.setEnter_time(TimeUtil.getNowTime());
-                scoreRepository.save(newScore);
             } else {
                 flag = 2;
             }
@@ -633,22 +703,33 @@ public class ScoreService {
     }
 
 
-    private void updateScoreInScore(String sid, String proName, float sco) {
+    /**
+     * 如果有这个对应sid，proName的score，就更新，如果没有就增加
+     * 所以也可以用于打分，而用于打分的时候就必须要加入录入记录，也就是更新这个时间和老师
+     *
+     * @param sid     sid
+     * @param proName proName
+     * @param sco     score
+     */
+    private void updateScoreInScore(String sid, String proName, float sco, String tName) {
 
         Score score = scoreRepository.findScoreBySidAndPro_name(sid, proName);
-        if (score != null) {
-            score.setPro_score(sco);
-        } else {
+
+        // 如果为空就new， setSid, setPro_name
+        if (score == null) {
             score = new Score();
             score.setSid(sid);
-            score.setPro_score(sco);
             score.setPro_name(proName);
         }
+        // 属于录入范畴
+        score.setTname(tName);
+        score.setEnter_time(TimeUtil.getZoneTime());
+        score.setPro_score(sco);
         scoreRepository.save(score);
 
     }
 
-    public List<Map<String, String>> getSpScore(String sid, String sname, String templateName) {
+    public List<Map<String, String>> getSpScore(String sid, String sname, String templateName, boolean isSpStudent) {
         List<Map<String, String>> maps = new ArrayList<>();
         List<SpecialStudent> spStudents = new ArrayList<>();
         /* 拿到所有的学生,所有或者具体一个 */
@@ -675,9 +756,13 @@ public class ScoreService {
             /* 一个学生的所有分数信息 */
             map.put("姓名", student.getSname());
             map.put("学号", student.getSid());
+            //如果成绩已经发布就返回,并且如果是教师就再返回发布情况
+
+            map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
             map.put("等级", student.getDegree());
             map.put("总成绩", String.valueOf(student.getTotal_score()));
-            map.put("发布情况", student.isScore_lock() ? "已发布" : "未发布");
+
+
             System.out.println(map.get("发布情况") + "********");
             for (SpecialScore score : scores) {
                 map.put(score.getPro_name(), String.valueOf(score.getPro_score()));
@@ -685,6 +770,38 @@ public class ScoreService {
             //***********************
             maps.add(map);
         }
+        return maps;
+    }
+
+    public List<Map<String, String>> getSpScore2(String sid) {
+        Optional<SpecialStudent> optionalSpecialStudent = spStudentRepository.findSpStudentBySid(sid);
+        List<Map<String, String>> maps = new ArrayList<>();
+
+        Map<String, String> map = new HashMap<>();
+
+        if (optionalSpecialStudent.isPresent()) {
+            SpecialStudent student = optionalSpecialStudent.get();
+            List<SpecialScore> scores;
+            scores = (List<SpecialScore>) spScoreRepository.findSpScoreBySid(student.getSid());
+            /* 一个学生的所有分数信息 */
+            map.put("sname", student.getSname());
+            map.put("sid", student.getSid());
+            //如果成绩已经发布就返回,并且如果是教师就再返回发布情况
+            if (student.isScore_lock()) {
+                map.put("degree", student.getDegree());
+                map.put("total_score", String.valueOf(student.getTotal_score()));
+
+            }
+            map.put("release", student.isScore_lock() ? "已发布" : "未发布");
+
+
+            System.out.println(map.get("发布情况") + "********");
+            for (SpecialScore score : scores) {
+                map.put(score.getPro_name(), String.valueOf(score.getPro_score()));
+            }
+        }
+        //***********************
+        maps.add(map);
         return maps;
     }
 

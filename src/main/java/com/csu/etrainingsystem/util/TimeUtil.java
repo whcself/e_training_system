@@ -14,6 +14,7 @@ public class TimeUtil {
         return new Timestamp(begin.getTime() + duration);
     }
 
+
     public static String getNowDate(){
         GregorianCalendar calendar=new GregorianCalendar();
         System.out.println(calendar.toZonedDateTime());
@@ -35,8 +36,17 @@ public class TimeUtil {
         return time.toString();
     }
 
+    /**
+     * 2019-02-23T12:50:11.468+08:00
+     * @return
+     */
+    public static String getZoneTime(){
+        return new GregorianCalendar().toZonedDateTime().toString().substring(0,29);
+    }
+
     public static void main(String[] args) {
-        System.out.println(getNowTime());
+        System.out.println(getZoneTime());
+
 //        System.out.println("java.lang.Exception: 学号重复，该学生已经存在343434\\r\\n\\tat ".substring(10,20));
 //        System.out.println("2019-01-22 20:33:00".substring(0,16));
     }

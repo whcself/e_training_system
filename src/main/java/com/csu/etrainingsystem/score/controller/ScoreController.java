@@ -4,27 +4,21 @@ import com.csu.etrainingsystem.experiment.entity.Experiment;
 import com.csu.etrainingsystem.form.CommonResponseForm;
 import com.csu.etrainingsystem.score.entity.Score;
 import com.csu.etrainingsystem.score.entity.ScoreSubmit;
-import com.csu.etrainingsystem.score.entity.ScoreUpdate;
+import com.csu.etrainingsystem.score.entity.SpecialScore;
 import com.csu.etrainingsystem.score.form.DegreeForm;
 import com.csu.etrainingsystem.score.form.EnteringForm;
 import com.csu.etrainingsystem.score.form.InputSearchForm;
-import com.csu.etrainingsystem.score.form.ScoreForm;
 import com.csu.etrainingsystem.score.service.ScoreService;
 import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.user.entity.User;
 import com.csu.etrainingsystem.user.entity.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.attribute.standard.Sides;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.Option;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -65,10 +59,11 @@ public class ScoreController {
 
     /**
      * -ScJn
+     *
      * @param batch_name 批次名
      * @param s_group_id 学生组
      * @param pro_name   工序名
-     * 学生端就传自己的id
+     *                   学生端就传自己的id
      * @apiNote 管理员端：成绩列表 评分查询
      */
     @RequestMapping("/getScore")
@@ -77,7 +72,7 @@ public class ScoreController {
                                                              @RequestParam(required = false) String pro_name,
                                                              @RequestParam(required = false) String sId,
                                                              @RequestParam(required = false) String sName) {
-        return scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName,false);
+        return scoreService.getScoreByBatchAndSGroupOrProName(batch_name, s_group_id, pro_name, sId, sName, false);
 //        if ( == 0) {
 //            return CommonResponseForm.of400("查询失败，结果为空");
 //        }
@@ -91,15 +86,35 @@ public class ScoreController {
     @RequestMapping("/getMyScore")
     public CommonResponseForm getMyScore(@RequestParam(required = false) String sid, HttpSession session) {
         List<HashMap<String, String>> scoreForms;
-        if (sid != null) {
-            return scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sid, "all",true);
-        } else {
-            User user = UserRole.getUser(session);
-            String sId = user.getAccount();
-            return scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sId, "all",true);
-
+        String role = (String) session.getAttribute("role");
+        String itId=(String) session.getAttribute("id");
+        if (role.equals("spStudent")) {
+            return CommonResponseForm.of200("成功", scoreService.getSpScore2(itId));
         }
+        if (role.equals("student")) {
+            if (sid != null) {
+                return scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sid, "all", true);
+            } else {
+                User user = UserRole.getUser(session);
+                String sId = user.getAccount();
+                return scoreService.getScoreByBatchAndSGroupOrProName("all", "all", "all", sId, "all", true);
+
+            }
+        }
+        return CommonResponseForm.of400("此用户不是学生");
     }
+
+    /**
+     * @apiNote 计算特殊学生成绩
+     * @param templateName
+     * @return
+     */
+    @RequestMapping("/executeSpScore")
+    public CommonResponseForm executeSpScore(@RequestParam String templateName){
+        scoreService.executeSpScore(templateName);
+        return CommonResponseForm.of204("计算成功");
+    }
+
 
     /**
      * @param batch_name 批次
@@ -174,19 +189,19 @@ public class ScoreController {
     @PostMapping("/updateScore")
     public CommonResponseForm updateScore(@RequestBody Map<String, String> scoreForm,
                                           HttpSession session) {
-        scoreService.updateScore2(scoreForm,true,session);
+        scoreService.updateScore2(scoreForm, true, session);
         return CommonResponseForm.of204("修改成功");
     }
 
     /**
-     * @apiNote 教师端-修改成绩
      * @param scoreForm
      * @return
+     * @apiNote 教师端-修改成绩
      */
     @PostMapping("/updateScore2")
     public CommonResponseForm updateScore2(@RequestBody Map<String, String> scoreForm,
                                            HttpSession session) {
-        if (scoreService.updateScore2(scoreForm,false,session))
+        if (scoreService.updateScore2(scoreForm, false,session))
             return CommonResponseForm.of204("修改成功");
         return CommonResponseForm.of400("成绩已发布，无法修改");
     }
@@ -201,7 +216,7 @@ public class ScoreController {
     public CommonResponseForm importScore(@RequestParam MultipartFile file, String batch_name,
                                           @RequestParam String pro_name,
                                           HttpSession session) throws IOException {
-        int flag = scoreService.importScore(file, batch_name, pro_name,session);
+        int flag = scoreService.importScore(file, batch_name, pro_name, session);
         if (flag == 1) {
             return CommonResponseForm.of204("导入成绩成功，部分学生不属于该批次所以未导入");
         } else if (flag == 2) {
@@ -221,7 +236,17 @@ public class ScoreController {
     }
 
     /**
+     * @apiNote 下载成绩excel
+     */
+
+    @PostMapping("/scoreExcel")
+    public void scoreExcel(@RequestBody List<List<Object>> data,
+                           HttpServletResponse response) throws IOException {
+        scoreService.downloadScoreExcel(response,data);
+    }
+    /**
      * -ScJn
+     *
      * @param sid   di
      * @param sname sname
      * @return f
@@ -231,7 +256,7 @@ public class ScoreController {
     public CommonResponseForm getSpScore(@RequestParam(required = false) String sid,
                                          @RequestParam(required = false) String sname,
                                          @RequestParam(required = false) String templateName) {
-        List<Map<String, String>> maps = scoreService.getSpScore(sid, sname,templateName);
+        List<Map<String, String>> maps = scoreService.getSpScore(sid, sname, templateName, false);
         return CommonResponseForm.of200("查询成功: 共" + maps.size(), maps);
     }
 
@@ -250,7 +275,7 @@ public class ScoreController {
         } catch (Exception e) {
             return CommonResponseForm.of400("修改失败,该学号不存在");
         }
-        if (spStudent.isScore_lock()&&!session.getAttribute("role").equals("管理员")) {
+        if (spStudent.isScore_lock() && !session.getAttribute("role").equals("管理员")) {
             return CommonResponseForm.of400("成绩已经发布，不能修改");
         } else {
             scoreService.updateSpScore(spStudent, map);
@@ -258,19 +283,25 @@ public class ScoreController {
         }
     }
 
+    /**
+     * @apiNote 提交特殊学生成绩
+     */
     @PostMapping("/releaseSpScore")
     public CommonResponseForm releaseSpScore(@RequestBody Map<String, String> sids) {
         scoreService.releaseSpScore(sids);
         return CommonResponseForm.of204("发布成功");
     }
 
+    /**
+     * @apiNote 录入记录
+     */
     @PostMapping("/getInputInfo")
-    public CommonResponseForm getInputInfo(@RequestBody InputSearchForm form){
-        List<EnteringForm> scores=scoreService.getInputInfo(form.getSId(),form.getSName(),form.getSGroup(),form.getBatchName(),form.getProName());
-        return CommonResponseForm.of200("共"+scores.size()+"条",scores);
+    public CommonResponseForm getInputInfo(@RequestBody InputSearchForm form) {
+        List<EnteringForm> scores = scoreService.getInputInfo(form.getSId(), form.getSName(), form.getSGroup(), form.getBatchName(), form.getProName());
+        return CommonResponseForm.of200("共" + scores.size() + "条", scores);
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
 
     }

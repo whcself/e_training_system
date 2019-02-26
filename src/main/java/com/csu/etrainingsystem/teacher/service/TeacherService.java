@@ -104,9 +104,13 @@ public class TeacherService {
     }
 
     @Transactional
-    public void deleteTeacher(String[] tids) {
+    public void deleteTeacher(String[] tids) throws Exception {
         for (String tid : tids) {
-//            deleteTeachersGroups(tid);
+            if(tid.equals("111111")){
+                throw new Exception("#该管理员无法被删除#");
+            }
+            deleteTeachersGroups(tid);
+
             Teacher teacher = getTeacher (tid);
             teacher.setDel_status (true);
             this.teacherRepository.saveAndFlush (teacher);

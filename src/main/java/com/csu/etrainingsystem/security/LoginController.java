@@ -3,7 +3,9 @@ package com.csu.etrainingsystem.security;
 import com.csu.etrainingsystem.administrator.entity.Admin;
 import com.csu.etrainingsystem.administrator.service.AdminService;
 import com.csu.etrainingsystem.form.CommonResponseForm;
+import com.csu.etrainingsystem.student.entity.SpecialStudent;
 import com.csu.etrainingsystem.student.entity.Student;
+import com.csu.etrainingsystem.student.repository.SpStudentRepository;
 import com.csu.etrainingsystem.student.service.StudentService;
 import com.csu.etrainingsystem.teacher.entity.Teacher;
 import com.csu.etrainingsystem.teacher.service.TeacherService;
@@ -92,6 +94,14 @@ public class LoginController {
                 subject.getSession().setAttribute("sGroupId", student.getS_group_id());
                 subject.getSession().setAttribute("clazz", student.getClazz());
                 subject.getSession().setAttribute("role", "student");
+
+            }else  if(user.getRole().equals("spStudent")){
+                SpecialStudent student=studentService.findSpStudentById(name);
+                realName = student.getSname();
+                subject.getSession().setAttribute("id", student.getSid());
+                subject.getSession().setAttribute("name", student.getSname());
+                subject.getSession().setAttribute("clazz", student.getClazz());
+                subject.getSession().setAttribute("role", "spStudent");
             }
             Map<String, String> m = new HashMap<String, String>();
             m.put("id", name);//name即是id
