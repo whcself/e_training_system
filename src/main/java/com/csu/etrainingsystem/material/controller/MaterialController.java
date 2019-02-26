@@ -87,7 +87,7 @@ public class MaterialController {
         material.setNum (material.getNum () - num);
         this.materialService.updateMaterial (material);
         //新增物料申请记录
-        SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd");
+        SimpleDateFormat format = new SimpleDateFormat ("yyyy-MM-dd HH:mm");
         String time = format.format (new Date ());
         Apply apply = new Apply ();
         apply.setApply_time (time);
@@ -96,14 +96,14 @@ public class MaterialController {
         apply.setSid (sid);
         apply.setSname (sname);
         //todo:需要判断是管理员还是老师
-        String tid = "";
+        String tname = "";
         User user = UserUtils.getHttpSessionUser (session);
         if (user != null) {
             Teacher teacher = teacherService.getTeacher (user.getAccount ());
             if (teacher != null)
-                tid = teacher.getTid ();
+                tname = teacher.getTname ();
         }
-        apply.setTid (tid);
+        apply.setTname (tname);
         materialService.addAply (apply);
         return CommonResponseForm.of204 ("派出物料成功");
     }

@@ -18,9 +18,9 @@ public class Apply implements Serializable {
     @Column
     private  int apply_id;
     private String apply_time;
-   private String sid;
-   private String tid ;
+    private String sid;
+    private String tname ;
     private String sname;
-   private String clazz;
-   private int num;
+    private String clazz;
+    private int num;
 }
