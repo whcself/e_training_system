@@ -24,6 +24,7 @@ public class ETrainingSystemApplication {
       //  BasicConfigurator.configure(); //自动快速地使用缺省Log4j环境。
         SpringApplication.run(ETrainingSystemApplication.class, args);
         //add oneline code
+        //add second line code
     }
 
 //    @PostConstruct
